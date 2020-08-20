@@ -1,0 +1,14 @@
+{
+  "properties": [
+    {
+      "name": "kim.kin.channel-no",
+      "type": "java.lang.String",
+      "description": "Description for kk.channel-no."
+    },
+    {
+      "name": "kim.kin.file-path",
+      "type": "java.lang.String",
+      "description": "Description for kk.file-path."
+    }
+  ]
+}

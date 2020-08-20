@@ -1,0 +1,13 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://kin.kim:3306/kinkim?serverTimezone=Asia/Shanghai&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true
+    username: kinkim
+    password: 123456
+  jpa:
+    show-sql: false
+  redis:
+    host: kin.kim
+    password: redis123456
+    port: 6379
+    database: 0
