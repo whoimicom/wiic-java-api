@@ -2,6 +2,7 @@ package kim.kin;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -9,13 +10,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController()
 public class KkApiApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(KkApiApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(KkApiApplication.class, args);
+    }
 
-	@PostMapping("/")
-	public String applicationSucess(){
-		return "applicationSucess";
-	}
+    @GetMapping("/")
+    public String index() {
+        return "kk service started successfully";
+    }
 
 }
