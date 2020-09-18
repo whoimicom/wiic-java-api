@@ -2,8 +2,8 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://kin.kim:3306/kinkim?serverTimezone=Asia/Shanghai&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true
-    username: kinkim
-    password: 123456
+    username: ENC(OABysE0GTzXHQxkVwtURIg==)
+    password: ENC(GpHnukd8RZKxcLOhJmYABQ==)
   jpa:
     show-sql: false
   redis:
@@ -11,3 +11,6 @@ spring:
     password: redis123456
     port: 6379
     database: 0
+jasypt:
+  encryptor:
+    password: a2luLmtpbQ==
