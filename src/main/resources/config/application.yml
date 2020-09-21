@@ -3,6 +3,8 @@ server:
   servlet:
     context-path: /kk-api
 spring:
+  profiles:
+    active: pro
   datasource:
     hikari:
       auto-commit: true
@@ -17,8 +19,6 @@ spring:
   jackson:
     serialization:
       write-dates-as-timestamps: false
-  profiles:
-    active: dev
   servlet:
     multipart:
       location: ${user.home}/multipartUpload

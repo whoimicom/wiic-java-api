@@ -1,16 +1,24 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://kin.kim:3306/kinkim?serverTimezone=Asia/Shanghai&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true
-    username: ENC(OABysE0GTzXHQxkVwtURIg==)
-    password: ENC(GpHnukd8RZKxcLOhJmYABQ==)
+    url: jdbc:mysql://localhost:3306/kinkim?serverTimezone=Asia/Shanghai&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true
+    username: KKENC@[rEhiVZqhHqRFVTssSbzz3S6DB4crsf+PvepDa8IT8ri6ZMK2vjmt/gbr6Xk7fBcw]
+    password: KKENC@[PdLLCrpeM93EWBLqYg3Zl3HkBfqWRww1P0gZygZVLwfkjLxqpt1wmyxbkyTrWiVx]
   jpa:
     show-sql: false
   redis:
-    host: kin.kim
-    password: redis123456
+    host: localhost
+    password:
     port: 6379
     database: 0
 jasypt:
   encryptor:
-    password: a2luLmtpbQ==
+    algorithm: PBEWITHHMACSHA512ANDAES_256
+    password: a2lua2lt
+    property:
+      prefix: "KKENC@["
+      suffix: "]"
+    privateKeyFormat: pem
+    publicKeyFormat: pem
+    privateKeyLocation: ${user.home}/.ssh/id_rsa_pkcs8
+    publicKeyLocation: ${user.home}/.ssh/id_rsa_pkcs8.pem
