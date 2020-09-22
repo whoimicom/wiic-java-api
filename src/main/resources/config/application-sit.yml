@@ -2,13 +2,13 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://kin.kim:3306/kinkim?serverTimezone=Asia/Shanghai&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true
-    username: KKENC@[LM2eZVHztvhiMyMAJQN+rAmnnYyTaxmRBGW06NZWr2pOT5GpmM5flix25TfqGx4iWDFtDoIXYx2ZYhF+3DrpFN62tca5AAJZhyFQd7CA+tg8AdaGhvcCUNsXJXAQES4xRwJlDjP/Qx2GprHBQuWICu37k6n3YRE9jzHyGLm8aHdjBz4o35CnupalggWumQ9HylDcATDtUXfWD1AQOmBbMSy31kNdn+BNe58KBuam2oFtCWIYhScqqD9jBu/w5ge/M6I3JEJvRELwzAHyq9r4zK3r2MI8FDx5tyMUgPTcou6pP7RckkAKxaBUYtXR3/fsdfeWWbXWKVYIh42GV4lObg==]
-    password: KKENC@[X1zDYcMGN/76deQv2zLnv5bcmW/ZWB0WNSY38/WeO9PN/HtvS8zn7ig1++Rl+JKgjvGGqXEkmPo0W+L/wZ8n1c3wPZXIMIw9CndV6aC+lGJ1w2u+porfge7vg+VkVxZcH7ne08vZVnE0NPdwEZOF7yC1PD+6b3LRWymGBam2PtUikrL0+MQukCfyWW4bUmq9h468zvdyY9geu6OU4ZQTId6Uf5AnHXClAvkqHzRboQUWKOT1071vreglonS2nnm5Rs/Rs76Fjk19r14+p0hCQ0XAIGEDU81xw+EqHhMdOWRkiyP7K/VB1wukLLhPv3scg64X0/hEsYmeOVAxYNGEPw==]
+    username: im@kin.kim[yT0o/tBDsLDMKDJkWsmSMLT1D1F6VdjJQ2piv1kJVmsT66+q3xZlaIrfe8PaU1OFhgdfywgTilVb2q2J/mWH2yPIezWRJR5WhUNp+thJJyH1UwT7GL+aGy8peUU5dv6ORWxyLC/xJK4kFuS3Exum5B2Yf1owj1oRHeVyzknK47FynIY75g6UCpMnInIxlJwZIGFmOwn1B7FKwqewhtC1+Xx4QELFFr5ACKD4k2q3cfjl8xkdXBkfsaiWwhikLJjWGX5Hfy0ry0NagAAFis9BA9LQobSemfyl6iiyBuPpHQ2MXQDaE7NzVF9O77tf/0GVJhKg8dT3VaDNYOy9S9AcaQ==]
+    password: im@kin.kim[NACfREF4LFIQFDM7MXotJilYF/b2gX+CkgvnPbRxRtqCiQ1UcZsqW2idQ2+fnxpnF6tGZlR+XYqvpMvRk7tms9B+Mv/M582EUk+gIdugS46sjzL/1q8RZ9fuVpNe6deWsggwqZwVXj1E7z/hKk4B0VAmY+32gIoRZrDxu/JSu52saCMjx1TIAvYPb4Ms8pO3xUo6M56ew9TAO0SKIHDR/4KpvrzrtsYKLUyyy31a0+WRNq/4n4CmqQXiDwuspMb5ap8V1g27nvhuPBytIhVOP7RdeV/kcSzMury9lKMbMrcBdGetC93s1mie7stn2uGx7ApMRRJo1ejjXK8ZbkQsrQ==]
   jpa:
     show-sql: false
   redis:
     host: kin.kim
-    password: redis123456
+    password: im@kin.kim[NACfREF4LFIQFDM7MXotJilYF/b2gX+CkgvnPbRxRtqCiQ1UcZsqW2idQ2+fnxpnF6tGZlR+XYqvpMvRk7tms9B+Mv/M582EUk+gIdugS46sjzL/1q8RZ9fuVpNe6deWsggwqZwVXj1E7z/hKk4B0VAmY+32gIoRZrDxu/JSu52saCMjx1TIAvYPb4Ms8pO3xUo6M56ew9TAO0SKIHDR/4KpvrzrtsYKLUyyy31a0+WRNq/4n4CmqQXiDwuspMb5ap8V1g27nvhuPBytIhVOP7RdeV/kcSzMury9lKMbMrcBdGetC93s1mie7stn2uGx7ApMRRJo1ejjXK8ZbkQsrQ==]
     port: 6379
     database: 0
 jasypt:
@@ -16,13 +16,12 @@ jasypt:
     #    algorithm: PBEWITHHMACSHA512ANDAES_256
     #    password: a2lua2lt
     property:
-      prefix: "KKENC@["
+      prefix: "im@kin.kim["
       suffix: "]"
     private-key-format: pem
     public-key-format: pem
     #    private-key-location: classpath:id_rsa_pkcs8
     #    public-key-location: classpath:id_rsa_pkcs8.pem
-    private-key-location: C:\Users\choky\.ssh\id_rsa_pkcs8
-    public-key-location: C:\Users\choky\.ssh\id_rsa_pkcs8.pem
-
+    private-key-location: file:C:/Users/choky/.ssh/id_rsa_pkcs8
+    public-key-location: file:C:/Users/choky/.ssh/id_rsa_pkcs8.pem
 

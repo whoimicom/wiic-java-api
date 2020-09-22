@@ -4,7 +4,7 @@ server:
     context-path: /kk-api
 spring:
   profiles:
-    active: pro
+    active: sit
   datasource:
     hikari:
       auto-commit: true

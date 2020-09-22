@@ -15,13 +15,6 @@ public class ConfigurerJasyptTest {
     ConfigurableEnvironment environment;
     @Test
     public void testEnvironmentProperties() {
-        String location = environment.getProperty("jasypt.encryptor:location");
-        System.out.println(location);
-        System.out.println(environment.getProperty("jasypt.encryptor:tlocation1"));
-        System.out.println(environment.getProperty("jasypt.encryptor:tlocation2"));
-        System.out.println(environment.getProperty("jasypt.encryptor:tlocation3"));
-        assertEquals("chupacabras", location);
-        assertEquals("chupacabras", environment.getProperty("secret2.property"));
-        assertEquals("chupacabras", environment.getProperty("secret3.property"));
+        assertEquals("kinkim", environment.getProperty("spring.datasource.username"));
     }
 }
