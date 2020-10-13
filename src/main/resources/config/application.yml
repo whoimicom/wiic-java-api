@@ -46,3 +46,5 @@ kim:
   kin:
     channel-no: '000'
     file-path: /data/file
+jwt:
+  secret: kinkim

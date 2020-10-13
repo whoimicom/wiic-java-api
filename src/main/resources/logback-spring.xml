@@ -98,7 +98,7 @@
     <!--    private Logger busiclassLog = LoggerFactory.getLogger("busiclassLog");  -->
     <!--    #lomok  -->
     <!--    @Slf4j(topic = "busiclassLog")  -->
-    <!--    <logger name="com.huijin" level="${level}" additivity="false">-->
+    <!--    <logger name="kin.kim" level="${level}" additivity="false">-->
     <!--        <appender-ref ref="ALL"/>-->
     <!--        <appender-ref ref="ERROR"/>-->
     <!--    </logger>-->
