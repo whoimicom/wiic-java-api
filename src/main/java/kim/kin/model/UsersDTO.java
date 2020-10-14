@@ -1,8 +1,9 @@
 package kim.kin.model;
 
-public class UserDTO {
+public class UsersDTO {
 	private String username;
 	private String password;
+	private Boolean enabled;
 
 	public String getUsername() {
 		return username;
@@ -18,5 +19,13 @@ public class UserDTO {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public Boolean getEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(Boolean enabled) {
+		this.enabled = enabled;
 	}
 }
