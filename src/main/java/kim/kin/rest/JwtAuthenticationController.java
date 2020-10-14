@@ -1,11 +1,10 @@
 package kim.kin.rest;
 
-import java.util.Objects;
 
 import kim.kin.config.JwtTokenUtil;
 import kim.kin.model.JwtRequest;
 import kim.kin.model.JwtResponse;
-import kim.kin.model.UserDTO;
+import kim.kin.model.UsersDTO;
 import kim.kin.service.JwtUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -47,7 +46,7 @@ public class JwtAuthenticationController {
 	}
 
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
-	public ResponseEntity<?> saveUser(@RequestBody UserDTO user) throws Exception {
+	public ResponseEntity<?> saveUser(@RequestBody UsersDTO user)  {
 		return ResponseEntity.ok(userDetailsService.save(user));
 	}
 

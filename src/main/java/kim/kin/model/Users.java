@@ -5,8 +5,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "user")
-public class DAOUser {
+@Table(name = "users")
+public class Users {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,6 +16,8 @@ public class DAOUser {
 	@Column
 	@JsonIgnore
 	private String password;
+	@Column
+	private Boolean enabled=true;
 
 	public String getUsername() {
 		return username;
@@ -33,4 +35,19 @@ public class DAOUser {
 		this.password = password;
 	}
 
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public Boolean getEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(Boolean enabled) {
+		this.enabled = enabled;
+	}
 }
