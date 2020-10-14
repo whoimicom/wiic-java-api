@@ -2,6 +2,7 @@ package kim.kin.rest;
 
 
 import kim.kin.config.JwtTokenUtil;
+import kim.kin.kklog.KkLog;
 import kim.kin.model.JwtRequest;
 import kim.kin.model.JwtResponse;
 import kim.kin.model.UsersDTO;
@@ -13,50 +14,58 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @CrossOrigin
 public class JwtAuthenticationController {
+    private final AuthenticationManager authenticationManager;
+    private final JwtTokenUtil jwtTokenUtil;
+    private final JwtUserDetailsService userDetailsService;
 
-	@Autowired
-	private AuthenticationManager authenticationManager;
+    public JwtAuthenticationController(AuthenticationManager authenticationManager, JwtTokenUtil jwtTokenUtil, JwtUserDetailsService userDetailsService) {
+        this.authenticationManager = authenticationManager;
+        this.jwtTokenUtil = jwtTokenUtil;
+        this.userDetailsService = userDetailsService;
+    }
 
-	@Autowired
-	private JwtTokenUtil jwtTokenUtil;
+    @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
+    public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
 
-	@Autowired
-	private JwtUserDetailsService userDetailsService;
+        authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
 
-	@RequestMapping(value = "/authenticate", method = RequestMethod.POST)
-	public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
+        final UserDetails userDetails = userDetailsService
+                .loadUserByUsername(authenticationRequest.getUsername());
 
-		authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
+        final String token = jwtTokenUtil.generateToken(userDetails);
+        Map<String, Object> authInfo = new HashMap<String, Object>(2) {{
+            put("token", "Bearer " + token);
+//			put("user", jwtUserDto);
+        }};
+        return ResponseEntity.ok(authInfo);
+    }
 
-		final UserDetails userDetails = userDetailsService
-				.loadUserByUsername(authenticationRequest.getUsername());
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    public ResponseEntity<?> saveUser(@RequestBody UsersDTO user) {
+        return ResponseEntity.ok(userDetailsService.save(user));
+    }
 
-		final String token = jwtTokenUtil.generateToken(userDetails);
+    @PostMapping(value = "/getInfo")
+    @KkLog
+    public ResponseEntity<?> getInfo() {
+        return ResponseEntity.ok(jwtTokenUtil.getCurrentUser());
+    }
 
-		return ResponseEntity.ok(new JwtResponse(token));
-	}
-
-	@RequestMapping(value = "/register", method = RequestMethod.POST)
-	public ResponseEntity<?> saveUser(@RequestBody UsersDTO user)  {
-		return ResponseEntity.ok(userDetailsService.save(user));
-	}
-
-	private void authenticate(String username, String password) throws Exception {
-		try {
-			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-		} catch (DisabledException e) {
-			throw new Exception("USER_DISABLED", e);
-		} catch (BadCredentialsException e) {
-			throw new Exception("INVALID_CREDENTIALS", e);
-		}
-	}
+    private void authenticate(String username, String password) throws Exception {
+        try {
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+        } catch (DisabledException e) {
+            throw new Exception("USER_DISABLED", e);
+        } catch (BadCredentialsException e) {
+            throw new Exception("INVALID_CREDENTIALS", e);
+        }
+    }
 }
