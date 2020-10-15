@@ -1,26 +1,26 @@
 package kim.kin.service;
 
-import java.util.ArrayList;
-
-import kim.kin.repository.UsersRepository;
 import kim.kin.model.User;
 import kim.kin.model.UserDTO;
-import org.springframework.beans.factory.annotation.Autowired;
+import kim.kin.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 
 @Service
 public class JwtUserDetailsService implements UserDetailsService {
+    private final UserRepository userRepository;
+    private final PasswordEncoder bcryptEncoder;
 
-    @Autowired
-    private UsersRepository userRepository;
-
-    @Autowired
-    private PasswordEncoder bcryptEncoder;
+    public JwtUserDetailsService(UserRepository userRepository, PasswordEncoder bcryptEncoder) {
+        this.userRepository = userRepository;
+        this.bcryptEncoder = bcryptEncoder;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -33,9 +33,9 @@ public class JwtUserDetailsService implements UserDetailsService {
     }
 
     public User save(UserDTO dto) {
-        User users = new User();
-        users.setUsername(dto.getUsername());
-        users.setPassword(bcryptEncoder.encode(dto.getPassword()));
-        return userRepository.save(users);
+        User user = new User();
+        user.setUsername(dto.getUsername());
+        user.setPassword(bcryptEncoder.encode(dto.getPassword()));
+        return userRepository.save(user);
     }
 }
