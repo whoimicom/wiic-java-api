@@ -3,10 +3,9 @@ package kim.kin.service;
 import java.util.ArrayList;
 
 import kim.kin.repository.UsersRepository;
-import kim.kin.model.Users;
-import kim.kin.model.UsersDTO;
+import kim.kin.model.User;
+import kim.kin.model.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -25,16 +24,16 @@ public class JwtUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Users user = userRepository.findByUsername(username);
+        User user = userRepository.findByUsername(username);
         if (user == null) {
             throw new UsernameNotFoundException("User not found with username: " + username);
         }
-        return new User(user.getUsername(), user.getPassword(),
+        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
                 new ArrayList<>());
     }
 
-    public Users save(UsersDTO dto) {
-        Users users = new Users();
+    public User save(UserDTO dto) {
+        User users = new User();
         users.setUsername(dto.getUsername());
         users.setPassword(bcryptEncoder.encode(dto.getPassword()));
         return userRepository.save(users);
