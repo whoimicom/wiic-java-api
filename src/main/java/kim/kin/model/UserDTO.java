@@ -8,6 +8,15 @@ public class UserDTO {
 	private Boolean enabled;
 	private String avatar;
 	private String introduction;
+	private String roles;
+
+	public String getRoles() {
+		return roles;
+	}
+
+	public void setRoles(String roles) {
+		this.roles = roles;
+	}
 
 	public String getUsername() {
 		return username;
