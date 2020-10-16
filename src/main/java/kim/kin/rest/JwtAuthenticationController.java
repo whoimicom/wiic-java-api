@@ -54,7 +54,15 @@ public class JwtAuthenticationController {
     @PostMapping(value = "/getInfo")
     @KkLog
     public ResponseEntity<?> getInfo() {
-        return ResponseEntity.ok(jwtTokenUtil.getCurrentUser());
+        UserDTO us=new UserDTO();
+        us.setAvatar("https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif");
+        us.setEnabled(true);
+        us.setIntroduction("I am a super administrator");
+        us.setUsername("admin");
+        us.setPassword("pwd");
+        us.setRoles("admin");
+//        return ResponseEntity.ok(jwtTokenUtil.getCurrentUser());
+        return ResponseEntity.ok(us);
     }
 
     private void authenticate(String username, String password) throws Exception {
