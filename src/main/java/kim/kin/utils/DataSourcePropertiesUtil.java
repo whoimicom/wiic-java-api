@@ -1,25 +1,26 @@
 package kim.kin.utils;
 
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityManager;
 import java.lang.reflect.Field;
+import java.sql.SQLException;
 
 @Service
 public class DataSourcePropertiesUtil {
-    private final EntityManager em;
     private final DataSourceProperties dataSourceProperties;
+    private final DataSourceTransactionManager dataSourceTransactionManager;
 
-    public DataSourcePropertiesUtil(EntityManager em, DataSourceProperties dataSourceProperties) {
-        this.em = em;
+    public DataSourcePropertiesUtil(DataSourceProperties dataSourceProperties, DataSourceTransactionManager dataSourceTransactionManager) {
         this.dataSourceProperties = dataSourceProperties;
+        this.dataSourceTransactionManager = dataSourceTransactionManager;
     }
 
-    public void test()  {
-        em.getEntityManagerFactory().getProperties().forEach((s, o) -> System.out.println(s + " " + o));
-        em.getProperties().forEach((s, o) -> System.out.println(s + " " + o));
-        em.getMetamodel().getEmbeddables();
+    public void test() throws SQLException {
+        String databaseProductName = dataSourceTransactionManager.getDataSource().getConnection()
+                .getMetaData().getDatabaseProductName();
+        System.out.println(databaseProductName);
         printAllFields(dataSourceProperties);
     }
 
