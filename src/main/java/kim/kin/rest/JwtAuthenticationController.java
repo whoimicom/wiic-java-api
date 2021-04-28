@@ -51,10 +51,15 @@ public class JwtAuthenticationController {
         return ResponseEntity.ok(userDetailsService.save(user));
     }
 
+    @PostMapping(value = "/user/logout")
+    public ResponseEntity<?> logout() {
+        return ResponseEntity.ok("SUCCESS");
+    }
+
     @PostMapping(value = "/getInfo")
     @KkLog
     public ResponseEntity<?> getInfo() {
-        UserDTO us=new UserDTO();
+        UserDTO us = new UserDTO();
         us.setAvatar("https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif");
         us.setEnabled(true);
         us.setIntroduction("I am a super administrator");
@@ -65,13 +70,14 @@ public class JwtAuthenticationController {
         return ResponseEntity.ok(us);
     }
 
-    private void authenticate(String username, String password) throws Exception {
-        try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-        } catch (DisabledException e) {
-            throw new Exception("USER_DISABLED", e);
-        } catch (BadCredentialsException e) {
-            throw new Exception("INVALID_CREDENTIALS", e);
-        }
+    private void authenticate(String username, String password) {
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+//        try {
+//            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+//        } catch (DisabledException e) {
+//            throw new Exception("USER_DISABLED", e);
+//        } catch (BadCredentialsException e) {
+//            throw new Exception("INVALID_CREDENTIALS", e);
+//        }
     }
 }

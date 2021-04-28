@@ -3,7 +3,9 @@ package kim.kin.config;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -29,6 +31,15 @@ public class CommExceptionHanlder {
         HttpHeaders resHeader = new HttpHeaders();
         resHeader.add("resCode", "500");
         return badRequest().headers(resHeader).body(e.getMessage());
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    @ResponseBody
+    public ResponseEntity<Object> authenticationException(AuthenticationException e) {
+        logger.error("RestControllerAdvice：", e);
+        HttpHeaders resHeader = new HttpHeaders();
+        resHeader.add("resCode", "401");
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
     }
 
     @InitBinder
