@@ -1,6 +1,9 @@
 package kim.kin.model;
 
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+import java.util.List;
 
 public class UserDTO {
 	private String username;
@@ -9,6 +12,8 @@ public class UserDTO {
 	private String avatar;
 	private String introduction;
 	private String roles;
+
+	private List<UserPermissionVO> vo;
 
 	public String getRoles() {
 		return roles;
@@ -56,5 +61,25 @@ public class UserDTO {
 
 	public void setIntroduction(String introduction) {
 		this.introduction = introduction;
+	}
+
+	public List<UserPermissionVO> getVo() {
+		return vo;
+	}
+
+	public void setVo(List<UserPermissionVO> vo) {
+		this.vo = vo;
+	}
+
+	@Override
+	public String toString() {
+		return "UserDTO{" +
+				"username='" + username + '\'' +
+				", password='" + password + '\'' +
+				", enabled=" + enabled +
+				", avatar='" + avatar + '\'' +
+				", introduction='" + introduction + '\'' +
+				", roles='" + roles + '\'' +
+				'}';
 	}
 }

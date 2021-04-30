@@ -4,7 +4,9 @@ package kim.kin.rest;
 import kim.kin.config.JwtTokenUtil;
 import kim.kin.kklog.KkLog;
 import kim.kin.model.JwtRequest;
+import kim.kin.model.MetaVO;
 import kim.kin.model.UserDTO;
+import kim.kin.model.UserPermissionVO;
 import kim.kin.service.JwtUserDetailsService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,8 +16,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @CrossOrigin
@@ -66,6 +67,23 @@ public class JwtAuthenticationController {
         us.setUsername("admin");
         us.setPassword("pwd");
         us.setRoles("admin");
+//        path: 'page',
+//                component: 'views/permission/page',
+//                name: 'PagePermission',
+//                meta: {
+//                  title: 'Page Permission',
+//                    roles: ['admin']
+//        }
+
+        MetaVO metaVO1 = new MetaVO("Page Permission", "lock");
+        MetaVO metaVO = new MetaVO("PermissionTitle", "lock");
+        UserPermissionVO userPermissionVO1 = new UserPermissionVO("PagePermission", "page", "", "permission/page", false, metaVO1, null);
+        UserPermissionVO userPermissionVO2 = new UserPermissionVO("RolePermission", "role", "", "permission/role", false, metaVO1, null);
+        List<UserPermissionVO> userPermissionVOS = Arrays.asList(userPermissionVO1, userPermissionVO2);
+//        UserPermissionVO userPermissionVO = new UserPermissionVO("permission", "/permission", "/permission/page", "Layout", false, metaVO, Collections.singletonList(userPermissionVO1));
+        UserPermissionVO userPermissionVO = new UserPermissionVO("permissionName", "/permission", "", "Layout", true, metaVO, userPermissionVOS);
+        us.setVo(Collections.singletonList(userPermissionVO));
+
 //        return ResponseEntity.ok(jwtTokenUtil.getCurrentUser());
         return ResponseEntity.ok(us);
     }
