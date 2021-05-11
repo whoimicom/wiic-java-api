@@ -18,7 +18,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.convert.converter.Converter;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
@@ -36,6 +35,9 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
+/**
+ * @author choky
+ */
 @Configuration
 @EnableWebMvc
 public class ConfigurerAdapter implements WebMvcConfigurer {
@@ -58,7 +60,7 @@ public class ConfigurerAdapter implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         String path = "file:" + filePath.replace("\\", "/");
-        registry.addResourceHandler("/file/**").addResourceLocations(path+ File.separator).setCachePeriod(0);
+        registry.addResourceHandler("/file/**").addResourceLocations(path + File.separator).setCachePeriod(0);
         registry.addResourceHandler("/**").addResourceLocations("classpath:/META-INF/resources/").setCachePeriod(0);
     }
 
@@ -135,7 +137,7 @@ public class ConfigurerAdapter implements WebMvcConfigurer {
         ObjectMapper objectMapper = new ObjectMapper()
                 .registerModule(new ParameterNamesModule())
                 .registerModule(new Jdk8Module())
-                .registerModule(new JavaTimeModule()); // new module, NOT JSR310Module
+                .registerModule(new JavaTimeModule());
         objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
         objectMapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
 
@@ -150,7 +152,7 @@ public class ConfigurerAdapter implements WebMvcConfigurer {
 
 
         //Date序列化和反序列化
-        javaTimeModule.addSerializer(Date.class, new JsonSerializer<Date>() {
+        javaTimeModule.addSerializer(Date.class, new JsonSerializer<>() {
             @Override
             public void serialize(Date date, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
                 SimpleDateFormat formatter = new SimpleDateFormat(DEFAULT_DATE_TIME_FORMAT);
@@ -158,7 +160,7 @@ public class ConfigurerAdapter implements WebMvcConfigurer {
                 jsonGenerator.writeString(formattedDate);
             }
         });
-        javaTimeModule.addDeserializer(Date.class, new JsonDeserializer<Date>() {
+        javaTimeModule.addDeserializer(Date.class, new JsonDeserializer<>() {
             @Override
             public Date deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
                 SimpleDateFormat format = new SimpleDateFormat(DEFAULT_DATE_TIME_FORMAT);

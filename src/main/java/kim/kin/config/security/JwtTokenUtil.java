@@ -1,16 +1,16 @@
-package kim.kin.config;
+package kim.kin.config.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import kim.kin.exception.ReqException;
 import kim.kin.repository.UserInfoRepository;
-import kim.kin.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
@@ -33,9 +33,12 @@ public class JwtTokenUtil implements Serializable {
     @Value("${jwt.secret}")
     private String secret;
     private final UserInfoRepository userInfoRepository;
+    private final UserDetailsServiceImpl userDetailsServiceImpl;
 
-    public JwtTokenUtil(UserInfoRepository userInfoRepository) {
+
+    public JwtTokenUtil(UserInfoRepository userInfoRepository, UserDetailsServiceImpl userDetailsServiceImpl) {
         this.userInfoRepository = userInfoRepository;
+        this.userDetailsServiceImpl = userDetailsServiceImpl;
     }
 
     /**
@@ -51,10 +54,12 @@ public class JwtTokenUtil implements Serializable {
         if (authentication.getPrincipal() instanceof UserDetails) {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             String username = userDetails.getUsername();
-             userInfoRepository.findByUsername(username)
-                    .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
+            return userDetailsServiceImpl.loadUserByUsername(username);
+//             userInfoRepository.findByUsername(username)
+//                    .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
+        } else {
+            throw new ReqException(HttpStatus.UNAUTHORIZED, "UNAUTHORIZED ");
         }
-        throw new ReqException(HttpStatus.UNAUTHORIZED, "UNAUTHORIZED ");
     }
 
     /**

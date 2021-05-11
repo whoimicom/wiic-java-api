@@ -1,4 +1,4 @@
-package kim.kin.config;
+package kim.kin.config.security;
 
 import java.io.IOException;
 import java.io.Serializable;
