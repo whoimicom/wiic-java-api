@@ -1,11 +1,12 @@
 package kim.kin.model;
 
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-
 import java.util.List;
 
-public class UserDTO {
+/**
+ * @author choky
+ */
+public class UserInfoDTO {
 	private String username;
 	private String password;
 	private Boolean enabled;

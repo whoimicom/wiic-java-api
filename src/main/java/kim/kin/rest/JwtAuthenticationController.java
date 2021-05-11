@@ -5,30 +5,34 @@ import kim.kin.config.JwtTokenUtil;
 import kim.kin.kklog.KkLog;
 import kim.kin.model.JwtRequest;
 import kim.kin.model.MetaVO;
-import kim.kin.model.UserDTO;
+import kim.kin.model.UserInfoDTO;
 import kim.kin.model.UserPermissionVO;
-import kim.kin.service.JwtUserDetailsService;
+import kim.kin.service.UserDetailsServiceImpl;
+import kim.kin.service.UserInfoService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
+/**
+ * @author choky
+ */
 @RestController
 @CrossOrigin
 public class JwtAuthenticationController {
     private final AuthenticationManager authenticationManager;
     private final JwtTokenUtil jwtTokenUtil;
-    private final JwtUserDetailsService userDetailsService;
+    private final UserDetailsServiceImpl userDetailsService;
+    private final UserInfoService userInfoService;
 
-    public JwtAuthenticationController(AuthenticationManager authenticationManager, JwtTokenUtil jwtTokenUtil, JwtUserDetailsService userDetailsService) {
+    public JwtAuthenticationController(AuthenticationManager authenticationManager, JwtTokenUtil jwtTokenUtil, UserDetailsServiceImpl userDetailsService, UserInfoService userInfoService) {
         this.authenticationManager = authenticationManager;
         this.jwtTokenUtil = jwtTokenUtil;
         this.userDetailsService = userDetailsService;
+        this.userInfoService = userInfoService;
     }
 
     @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
@@ -48,8 +52,8 @@ public class JwtAuthenticationController {
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public ResponseEntity<?> saveUser(@RequestBody UserDTO user) {
-        return ResponseEntity.ok(userDetailsService.save(user));
+    public ResponseEntity<?> saveUser(@RequestBody UserInfoDTO user) {
+        return ResponseEntity.ok(userInfoService.save(user));
     }
 
     @PostMapping(value = "/user/logout")
@@ -60,7 +64,7 @@ public class JwtAuthenticationController {
     @PostMapping(value = "/getInfo")
     @KkLog
     public ResponseEntity<?> getInfo() {
-        UserDTO us = new UserDTO();
+        UserInfoDTO us = new UserInfoDTO();
         us.setAvatar("https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif");
         us.setEnabled(true);
         us.setIntroduction("I am a super administrator");
