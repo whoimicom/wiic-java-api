@@ -5,6 +5,9 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import java.io.Serializable;
 import java.util.List;
 
+/**
+ * @author choky
+ */
 public class UserPermissionVO implements Serializable {
 
     private String name;
@@ -18,7 +21,7 @@ public class UserPermissionVO implements Serializable {
     private Boolean alwaysShow;
 
     private MetaVO meta;
-    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private List<UserPermissionVO> children;
 
     public String getName() {
@@ -90,5 +93,18 @@ public class UserPermissionVO implements Serializable {
         this.alwaysShow = alwaysShow;
         this.meta = meta;
         this.children = children;
+    }
+
+    @Override
+    public String toString() {
+        return "UserPermissionVO{" +
+                "name='" + name + '\'' +
+                ", path='" + path + '\'' +
+                ", redirect='" + redirect + '\'' +
+                ", component='" + component + '\'' +
+                ", alwaysShow=" + alwaysShow +
+                ", meta=" + meta +
+                ", children=" + children +
+                '}';
     }
 }

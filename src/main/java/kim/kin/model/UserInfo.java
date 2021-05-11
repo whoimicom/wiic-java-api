@@ -6,8 +6,11 @@ import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
 
-@Table("kk_user")
-public class User {
+/**
+ * @author choky
+ */
+@Table("kk_user_info")
+public class UserInfo {
 
 	@Id
 	private long id;
