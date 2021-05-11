@@ -1,13 +1,13 @@
 package kim.kin.rest;
 
 
-import kim.kin.config.JwtTokenUtil;
+import kim.kin.config.security.JwtTokenUtil;
 import kim.kin.kklog.KkLog;
 import kim.kin.model.JwtRequest;
 import kim.kin.model.MetaVO;
 import kim.kin.model.UserInfoDTO;
 import kim.kin.model.UserPermissionVO;
-import kim.kin.service.UserDetailsServiceImpl;
+import kim.kin.config.security.UserDetailsServiceImpl;
 import kim.kin.service.UserInfoService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -37,11 +37,10 @@ public class JwtAuthenticationController {
 
     @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
-
-        authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
-
-        final UserDetails userDetails = userDetailsService
-                .loadUserByUsername(authenticationRequest.getUsername());
+        String username = authenticationRequest.getUsername();
+        String password = authenticationRequest.getPassword();
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+        final UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
         final String token = jwtTokenUtil.generateToken(userDetails);
         Map<String, Object> authInfo = new HashMap<String, Object>(2) {{
@@ -92,14 +91,4 @@ public class JwtAuthenticationController {
         return ResponseEntity.ok(us);
     }
 
-    private void authenticate(String username, String password) {
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-//        try {
-//            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-//        } catch (DisabledException e) {
-//            throw new Exception("USER_DISABLED", e);
-//        } catch (BadCredentialsException e) {
-//            throw new Exception("INVALID_CREDENTIALS", e);
-//        }
-    }
 }

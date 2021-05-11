@@ -1,6 +1,5 @@
-package kim.kin.config;
+package kim.kin.config.security;
 
-import kim.kin.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
