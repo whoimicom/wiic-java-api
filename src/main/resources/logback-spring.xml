@@ -10,8 +10,9 @@
     <property name="maxFileSize" value="512MB"/>
     <property name="totalSizeCap" value="10240MB"/>
     <property name="pattern" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] [%-5level] %logger{36} - %msg%n"/>
-    <property name="otherPattern" value="%d{yyyy-MM-dd HH:mm:ss.SSS} \t %-5p \t %-10t \t %C \t %4L \t %m%n" />
-    <property name="patternColoring" value="%red(%d{yyyy-MM-dd HH:mm:ss}) %green([%thread]) %highlight(%-5level) %boldMagenta(%logger{36}) - %gray(%msg%n)"/>
+    <property name="otherPattern" value="%d{yyyy-MM-dd HH:mm:ss.SSS} \t %-5p \t %-10t \t %C \t %4L \t %m%n"/>
+    <property name="patternColoring"
+              value="%red(%d{yyyy-MM-dd HH:mm:ss}) %green([%thread]) %highlight(%-5level) %boldMagenta(%logger{36}) - %gray(%msg%n)"/>
     <contextName>${contextName}</contextName>
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
@@ -64,12 +65,19 @@
             <pattern>${pattern}</pattern>
         </encoder>
     </appender>
+
+    <!--    config data jpa log-->
     <!--    <logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="TRACE"/>-->
     <!--    <logger name="org.hibernate.type.descriptor.sql.BasicExtractor" level="DEBUG"/>-->
-    <logger name="org.hibernate.SQL" level="DEBUG"/>
+    <!--    <logger name="org.hibernate.SQL" level="DEBUG"/>-->
     <!--    <logger name="org.hibernate.engine.QueryParameters" level="DEBUG"/>-->
     <!--    <logger name="org.hibernate.engine.query.HQLQueryPlan" level="DEBUG"/>-->
-    <!-- root级别   DEBUG -->
+
+    <!--     config jdbc log-->
+    <logger name="org.springframework.jdbc.core.JdbcTemplate" level="debug"/>
+    <logger name="org.springframework.jdbc.core.StatementCreatorUtils" level="debug"/>
+
+    <!-- root level  DEBUG -->
     <root>
         <level value="${level}"/>
         <appender-ref ref="CONSOLE"/>
