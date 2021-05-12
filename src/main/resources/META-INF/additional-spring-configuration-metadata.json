@@ -9,6 +9,11 @@
       "name": "kim.kin.file-path",
       "type": "java.lang.String",
       "description": "Description for kk.file-path."
+    },
+    {
+      "name": "kim.kin.logpath",
+      "type": "java.lang.String",
+      "description": "Description for kim.kin.logpath."
     }
   ]
 }

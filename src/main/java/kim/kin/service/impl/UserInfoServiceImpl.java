@@ -1,10 +1,9 @@
 package kim.kin.service.impl;
 
-import kim.kin.model.UserInfoDTO;
 import kim.kin.model.UserInfo;
+import kim.kin.model.UserInfoDTO;
 import kim.kin.repository.UserInfoRepository;
 import kim.kin.service.UserInfoService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -13,11 +12,14 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class UserInfoServiceImpl implements UserInfoService {
-    @Autowired
-    private UserInfoRepository userInfoRepository;
+    private final UserInfoRepository userInfoRepository;
 
-    @Autowired
-    private PasswordEncoder bcryptEncoder;
+    private final PasswordEncoder bcryptEncoder;
+
+    public UserInfoServiceImpl(UserInfoRepository userInfoRepository, PasswordEncoder bcryptEncoder) {
+        this.userInfoRepository = userInfoRepository;
+        this.bcryptEncoder = bcryptEncoder;
+    }
 
     @Override
     public UserInfo save(UserInfoDTO dto) {
