@@ -3,6 +3,7 @@ package kim.kin.config.security;
 import io.jsonwebtoken.ExpiredJwtException;
 import kim.kin.model.UserInfo;
 import kim.kin.repository.UserInfoRepository;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -57,7 +58,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             }
         } else {
 
-			logger.warn("JWT Token does not begin with Bearer String");
+            logger.warn("JWT Token does not begin with Bearer String");
         }
 
         // Once we get the token validate it.
@@ -85,10 +86,21 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         }
         chain.doFilter(request, response);
     }
+
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
+        boolean result = false;
         String requestURI = request.getRequestURI();
-        return false;
+        if (SecurityParams.LOGIN_URI.equals(requestURI)) {
+            result = true;
+        }
+        if (SecurityParams.REGISTER_URI.equals(requestURI)) {
+            result = true;
+        }
+        if (HttpMethod.OPTIONS.toString().equals(request.getMethod())) {
+            result = true;
+        }
+        return result;
     }
 
 }

@@ -35,26 +35,28 @@ public class JwtAuthenticationController {
     }
 
     @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
-    public ResponseEntity<?> createAuthenticationToken(@RequestBody UserInfoDTO userInfoDTO) throws Exception {
+    @KkLog
+    public ResponseEntity<?> createAuthenticationToken(@RequestBody UserInfoDTO userInfoDTO) {
         String username = userInfoDTO.getUsername();
         String password = userInfoDTO.getPassword();
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
         final UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
         final String token = jwtTokenUtil.generateToken(userDetails);
-        Map<String, Object> authInfo = new HashMap<String, Object>(2) {{
+        Map<String, Object> authInfo = new HashMap<>(1) {{
             put("token", "Bearer " + token);
-//			put("user", jwtUserDto);
         }};
         return ResponseEntity.ok(authInfo);
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
+    @KkLog
     public ResponseEntity<?> saveUser(@RequestBody UserInfoDTO user) {
         return ResponseEntity.ok(userInfoService.save(user));
     }
 
     @PostMapping(value = "/user/logout")
+    @KkLog
     public ResponseEntity<?> logout() {
         return ResponseEntity.ok("SUCCESS");
     }

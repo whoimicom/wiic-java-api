@@ -49,7 +49,7 @@ public class LogAspect {
         currentTime.remove();
         HttpServletRequest request = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
         List<Object> collect = Arrays.stream(joinPoint.getArgs()).collect(Collectors.toList());
-        logger.info("ip:" + getIp(request) + " args:" + collect + " joinPoint:" + joinPoint);
+        logger.info("ip:" + acquireIp(request) + " args:" + collect + " joinPoint:" + joinPoint);
         return result;
     }
 
@@ -62,13 +62,13 @@ public class LogAspect {
         logger.error(e.toString());
         currentTime.remove();
         HttpServletRequest request = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
-        logger.error("ip:" + getIp(request) + " joinPoint:" + joinPoint);
+        logger.error("ip:" + acquireIp(request) + " joinPoint:" + joinPoint);
     }
 
     /**
-     * 获取ip地址
+     * acquire request ip
      */
-    public static String getIp(HttpServletRequest request) {
+    public static String acquireIp(HttpServletRequest request) {
         String ip = request.getHeader("x-forwarded-for");
         if (ip == null || ip.length() == 0 || UNKNOWN.equalsIgnoreCase(ip)) {
             ip = request.getHeader("Proxy-Client-IP");
@@ -80,16 +80,16 @@ public class LogAspect {
             ip = request.getRemoteAddr();
         }
         String comma = ",";
-        String localhost = "127.0.0.1";
+        List<String> localIps = Arrays.asList("127.0.0.1", "0:0:0:0:0:0:0:1", "localhost", "localhost.localdomain", "localhost4", "localhost4.localdomain4", "::1", "localhost6", "localhost6.localdomain6");
         if (ip.contains(comma)) {
             ip = ip.split(",")[0];
         }
-        if (localhost.equals(ip)) {
-            // 获取本机真正的ip地址
+        if (localIps.contains(ip)) {
             try {
                 ip = InetAddress.getLocalHost().getHostAddress();
             } catch (UnknownHostException e) {
                 e.printStackTrace();
+                ip = "UNKNOWN_IP";
             }
         }
         return ip;
