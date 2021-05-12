@@ -47,4 +47,5 @@ kim:
     channel-no: '000'
     file-path: /data/file
 jwt:
-  secret: kinkim
+  base64EncodedSecretKey: kinkim
+  expiration: 36000
