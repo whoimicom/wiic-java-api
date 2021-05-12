@@ -10,8 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
@@ -27,17 +25,15 @@ import java.util.function.Function;
 public class JwtTokenUtil implements Serializable {
 
     private static final long serialVersionUID = -2550185165626007488L;
-
     public static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60;
 
     @Value("${jwt.secret}")
     private String secret;
-    private final UserInfoRepository userInfoRepository;
+
     private final UserDetailsServiceImpl userDetailsServiceImpl;
 
 
     public JwtTokenUtil(UserInfoRepository userInfoRepository, UserDetailsServiceImpl userDetailsServiceImpl) {
-        this.userInfoRepository = userInfoRepository;
         this.userDetailsServiceImpl = userDetailsServiceImpl;
     }
 
@@ -55,8 +51,6 @@ public class JwtTokenUtil implements Serializable {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             String username = userDetails.getUsername();
             return userDetailsServiceImpl.loadUserByUsername(username);
-//             userInfoRepository.findByUsername(username)
-//                    .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
         } else {
             throw new ReqException(HttpStatus.UNAUTHORIZED, "UNAUTHORIZED ");
         }
@@ -65,8 +59,8 @@ public class JwtTokenUtil implements Serializable {
     /**
      * retrieve username from jwt token
      *
-     * @param token
-     * @return
+     * @param token token
+     * @return getUsernameFromToken
      */
     public String getUsernameFromToken(String token) {
         return getClaimFromToken(token, Claims::getSubject);
@@ -75,8 +69,8 @@ public class JwtTokenUtil implements Serializable {
     /**
      * retrieve expiration date from jwt token
      *
-     * @param token
-     * @return
+     * @param token token
+     * @return getExpirationDateFromToken
      */
     public Date getExpirationDateFromToken(String token) {
         return getClaimFromToken(token, Claims::getExpiration);
@@ -90,8 +84,8 @@ public class JwtTokenUtil implements Serializable {
     /**
      * for retrieveing any information from token we will need the secret key
      *
-     * @param token
-     * @return
+     * @param token token
+     * @return Claims
      */
     private Claims getAllClaimsFromToken(String token) {
         return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
@@ -100,8 +94,8 @@ public class JwtTokenUtil implements Serializable {
     /**
      * check if the token has expired
      *
-     * @param token
-     * @return
+     * @param token token
+     * @return isTokenExpired
      */
     private Boolean isTokenExpired(String token) {
         final Date expiration = getExpirationDateFromToken(token);
@@ -111,11 +105,11 @@ public class JwtTokenUtil implements Serializable {
     /**
      * generate token for user
      *
-     * @param userDetails
-     * @return
+     * @param userDetails userDetails
+     * @return token
      */
     public String generateToken(UserDetails userDetails) {
-        Map<String, Object> claims = new HashMap<>();
+        Map<String, Object> claims = new HashMap<>(10);
         return doGenerateToken(claims, userDetails.getUsername());
     }
 
@@ -126,9 +120,9 @@ public class JwtTokenUtil implements Serializable {
      * 3. According to JWS Compact Serialization(https://tools.ietf.org/html/draft-ietf-jose-json-web-signature-41#section-3.1)
      * compaction of the JWT to a URL-safe string
      *
-     * @param claims
-     * @param subject
-     * @return
+     * @param claims  claims
+     * @param subject subject
+     * @return token
      */
 
     private String doGenerateToken(Map<String, Object> claims, String subject) {
@@ -141,9 +135,9 @@ public class JwtTokenUtil implements Serializable {
     /**
      * validate token
      *
-     * @param token
-     * @param userDetails
-     * @return
+     * @param token       token
+     * @param userDetails userDetails
+     * @return result
      */
     public Boolean validateToken(String token, UserDetails userDetails) {
         final String username = getUsernameFromToken(token);

@@ -20,9 +20,12 @@ import java.time.format.DateTimeFormatter;
 
 import static org.springframework.http.ResponseEntity.badRequest;
 
+/**
+ * @author choky
+ */
 @RestControllerAdvice
-public class CommExceptionHanlder {
-    private Logger logger = LoggerFactory.getLogger(CommExceptionHanlder.class);
+public class CommExceptionHandler {
+    private final Logger logger = LoggerFactory.getLogger(CommExceptionHandler.class);
 
     @ExceptionHandler(Exception.class)
     @ResponseBody
@@ -37,8 +40,6 @@ public class CommExceptionHanlder {
     @ResponseBody
     public ResponseEntity<Object> authenticationException(AuthenticationException e) {
         logger.error("RestControllerAdvice：", e);
-        HttpHeaders resHeader = new HttpHeaders();
-        resHeader.add("resCode", "401");
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
     }
 

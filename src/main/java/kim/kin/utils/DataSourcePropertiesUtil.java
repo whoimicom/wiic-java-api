@@ -6,7 +6,11 @@ import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Field;
 import java.sql.SQLException;
+import java.util.Objects;
 
+/**
+ * @author choky
+ */
 @Service
 public class DataSourcePropertiesUtil {
     private final DataSourceProperties dataSourceProperties;
@@ -18,7 +22,7 @@ public class DataSourcePropertiesUtil {
     }
 
     public void test() throws SQLException {
-        String databaseProductName = dataSourceTransactionManager.getDataSource().getConnection()
+        String databaseProductName = Objects.requireNonNull(dataSourceTransactionManager.getDataSource()).getConnection()
                 .getMetaData().getDatabaseProductName();
         System.out.println(databaseProductName);
         printAllFields(dataSourceProperties);

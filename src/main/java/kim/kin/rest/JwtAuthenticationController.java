@@ -2,12 +2,11 @@ package kim.kin.rest;
 
 
 import kim.kin.config.security.JwtTokenUtil;
+import kim.kin.config.security.UserDetailsServiceImpl;
 import kim.kin.kklog.KkLog;
-import kim.kin.model.JwtRequest;
 import kim.kin.model.MetaVO;
 import kim.kin.model.UserInfoDTO;
 import kim.kin.model.UserPermissionVO;
-import kim.kin.config.security.UserDetailsServiceImpl;
 import kim.kin.service.UserInfoService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -36,9 +35,9 @@ public class JwtAuthenticationController {
     }
 
     @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
-    public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
-        String username = authenticationRequest.getUsername();
-        String password = authenticationRequest.getPassword();
+    public ResponseEntity<?> createAuthenticationToken(@RequestBody UserInfoDTO userInfoDTO) throws Exception {
+        String username = userInfoDTO.getUsername();
+        String password = userInfoDTO.getPassword();
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
         final UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 

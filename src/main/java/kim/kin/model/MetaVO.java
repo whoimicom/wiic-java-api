@@ -2,6 +2,10 @@ package kim.kin.model;
 
 import java.io.Serializable;
 
+/**
+ *
+ * @author choky
+ */
 public class MetaVO implements Serializable {
 
     private String title;
