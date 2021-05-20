@@ -1,6 +1,7 @@
 package kim.kin.config.security;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import kim.kin.exception.ReqException;
@@ -12,9 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 
 /**
@@ -84,19 +83,20 @@ public class JwtTokenUtil implements Serializable {
     }
 
     public <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
-        final Claims claims = getAllClaimsFromToken(token);
+        Jws<Claims> claimsJws = Jwts.parser().setSigningKey(base64EncodedSecretKey).parseClaimsJws(token);
+        Object scope = claimsJws.getBody().get("scope");
+        System.out.println(scope);
+        Claims claims = claimsJws.getBody();
+        System.out.println("ID: " + claims.getId());
+        System.out.println("Subject: " + claims.getSubject());
+        System.out.println("Issuer: " + claims.getIssuer());
+        System.out.println("Expiration: " + claims.getExpiration());
+        System.out.println("getNotBefore: " + claims.getNotBefore());
+        System.out.println("getAudience: " + claims.getAudience());
+        System.out.println("getIssuedAt: " + claims.getIssuedAt());
         return claimsResolver.apply(claims);
     }
 
-    /**
-     * for retrieveing any information from token we will need the secret key
-     *
-     * @param token token
-     * @return Claims
-     */
-    private Claims getAllClaimsFromToken(String token) {
-        return Jwts.parser().setSigningKey(base64EncodedSecretKey).parseClaimsJws(token).getBody();
-    }
 
     /**
      * check if the token has expired
@@ -122,6 +122,8 @@ public class JwtTokenUtil implements Serializable {
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>(10);
         String username = userDetails.getUsername();
+        List<String> strings = Arrays.asList("/admin", "/index", "/index.html");
+        claims.put("scope", strings);
         return Jwts.builder().setClaims(claims).setSubject(username).setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + expiration * 1000))
                 .signWith(SignatureAlgorithm.HS512, base64EncodedSecretKey).compact();

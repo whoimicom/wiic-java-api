@@ -66,7 +66,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
 //            UserDetails userDetails = userInfoRepository.findByUsername(username)
 //                    .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
-
+            // 这里需要改造成不读取数据库，解析TOKEN 中的权限
             UserInfo userInfo = userInfoRepository.findByUsername(username)
                     .orElseThrow(() -> new UsernameNotFoundException("User not found with username: "));
             List<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority("admin"));
@@ -90,6 +90,11 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         boolean result = false;
+        logger.info("getPathInfo:"+request.getPathInfo());
+        logger.info("getRequestURI:"+request.getRequestURI());
+        logger.info("getRequestURL:"+request.getRequestURL());
+        logger.info("getUserPrincipal:"+request.getUserPrincipal());
+        logger.info("getServletPath:"+request.getServletPath());
         String requestURI = request.getRequestURI();
         if (SecurityParams.LOGIN_URI.equals(requestURI)) {
             result = true;
