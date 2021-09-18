@@ -1,5 +1,7 @@
 package kim.kin.config.security;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,6 +16,12 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.method.HandlerMethod;
+import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
+
+import java.util.*;
 
 /**
  * @author choky
@@ -22,6 +30,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfigurerKimAdapter extends WebSecurityConfigurerAdapter {
+    private static final Logger logger = LoggerFactory.getLogger(WebSecurityConfigurerKimAdapter.class);
     private final AuthenticationEntryPointKimImpl authenticationEntryPointKimImpl;
     private final UserDetailsServiceImpl userDetailsServiceImpl;
     private final JwtRequestFilter jwtRequestFilter;
@@ -58,6 +67,7 @@ public class WebSecurityConfigurerKimAdapter extends WebSecurityConfigurerAdapte
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
+
     /**
      * hasRole([role])	用户拥有指定的角色时返回true(hasRole()默认会将配置中的 role 带有 ROLE_ 前缀再和用户的角色权限 进行对比)
      * hasAnyRole([role1,role2])	用户拥有任意一个指定中的角色时返回true
@@ -94,12 +104,21 @@ public class WebSecurityConfigurerKimAdapter extends WebSecurityConfigurerAdapte
      */
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
+        Map<RequestMappingInfo, HandlerMethod> handlerMethodMap = getApplicationContext().getBean("requestMappingHandlerMapping", RequestMappingHandlerMapping.class).getHandlerMethods();
+        Map<String, Set<String>> anonymousUrls = anonymousUrls(handlerMethodMap);
         // We don't need CSRF for this example
         httpSecurity.csrf().disable()
                 // dont authenticate this particular request
                 .authorizeRequests().antMatchers("/authenticate", "/register").permitAll()
                 // permitAll OPTIONS
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                .antMatchers(HttpMethod.GET, anonymousUrls.get(HttpMethod.GET.toString()).toArray(String[]::new)).permitAll()
+                .antMatchers(HttpMethod.POST, anonymousUrls.get(HttpMethod.GET.toString()).toArray(String[]::new)).permitAll()
+                .antMatchers(HttpMethod.PUT, anonymousUrls.get(HttpMethod.GET.toString()).toArray(String[]::new)).permitAll()
+                .antMatchers(HttpMethod.PATCH, anonymousUrls.get(HttpMethod.GET.toString()).toArray(String[]::new)).permitAll()
+                .antMatchers(HttpMethod.DELETE, anonymousUrls.get(HttpMethod.GET.toString()).toArray(String[]::new)).permitAll()
+                .antMatchers(anonymousUrls.get("ALL").toArray(String[]::new)).permitAll()
                 // all other requests need to be authenticated
                 .anyRequest().authenticated().and()
                 // make sure we use stateless session; session won't be used to
@@ -112,5 +131,61 @@ public class WebSecurityConfigurerKimAdapter extends WebSecurityConfigurerAdapte
 
         // Add a filter to validate the tokens with every request
         httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+    }
+
+    private Map<String, Set<String>> anonymousUrls(Map<RequestMappingInfo, HandlerMethod> handlerMethodMap) {
+        Map<String, Set<String>> anonymousUrls = new HashMap<>(6);
+        Set<String> get = new HashSet<>();
+        Set<String> post = new HashSet<>();
+        Set<String> put = new HashSet<>();
+        Set<String> patch = new HashSet<>();
+        Set<String> delete = new HashSet<>();
+        Set<String> all = new HashSet<>();
+        for (Map.Entry<RequestMappingInfo, HandlerMethod> infoEntry : handlerMethodMap.entrySet()) {
+            HandlerMethod handlerMethod = infoEntry.getValue();
+            AnonymousKimAccess anonymousKimAccess = handlerMethod.getMethodAnnotation(AnonymousKimAccess.class);
+            if (null != anonymousKimAccess) {
+                List<RequestMethod> requestMethods = new ArrayList<>(infoEntry.getKey().getMethodsCondition().getMethods());
+                if (0 != requestMethods.size()) {
+                    HttpMethod httpMethod = HttpMethod.resolve(requestMethods.get(0).name());
+                    switch (Objects.requireNonNull(httpMethod)) {
+                        case GET:
+                            assert infoEntry.getKey().getPatternsCondition() != null;
+                            get.addAll(infoEntry.getKey().getPatternsCondition().getPatterns());
+                            break;
+                        case POST:
+                            assert infoEntry.getKey().getPatternsCondition() != null;
+                            post.addAll(infoEntry.getKey().getPatternsCondition().getPatterns());
+                            break;
+                        case PUT:
+                            assert infoEntry.getKey().getPatternsCondition() != null;
+                            put.addAll(infoEntry.getKey().getPatternsCondition().getPatterns());
+                            break;
+                        case PATCH:
+                            assert infoEntry.getKey().getPatternsCondition() != null;
+                            patch.addAll(infoEntry.getKey().getPatternsCondition().getPatterns());
+                            break;
+                        case DELETE:
+                            assert infoEntry.getKey().getPatternsCondition() != null;
+                            delete.addAll(infoEntry.getKey().getPatternsCondition().getPatterns());
+                            break;
+                        default:
+                            break;
+                    }
+                } else {
+                    all.addAll(infoEntry.getKey().getPatternsCondition().getPatterns());
+                }
+
+            }
+        }
+        anonymousUrls.put(HttpMethod.GET.toString(), get);
+        anonymousUrls.put(HttpMethod.POST.toString(), post);
+        anonymousUrls.put(HttpMethod.PUT.toString(), put);
+        anonymousUrls.put(HttpMethod.PATCH.toString(), patch);
+        anonymousUrls.put(HttpMethod.DELETE.toString(), delete);
+        anonymousUrls.put("ALL", all);
+        logger.info(String.valueOf(anonymousUrls));
+        logger.info(Arrays.toString(anonymousUrls.get("ALL").toArray(String[]::new)));
+        return anonymousUrls;
     }
 }
