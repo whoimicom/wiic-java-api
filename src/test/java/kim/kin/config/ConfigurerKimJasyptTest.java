@@ -12,7 +12,7 @@ import java.sql.SQLException;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
-public class ConfigurerJasyptTest {
+public class ConfigurerKimJasyptTest {
     @Autowired
     ConfigurableEnvironment environment;
     @Autowired

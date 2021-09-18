@@ -12,7 +12,7 @@ import java.io.IOException;
  * @author choky
  */
 @Component
-public class AccessDenied implements AccessDeniedHandler {
+public class AccessDeniedKimImpl implements AccessDeniedHandler {
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException {

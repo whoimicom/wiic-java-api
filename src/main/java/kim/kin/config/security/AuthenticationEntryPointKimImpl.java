@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
  * @author choky
  */
 @Component
-public class AuthenticationEntryPointImpl implements AuthenticationEntryPoint, Serializable {
+public class AuthenticationEntryPointKimImpl implements AuthenticationEntryPoint, Serializable {
 
 	private static final long serialVersionUID = -7858869558953243875L;
 
