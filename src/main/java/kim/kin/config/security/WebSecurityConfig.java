@@ -22,17 +22,17 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-    private final AuthenticationEntryPointImpl authenticationEntryPointImpl;
+    private final AuthenticationEntryPointKimImpl authenticationEntryPointKimImpl;
     private final UserDetailsServiceImpl userDetailsServiceImpl;
     private final JwtRequestFilter jwtRequestFilter;
-    private final AccessDenied accessDenied;
+    private final AccessDeniedKimImpl accessDeniedKimImpl;
 
 
-    public WebSecurityConfig(AuthenticationEntryPointImpl authenticationEntryPointImpl, UserDetailsServiceImpl userDetailsServiceImpl, JwtRequestFilter jwtRequestFilter, AccessDenied accessDenied) {
-        this.authenticationEntryPointImpl = authenticationEntryPointImpl;
+    public WebSecurityConfig(AuthenticationEntryPointKimImpl authenticationEntryPointKimImpl, UserDetailsServiceImpl userDetailsServiceImpl, JwtRequestFilter jwtRequestFilter, AccessDeniedKimImpl accessDeniedKimImpl) {
+        this.authenticationEntryPointKimImpl = authenticationEntryPointKimImpl;
         this.userDetailsServiceImpl = userDetailsServiceImpl;
         this.jwtRequestFilter = jwtRequestFilter;
-        this.accessDenied = accessDenied;
+        this.accessDeniedKimImpl = accessDeniedKimImpl;
     }
 
     /**
@@ -104,8 +104,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated().and()
                 // make sure we use stateless session; session won't be used to
                 // store user's state.
-                .exceptionHandling().authenticationEntryPoint(authenticationEntryPointImpl)
-                .accessDeniedHandler(accessDenied)
+                .exceptionHandling().authenticationEntryPoint(authenticationEntryPointKimImpl)
+                .accessDeniedHandler(accessDeniedKimImpl)
                 .and().sessionManagement()
 
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);

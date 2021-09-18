@@ -3,7 +3,7 @@ package kim.kin.rest;
 
 import kim.kin.config.security.JwtTokenUtil;
 import kim.kin.config.security.UserDetailsServiceImpl;
-import kim.kin.kklog.KkLog;
+import kim.kin.kklog.LogKimAnnotation;
 import kim.kin.model.MetaVO;
 import kim.kin.model.UserInfoDTO;
 import kim.kin.model.UserPermissionVO;
@@ -35,7 +35,7 @@ public class JwtAuthenticationController {
     }
 
     @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
-    @KkLog
+    @LogKimAnnotation
     public ResponseEntity<?> createAuthenticationToken(@RequestBody UserInfoDTO userInfoDTO) {
         String username = userInfoDTO.getUsername();
         String password = userInfoDTO.getPassword();
@@ -50,19 +50,19 @@ public class JwtAuthenticationController {
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    @KkLog
+    @LogKimAnnotation
     public ResponseEntity<?> saveUser(@RequestBody UserInfoDTO user) {
         return ResponseEntity.ok(userInfoService.save(user));
     }
 
     @PostMapping(value = "/user/logout")
-    @KkLog
+    @LogKimAnnotation
     public ResponseEntity<?> logout() {
         return ResponseEntity.ok("SUCCESS");
     }
 
     @PostMapping(value = "/getInfo")
-    @KkLog
+    @LogKimAnnotation
     public ResponseEntity<?> getInfo() {
         UserInfoDTO us = new UserInfoDTO();
         us.setAvatar("https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif");

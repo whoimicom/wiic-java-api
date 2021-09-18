@@ -4,7 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import kim.kin.exception.ReqException;
+import kim.kin.exception.ReqKimException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
@@ -51,14 +51,14 @@ public class JwtTokenUtil implements Serializable {
     public UserDetails getCurrentUser() {
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null) {
-            throw new ReqException(HttpStatus.UNAUTHORIZED, "token timeout");
+            throw new ReqKimException(HttpStatus.UNAUTHORIZED, "token timeout");
         }
         if (authentication.getPrincipal() instanceof UserDetails) {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             String username = userDetails.getUsername();
             return userDetailsServiceImpl.loadUserByUsername(username);
         } else {
-            throw new ReqException(HttpStatus.UNAUTHORIZED, "UNAUTHORIZED ");
+            throw new ReqKimException(HttpStatus.UNAUTHORIZED, "UNAUTHORIZED ");
         }
     }
 
