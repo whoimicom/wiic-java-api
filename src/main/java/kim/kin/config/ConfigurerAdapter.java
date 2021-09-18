@@ -12,14 +12,20 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
 import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -33,21 +39,51 @@ import java.util.Date;
  * @author choky
  */
 @Configuration
-public class Jsr310FormatKimConfig {
-    private static final Logger logger = LoggerFactory.getLogger(Jsr310FormatKimConfig.class);
-    public static final String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
-    public static final String DATE_FORMAT = "yyyy-MM-dd";
-    public static final String TIME_FORMAT = "HH:mm:ss";
+@EnableWebMvc
+public class ConfigurerAdapter implements WebMvcConfigurer {
+
+    @Value("${kim.kin.file-path}")
+    private String filePath;
+
+    @Bean
+    public CorsFilter corsFilter() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowCredentials(true);
+        config.addAllowedOriginPattern("*");
+        config.addAllowedHeader("*");
+        config.addAllowedMethod("*");
+        source.registerCorsConfiguration("/**", config);
+        return new CorsFilter(source);
+    }
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        String path = "file:" + filePath.replace("\\", "/");
+        registry.addResourceHandler("/file/**").addResourceLocations(path + File.separator).setCachePeriod(0);
+        registry.addResourceHandler("/**").addResourceLocations("classpath:/META-INF/resources/").setCachePeriod(0);
+    }
+
+
+    /**
+     * 默认日期时间格式
+     */
+    public static final String DEFAULT_DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
+    /**
+     * 默认日期格式
+     */
+    public static final String DEFAULT_DATE_FORMAT = "yyyy-MM-dd";
+    /**
+     * 默认时间格式
+     */
+    public static final String DEFAULT_TIME_FORMAT = "HH:mm:ss";
 
     /**
      * LocalDate转换器，用于转换RequestParam和PathVariable参数
      */
     @Bean
     public Converter<String, LocalDate> localDateConverter() {
-        return source -> {
-            logger.info("localDateConverter[{}]" + source);
-            return LocalDate.parse(source, DateTimeFormatter.ofPattern(DATE_FORMAT));
-        };
+        return source -> LocalDate.parse(source, DateTimeFormatter.ofPattern(DEFAULT_DATE_FORMAT));
     }
 
     /**
@@ -55,10 +91,7 @@ public class Jsr310FormatKimConfig {
      */
     @Bean
     public Converter<String, LocalDateTime> localDateTimeConverter() {
-        return source -> {
-            logger.info("localDateTimeConverter[{}]" + source);
-            return LocalDateTime.parse(source, DateTimeFormatter.ofPattern(DATE_TIME_FORMAT));
-        };
+        return source -> LocalDateTime.parse(source, DateTimeFormatter.ofPattern(DEFAULT_DATE_TIME_FORMAT));
     }
 
     /**
@@ -66,10 +99,7 @@ public class Jsr310FormatKimConfig {
      */
     @Bean
     public Converter<String, LocalTime> localTimeConverter() {
-        return source -> {
-            logger.info("localTimeConverter[{}]" + source);
-            return LocalTime.parse(source, DateTimeFormatter.ofPattern(TIME_FORMAT));
-        };
+        return source -> LocalTime.parse(source, DateTimeFormatter.ofPattern(DEFAULT_TIME_FORMAT));
     }
 
     /**
@@ -78,9 +108,8 @@ public class Jsr310FormatKimConfig {
     @Bean
     public Converter<String, Date> dateConverter() {
         return source -> {
+            SimpleDateFormat format = new SimpleDateFormat(DEFAULT_DATE_TIME_FORMAT);
             try {
-                logger.info("dateConverter[{}]" + source);
-                SimpleDateFormat format = new SimpleDateFormat(DATE_TIME_FORMAT);
                 return format.parse(source);
             } catch (ParseException e) {
                 throw new RuntimeException(e);
@@ -93,17 +122,9 @@ public class Jsr310FormatKimConfig {
         return new LocalDateSerializer(DateTimeFormatter.ISO_LOCAL_DATE);
     }
 
-
     @Bean
-    @Primary
     public Jackson2ObjectMapperBuilderCustomizer jackson2ObjectMapperBuilderCustomizer() {
-        logger.info("Jackson2ObjectMapperBuilderCustomizer:");
-        return builder -> builder.serializerByType(LocalDateTime.class, new LocalDateTimeSerializer(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)))
-                .serializerByType(LocalDate.class, new LocalDateSerializer(DateTimeFormatter.ofPattern(DATE_FORMAT)))
-                .serializerByType(LocalTime.class, new LocalTimeSerializer(DateTimeFormatter.ofPattern(TIME_FORMAT)))
-                .deserializerByType(LocalDateTime.class, new LocalDateTimeDeserializer(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)))
-                .deserializerByType(LocalDate.class, new LocalDateDeserializer(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)))
-                .deserializerByType(LocalTime.class, new LocalTimeDeserializer(DateTimeFormatter.ofPattern(TIME_FORMAT)));
+        return builder -> builder.serializerByType(LocalDate.class, localDateDeserializer());
     }
 
     /**
@@ -112,7 +133,7 @@ public class Jsr310FormatKimConfig {
     @Bean
     @Primary
     public ObjectMapper objectMapper() {
-        logger.info("ObjectMapper:");
+//        ObjectMapper objectMapper = new ObjectMapper();
         ObjectMapper objectMapper = new ObjectMapper()
                 .registerModule(new ParameterNamesModule())
                 .registerModule(new Jdk8Module())
@@ -122,19 +143,19 @@ public class Jsr310FormatKimConfig {
 
         //LocalDateTime系列序列化和反序列化模块，继承自jsr310，我们在这里修改了日期格式
         JavaTimeModule javaTimeModule = new JavaTimeModule();
-        javaTimeModule.addSerializer(LocalDateTime.class, new LocalDateTimeSerializer(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)));
-        javaTimeModule.addSerializer(LocalDate.class, new LocalDateSerializer(DateTimeFormatter.ofPattern(DATE_FORMAT)));
-        javaTimeModule.addSerializer(LocalTime.class, new LocalTimeSerializer(DateTimeFormatter.ofPattern(TIME_FORMAT)));
-        javaTimeModule.addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)));
-        javaTimeModule.addDeserializer(LocalDate.class, new LocalDateDeserializer(DateTimeFormatter.ofPattern(DATE_FORMAT)));
-        javaTimeModule.addDeserializer(LocalTime.class, new LocalTimeDeserializer(DateTimeFormatter.ofPattern(TIME_FORMAT)));
+        javaTimeModule.addSerializer(LocalDateTime.class, new LocalDateTimeSerializer(DateTimeFormatter.ofPattern(DEFAULT_DATE_TIME_FORMAT)));
+        javaTimeModule.addSerializer(LocalDate.class, new LocalDateSerializer(DateTimeFormatter.ofPattern(DEFAULT_DATE_FORMAT)));
+        javaTimeModule.addSerializer(LocalTime.class, new LocalTimeSerializer(DateTimeFormatter.ofPattern(DEFAULT_TIME_FORMAT)));
+        javaTimeModule.addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer(DateTimeFormatter.ofPattern(DEFAULT_DATE_TIME_FORMAT)));
+        javaTimeModule.addDeserializer(LocalDate.class, new LocalDateDeserializer(DateTimeFormatter.ofPattern(DEFAULT_DATE_FORMAT)));
+        javaTimeModule.addDeserializer(LocalTime.class, new LocalTimeDeserializer(DateTimeFormatter.ofPattern(DEFAULT_TIME_FORMAT)));
 
 
         //Date序列化和反序列化
         javaTimeModule.addSerializer(Date.class, new JsonSerializer<>() {
             @Override
             public void serialize(Date date, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
-                SimpleDateFormat formatter = new SimpleDateFormat(DATE_TIME_FORMAT);
+                SimpleDateFormat formatter = new SimpleDateFormat(DEFAULT_DATE_TIME_FORMAT);
                 String formattedDate = formatter.format(date);
                 jsonGenerator.writeString(formattedDate);
             }
@@ -142,7 +163,7 @@ public class Jsr310FormatKimConfig {
         javaTimeModule.addDeserializer(Date.class, new JsonDeserializer<>() {
             @Override
             public Date deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
-                SimpleDateFormat format = new SimpleDateFormat(DATE_TIME_FORMAT);
+                SimpleDateFormat format = new SimpleDateFormat(DEFAULT_DATE_TIME_FORMAT);
                 String date = jsonParser.getText();
                 try {
                     return format.parse(date);

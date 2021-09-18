@@ -1,8 +1,9 @@
 package kim.kin.rest;
 
 
-import kim.kin.config.security.UserDetailsServiceKimImpl;
-import kim.kin.kklog.LogKimAnnotation;
+import kim.kin.config.security.JwtTokenUtil;
+import kim.kin.config.security.UserDetailsServiceImpl;
+import kim.kin.kklog.KkLog;
 import kim.kin.model.MetaVO;
 import kim.kin.model.UserInfoDTO;
 import kim.kin.model.UserPermissionVO;
@@ -11,13 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.web.DefaultRedirectStrategy;
-import org.springframework.security.web.RedirectStrategy;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.*;
 
 /**
@@ -25,44 +21,48 @@ import java.util.*;
  */
 @RestController
 @CrossOrigin
-public class AuthenticationController {
+public class JwtAuthenticationController {
     private final AuthenticationManager authenticationManager;
-    private final UserDetailsServiceKimImpl userDetailsService;
+    private final JwtTokenUtil jwtTokenUtil;
+    private final UserDetailsServiceImpl userDetailsService;
     private final UserInfoService userInfoService;
-    private final RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
 
-
-    public AuthenticationController(AuthenticationManager authenticationManager, UserDetailsServiceKimImpl userDetailsService, UserInfoService userInfoService) {
+    public JwtAuthenticationController(AuthenticationManager authenticationManager, JwtTokenUtil jwtTokenUtil, UserDetailsServiceImpl userDetailsService, UserInfoService userInfoService) {
         this.authenticationManager = authenticationManager;
+        this.jwtTokenUtil = jwtTokenUtil;
         this.userDetailsService = userDetailsService;
         this.userInfoService = userInfoService;
     }
 
     @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
-    @LogKimAnnotation
-    public void createAuthenticationToken(HttpServletRequest request, HttpServletResponse response,@RequestBody UserInfoDTO userInfoDTO) throws IOException {
+    @KkLog
+    public ResponseEntity<?> createAuthenticationToken(@RequestBody UserInfoDTO userInfoDTO) {
         String username = userInfoDTO.getUsername();
         String password = userInfoDTO.getPassword();
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
         final UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-//        return ResponseEntity.ok(userDetails);
-        redirectStrategy.sendRedirect(request, response, "/index.html");
+
+        final String token = jwtTokenUtil.generateToken(userDetails);
+        Map<String, Object> authInfo = new HashMap<>(1) {{
+            put("token", "Bearer " + token);
+        }};
+        return ResponseEntity.ok(authInfo);
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    @LogKimAnnotation
+    @KkLog
     public ResponseEntity<?> saveUser(@RequestBody UserInfoDTO user) {
         return ResponseEntity.ok(userInfoService.save(user));
     }
 
-//    @PostMapping(value = "/user/logout")
-//    @KkLog
-//    public ResponseEntity<?> logout() {
-//        return ResponseEntity.ok("SUCCESS");
-//    }
+    @PostMapping(value = "/user/logout")
+    @KkLog
+    public ResponseEntity<?> logout() {
+        return ResponseEntity.ok("SUCCESS");
+    }
 
     @PostMapping(value = "/getInfo")
-    @LogKimAnnotation
+    @KkLog
     public ResponseEntity<?> getInfo() {
         UserInfoDTO us = new UserInfoDTO();
         us.setAvatar("https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif");
