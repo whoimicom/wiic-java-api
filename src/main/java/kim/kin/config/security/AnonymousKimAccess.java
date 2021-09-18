@@ -1,5 +1,4 @@
-
-package kim.kin.kklog;
+package kim.kin.config.security;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -11,6 +10,5 @@ import java.lang.annotation.Target;
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface KkLog {
-    String value() default "";
+public @interface AnonymousKimAccess {
 }
