@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Arrays;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -26,15 +27,15 @@ import java.util.stream.Collectors;
  */
 @Component
 @Aspect
-public class LogAspect {
+public class LogKimAspect {
     private static final String UNKNOWN = "unknown";
     ThreadLocal<Long> currentTime = new ThreadLocal<>();
-    private final Logger logger = LoggerFactory.getLogger(LogAspect.class);
+    private final Logger logger = LoggerFactory.getLogger(LogKimAspect.class);
 
     /**
      * 配置切入点
      */
-    @Pointcut("@annotation(kim.kin.kklog.KkLog)")
+    @Pointcut("@annotation(kim.kin.kklog.LogKimAnnotation)")
     public void logPointcut() {
     }
 
@@ -49,6 +50,13 @@ public class LogAspect {
         currentTime.remove();
         HttpServletRequest request = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
         List<Object> collect = Arrays.stream(joinPoint.getArgs()).collect(Collectors.toList());
+        Enumeration<String> headerNames = request.getHeaderNames();
+        logger.debug("header:------------------------------------------------");
+        headerNames.asIterator().forEachRemaining(s -> {
+            String header = request.getHeader(s);
+            logger.debug(s + " :" + header);
+        });
+        logger.debug("header:------------------------------------------------");
         logger.info("ip:" + acquireIp(request) + " args:" + collect + " joinPoint:" + joinPoint);
         return result;
     }

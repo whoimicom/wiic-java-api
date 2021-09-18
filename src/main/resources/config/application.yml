@@ -1,11 +1,26 @@
 server:
-  port: 10000
+  port: 80
   servlet:
-    context-path: /kk-api
+    context-path: /kk-mgr
 spring:
   profiles:
     active: sit
+  jpa:
+    open-in-view: true
+    show-sql: false
+    properties:
+      entity-scan-packages: kim.kin
+    hibernate:
+      naming:
+        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyComponentPathImpl
+#        implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
+#        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyJpaCompliantImpl
+#        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyHbmImpl
+#        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
+#        physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
   datasource:
+    type: com.mysql.cj.jdbc.MysqlXADataSource
     hikari:
       auto-commit: true
       connection-test-query: SELECT 1
@@ -15,37 +30,49 @@ spring:
       maximum-pool-size: 20
       minimum-idle: 10
       pool-name: DatebookHikariCP
-    type: com.zaxxer.hikari.HikariDataSource
   jackson:
     serialization:
       write-dates-as-timestamps: false
+    date-format: yyyy-MM-dd HH:mm:ss
   servlet:
     multipart:
       location: ${user.home}/multipartUpload
       max-file-size: 10MB
       max-request-size: 100MB
+  thymeleaf:
+    prefix: classpath:/templates/
+    check-template-location: true
+    suffix: .html
+    encoding: UTF-8
+    mode: HTML
+    cache: false
+    servlet:
+      content-type: text/html
+
 management:
-  server:
-    port: 15000
-#    servlet:
-#      context-path: /actuator
   endpoint:
     health:
       show-details: always
     shutdown:
       enabled: true
-#  endpoints:
-#    jmx:
-#      exposure:
-#        include: '*'
-#    web:
-#      base-path: /actuator
-#      exposure:
-#        include: '/actuator/*'
+  endpoints:
+    jmx:
+      exposure:
+        include: '*'
+    web:
+      exposure:
+        include: '*'
 kim:
   kin:
     channel-no: '000'
     file-path: /data/file
-jwt:
-  base64EncodedSecretKey: kinkim
-  expiration: 36000
+
+jbpm:
+  executor:
+    enabled: false
+  default:
+    processId: test
+  bpmn2file:
+    path: test.bpmn,hello.bpmn
+
+
