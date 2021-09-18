@@ -7,15 +7,15 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
  *
  * @author choky
  */
-public class ReqKimException extends RuntimeException{
+public class ReqException extends RuntimeException{
 
     private Integer status = BAD_REQUEST.value();
 
-    public ReqKimException(String msg){
+    public ReqException(String msg){
         super(msg);
     }
 
-    public ReqKimException(HttpStatus status, String msg){
+    public ReqException(HttpStatus status, String msg){
         super(msg);
         this.status = status.value();
     }
