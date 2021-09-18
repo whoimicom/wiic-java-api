@@ -21,14 +21,14 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+public class WebSecurityConfigurerKimAdapter extends WebSecurityConfigurerAdapter {
     private final AuthenticationEntryPointKimImpl authenticationEntryPointKimImpl;
     private final UserDetailsServiceImpl userDetailsServiceImpl;
     private final JwtRequestFilter jwtRequestFilter;
     private final AccessDeniedKimImpl accessDeniedKimImpl;
 
 
-    public WebSecurityConfig(AuthenticationEntryPointKimImpl authenticationEntryPointKimImpl, UserDetailsServiceImpl userDetailsServiceImpl, JwtRequestFilter jwtRequestFilter, AccessDeniedKimImpl accessDeniedKimImpl) {
+    public WebSecurityConfigurerKimAdapter(AuthenticationEntryPointKimImpl authenticationEntryPointKimImpl, UserDetailsServiceImpl userDetailsServiceImpl, JwtRequestFilter jwtRequestFilter, AccessDeniedKimImpl accessDeniedKimImpl) {
         this.authenticationEntryPointKimImpl = authenticationEntryPointKimImpl;
         this.userDetailsServiceImpl = userDetailsServiceImpl;
         this.jwtRequestFilter = jwtRequestFilter;
