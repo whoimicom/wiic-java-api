@@ -9,10 +9,10 @@
         <relativePath/>
     </parent>
     <groupId>kim.kin</groupId>
-    <artifactId>kk-promgr-api</artifactId>
+    <artifactId>promgt-api</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>kk-promgr-api</name>
-    <description>Demo project for Spring Boot</description>
+    <name>promgt-api</name>
+    <description>Porject Management</description>
 
     <properties>
         <java.version>11</java.version>
