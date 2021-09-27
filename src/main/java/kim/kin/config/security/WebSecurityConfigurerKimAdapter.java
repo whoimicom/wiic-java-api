@@ -112,12 +112,11 @@ public class WebSecurityConfigurerKimAdapter extends WebSecurityConfigurerAdapte
                 .authorizeRequests().antMatchers("/authenticate", "/register").permitAll()
                 // permitAll OPTIONS
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .antMatchers(HttpMethod.GET, anonymousUrls.get(HttpMethod.GET.toString()).toArray(String[]::new)).permitAll()
-                .antMatchers(HttpMethod.POST, anonymousUrls.get(HttpMethod.GET.toString()).toArray(String[]::new)).permitAll()
-                .antMatchers(HttpMethod.PUT, anonymousUrls.get(HttpMethod.GET.toString()).toArray(String[]::new)).permitAll()
-                .antMatchers(HttpMethod.PATCH, anonymousUrls.get(HttpMethod.GET.toString()).toArray(String[]::new)).permitAll()
-                .antMatchers(HttpMethod.DELETE, anonymousUrls.get(HttpMethod.GET.toString()).toArray(String[]::new)).permitAll()
+                .antMatchers(HttpMethod.POST, anonymousUrls.get(HttpMethod.POST.toString()).toArray(String[]::new)).permitAll()
+                .antMatchers(HttpMethod.PUT, anonymousUrls.get(HttpMethod.PUT.toString()).toArray(String[]::new)).permitAll()
+                .antMatchers(HttpMethod.PATCH, anonymousUrls.get(HttpMethod.PATCH.toString()).toArray(String[]::new)).permitAll()
+                .antMatchers(HttpMethod.DELETE, anonymousUrls.get(HttpMethod.DELETE.toString()).toArray(String[]::new)).permitAll()
                 .antMatchers(anonymousUrls.get("ALL").toArray(String[]::new)).permitAll()
                 // all other requests need to be authenticated
                 .anyRequest().authenticated().and()
@@ -173,6 +172,7 @@ public class WebSecurityConfigurerKimAdapter extends WebSecurityConfigurerAdapte
                             break;
                     }
                 } else {
+                    assert infoEntry.getKey().getPatternsCondition() != null;
                     all.addAll(infoEntry.getKey().getPatternsCondition().getPatterns());
                 }
 
