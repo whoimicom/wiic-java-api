@@ -1,29 +1,24 @@
 package kim.kin.utils;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
+
 import org.springframework.stereotype.Component;
 
-import javax.net.ssl.*;
 import java.io.*;
-import java.net.*;
+import java.net.URL;
 import java.nio.channels.FileChannel;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
-import java.security.SecureRandom;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
-import java.util.*;
+import java.util.Base64;
+import java.util.HashMap;
+import java.util.Map;
 
+
+/**
+ * @author kin.kim
+ */
 @Component
 public class FileKimUtils {
-    private static final String CONTENT_TYPE_FORM = "application/x-www-form-urlencoded;charset=utf-8";
-    private static final String CONTENT_TYPE_JSON = "application/json; charset=utf-8";
-    private static final String CONTENT_TYPE_STREAM = "application/octet-stream; charset=utf-8";
-    private static final String charset = "utf-8";
+
     //    @Value("${fs.apiurl}")
     //private String fsApiurl = "http://172.16.2.172:10011/huij-fs";
     private final String fsApiurl = "http://172.16.2.160:10016/oa-api/api/pictures";
@@ -37,10 +32,6 @@ public class FileKimUtils {
     }
 
     public static void main(String[] args) throws Exception {
-        ObjectMapper mapper = new ObjectMapper()
-                .registerModule(new ParameterNamesModule())
-                .registerModule(new Jdk8Module())
-                .registerModule(new JavaTimeModule());
 
 //        String resp = getInstance().postJson("http://localhost:8080/test/test", "{\"custCmonId\":\"12345678\",\"custNo\":\"111\",\"custNo111\":\"706923\"}");
 //        String resp = getInstance().getForm("http://localhost:10011/huij-fs/testpost");
@@ -54,9 +45,11 @@ public class FileKimUtils {
         System.out.println(bytes[1]);
         System.out.println("bytes2:" + Base64.getEncoder().encodeToString(bytes));
 
-//        //上传多文件
+        //上传多文件
 //        String v1 = getInstance().uploadFile(new String[]{"D:\\data\\fs\\1.png", "D:\\data\\fs\\1.1.jpg"});
 //        System.out.println(v1);
+
+
 //        //上传单文件
 
 //        String v2 = getInstance().uploadFile("D:\\data\\fs\\2.png");
@@ -209,7 +202,7 @@ public class FileKimUtils {
      * @throws Exception
      */
     public String uploadFile(String[] files, Map<String, String> headerMap) throws Exception {
-        return HttpKimUtils.getInstance().postFiles(fsApiurl + "/uploads", files, headerMap);
+        return HttpKimUtils.getInstance().uploadMultipartFile(fsApiurl + "/uploads", files, headerMap);
     }
 
     /**
@@ -221,7 +214,7 @@ public class FileKimUtils {
      * @throws Exception
      */
     public String uploadFile(String url, String[] files, Map<String, String> headerMap) throws Exception {
-        return HttpKimUtils.getInstance().postFiles(url, files, headerMap);
+        return HttpKimUtils.getInstance().uploadMultipartFile(url, files, headerMap);
     }
 
     /**
@@ -233,11 +226,11 @@ public class FileKimUtils {
      * @throws IOException
      */
     public String uploadFile(String filePath, Map<String, String> headerMap) throws Exception {
-        return postFile(fsApiurl + "/uploadbytes", filePath, headerMap);
+        return HttpKimUtils.getInstance().postFile(fsApiurl + "/uploadbytes", filePath, headerMap);
     }
 
     public String uploadFile(String url, String filePath, Map<String, String> headerMap) throws Exception {
-        return postFile(url, filePath, headerMap);
+        return HttpKimUtils.getInstance().postFile(url, filePath, headerMap);
     }
 
     /**
@@ -250,26 +243,10 @@ public class FileKimUtils {
      * @throws IOException
      */
     public String uploadFile(byte[] bytes, String originalFilename, Map<String, String> headerMap) throws Exception {
-        return postFile(fsApiurl + "/uploadbytes", bytes, originalFilename, headerMap);
+        return HttpKimUtils.getInstance().postFile(fsApiurl + "/uploadbytes", bytes, originalFilename, headerMap);
     }
 
-    private String postFile(String url, byte[] bytes, String originalFilename, Map<String, String> headerMap) throws Exception {
-        originalFilename = Optional.ofNullable(originalFilename).orElse("unknownFile");
-        headerMap = Optional.ofNullable(headerMap).orElse(new HashMap<>(0));
-        headerMap.put("originalFilename", originalFilename);
-        return HttpKimUtils.getInstance().doRequest("POST", url, bytes, 15000, 15000, CONTENT_TYPE_STREAM, headerMap);
-    }
 
-    private String postFile(String url, String filePath, Map<String, String> headerMap) throws Exception {
-        File file = new File(filePath);
-        InputStream input = new FileInputStream(file);
-        byte[] bytes = new byte[input.available()];
-        input.read(bytes);
-        String originalFilename = Optional.of(file.getName()).orElse("unknownFile");
-        headerMap = Optional.ofNullable(headerMap).orElse(new HashMap<>(0));
-        headerMap.put("originalFilename", originalFilename);
-        return HttpKimUtils.getInstance().doRequest("POST", url, bytes, 15000, 15000, CONTENT_TYPE_STREAM, headerMap);
-    }
 
 
 }
