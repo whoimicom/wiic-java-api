@@ -65,60 +65,19 @@ public class HttpKimUtils {
         return doRequest("POST", url, bytes, CONNECT_TIMEOUT, READ_TIMEOUT, CONTENT_TYPE_STREAM, headerMap);
     }
 
-    /**
-     * POST 以application/x-www-form-urlencoded;charset=utf-8方式传输
-     *
-     * @param url       requestUrl
-     * @param headerMap headerMap
-     * @return
-     * @throws SocketTimeoutException
-     * @throws IOException
-     */
     public String postForm(String url, Map<String, String> headerMap) throws SocketTimeoutException, IOException, NoSuchAlgorithmException, KeyManagementException {
         return doRequest("POST", url, "", CONNECT_TIMEOUT, READ_TIMEOUT, CONTENT_TYPE_FORM, headerMap);
     }
 
-    /**
-     * POST 以application/x-www-form-urlencoded;charset=utf-8方式传输
-     *
-     * @param url
-     * @param params
-     * @param headerMap
-     * @return
-     * @throws SocketTimeoutException
-     * @throws IOException
-     */
     public String postForm(String url, Map<String, String> params, Map<String, String> headerMap) throws SocketTimeoutException, IOException, NoSuchAlgorithmException, KeyManagementException {
         return doRequest("POST", url, buildQuery(params), CONNECT_TIMEOUT, READ_TIMEOUT, CONTENT_TYPE_FORM, headerMap);
     }
 
-    /**
-     * POST 以application/x-www-form-urlencoded;charset=utf-8方式传输
-     *
-     * @param url
-     * @param headerMap
-     * @return
-     * @throws SocketTimeoutException
-     * @throws IOException
-     * @throws NoSuchAlgorithmException
-     * @throws KeyManagementException
-     */
+
     public String getForm(String url, Map<String, String> headerMap) throws SocketTimeoutException, IOException, NoSuchAlgorithmException, KeyManagementException {
         return doRequest("GET", url, "", CONNECT_TIMEOUT, READ_TIMEOUT, CONTENT_TYPE_FORM, headerMap);
     }
 
-    /**
-     * POST 以application/x-www-form-urlencoded;charset=utf-8方式传输
-     *
-     * @param url
-     * @param params
-     * @param headerMap
-     * @return
-     * @throws SocketTimeoutException
-     * @throws IOException
-     * @throws NoSuchAlgorithmException
-     * @throws KeyManagementException
-     */
     public String getForm(String url, Map<String, String> params, Map<String, String> headerMap) throws SocketTimeoutException, IOException, NoSuchAlgorithmException, KeyManagementException {
         return doRequest("GET", url, buildQuery(params), CONNECT_TIMEOUT, READ_TIMEOUT, CONTENT_TYPE_FORM, headerMap);
     }
@@ -226,15 +185,6 @@ public class HttpKimUtils {
         }
     }
 
-    /**
-     * 以application/json; charset=utf-8方式传输
-     *
-     * @param url
-     * @param jsonContent
-     * @return
-     * @throws SocketTimeoutException
-     * @throws IOException
-     */
     public String postJson(String url, String jsonContent) throws NoSuchAlgorithmException, IOException, KeyManagementException {
         return doRequest("POST", url, jsonContent, CONNECT_TIMEOUT, READ_TIMEOUT, CONTENT_TYPE_JSON, null);
     }
@@ -280,9 +230,9 @@ public class HttpKimUtils {
     /**
      * Multipart File Upload
      *
-     * @param actionUrl
-     * @param uploadFilePaths
-     * @param headerMap
+     * @param actionUrl actionUrl
+     * @param uploadFilePaths uploadFilePaths
+     * @param headerMap headerMap
      * @return
      * @throws IOException
      */
