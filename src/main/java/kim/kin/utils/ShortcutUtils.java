@@ -47,7 +47,7 @@ public class ShortcutUtils {
             int length = split.length();
             if (countLine.get() == 1) {
                 columnCount.set(length);
-                for (int column = 1; column < length; column++) {
+                for (int column = 1; column < columnCount.get(); column++) {
                     String value = split.get(column);
                     AtomicReference<Map<Integer, String>> columnMap = new AtomicReference<>(new HashMap<Integer, String>());
                     columnMap.get().put(1, value);
@@ -55,15 +55,14 @@ public class ShortcutUtils {
                 }
             } else if (countLine.get() == 2) {
                 for (int column = 1; column < columnCount.get(); column++) {
-//                    String value = split.get(column);
                     Map<Integer, String> columnMap = columnData.get(column);
-                    columnMap.put(countLine.get() - 1, "-");
+                    columnMap.put(countLine.get() , "-");
                 }
             } else {
                 for (int column = 1; column < columnCount.get(); column++) {
                     String value = split.get(column);
                     Map<Integer, String> columnMap = columnData.get(column);
-                    columnMap.put(countLine.get() - 1, value);
+                    columnMap.put(countLine.get() , value);
                 }
             }
             countLine.getAndIncrement();
@@ -73,13 +72,13 @@ public class ShortcutUtils {
             Integer max = columnMap.values().stream().map(String::length).max(Integer::compareTo).orElse(0);
             maxLength.put(column, max);
         }
-        for (int line = 0; line < countLine.get() - 1; line++) {
+        for (int line = 1; line < countLine.get(); line++) {
             String allLine = "|";
             for (int column = 1; column < columnCount.get(); column++) {
                 Map<Integer, String> integerStringMap = columnData.get(column);
                 String s = integerStringMap.get(line);
-                if (line==1) {
-                    allLine = allLine + String.format("%1$-" + maxLength.get(column) + "s", s).replace("","-") + " |";
+                if (line==2) {
+                    allLine = allLine + String.format("%1$-" + maxLength.get(column) + "s", s).replace(" ","-") + " |";
                 }else{
                     allLine = allLine + String.format("%1$-" + maxLength.get(column) + "s", s) + " |";
                 }
@@ -87,27 +86,6 @@ public class ShortcutUtils {
             }
             System.out.println(allLine);
         }
-
-        try (BufferedWriter bufferedWriter = Files.newBufferedWriter(path, StandardCharsets.UTF_8, StandardOpenOption.APPEND)) {
-
-      /*          if ((split.length() >= 2)) {
-                    try {
-                        String str = String.format("%1$-" + 27 + "s", split.get(0).trim()) + " |➤" + split.get(1).trim() + LINE_SEPARATOR;
-                        System.out.print(str);
-                        bufferedWriter.write(str);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    try {
-                        bufferedWriter.write(lin + LINE_SEPARATOR);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }*/
-
-        }
-        System.out.println(maxLength);
         System.out.println(columnData);
         System.out.println("FINISH");
     }
