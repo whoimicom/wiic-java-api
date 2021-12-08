@@ -24,6 +24,31 @@
       "name": "jwt.expiration",
       "type": "java.lang.String",
       "description": "Description for jwt.expiration."
+    },
+    {
+      "name": "swagger.enable",
+      "type": "java.lang.String",
+      "description": "Description for swagger.enable."
+    },
+    {
+      "name": "swagger.application-name",
+      "type": "java.lang.String",
+      "description": "Description for swagger.application-name."
+    },
+    {
+      "name": "swagger.application-version",
+      "type": "java.lang.String",
+      "description": "Description for swagger.application-version."
+    },
+    {
+      "name": "swagger.application-description",
+      "type": "java.lang.String",
+      "description": "Description for swagger.application-description."
+    },
+    {
+      "name": "swagger.try-host",
+      "type": "java.lang.String",
+      "description": "Description for swagger.try-host."
     }
   ]
 }

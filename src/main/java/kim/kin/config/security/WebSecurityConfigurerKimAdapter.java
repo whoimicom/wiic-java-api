@@ -110,6 +110,12 @@ public class WebSecurityConfigurerKimAdapter extends WebSecurityConfigurerAdapte
         httpSecurity.csrf().disable()
                 // dont authenticate this particular request
                 .authorizeRequests().antMatchers("/authenticate", "/register").permitAll()
+                // swagger
+                .antMatchers( "/swagger**/**").permitAll()
+                .antMatchers( "/webjars/**").permitAll()
+                .antMatchers( "/v3/**").permitAll()
+                .antMatchers( "/doc.html").permitAll()
+
                 // permitAll OPTIONS
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .antMatchers(HttpMethod.GET, anonymousUrls.get(HttpMethod.GET.toString()).toArray(String[]::new)).permitAll()
