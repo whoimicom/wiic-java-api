@@ -1,8 +1,10 @@
 server:
   port: 10000
   servlet:
-    context-path: /kk-api
+    context-path: /promgt-api
 spring:
+  application:
+    name: Promgt
   profiles:
     active: sit
   datasource:
@@ -49,3 +51,9 @@ kim:
 jwt:
   base64EncodedSecretKey: kinkim
   expiration: 36000
+swagger:
+  enable: true
+  application-name: ${spring.application.name}
+  application-version: 1.0
+  application-description: springfox swagger
+  try-host: http://localhost:${server.port}
