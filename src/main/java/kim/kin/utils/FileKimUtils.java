@@ -8,9 +8,12 @@ import java.net.URL;
 import java.nio.channels.FileChannel;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
-import java.util.Base64;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+import java.util.zip.ZipOutputStream;
 
 
 /**
@@ -32,18 +35,18 @@ public class FileKimUtils {
     }
 
     public static void main(String[] args) throws Exception {
-
+        long startTime = System.currentTimeMillis();
 //        String resp = getInstance().postJson("http://localhost:8080/test/test", "{\"custCmonId\":\"12345678\",\"custNo\":\"111\",\"custNo111\":\"706923\"}");
 //        String resp = getInstance().getForm("http://localhost:10011/huij-fs/testpost");
-        long startTime = System.currentTimeMillis();
-
-
-        File file = new File("D:\\data\\fs\\3.jpg");
-        InputStream input = new FileInputStream(file);
-        byte[] bytes = new byte[input.available()];
-        input.read(bytes);
-        System.out.println(bytes[1]);
-        System.out.println("bytes2:" + Base64.getEncoder().encodeToString(bytes));
+//        long startTime = System.currentTimeMillis();
+//
+//
+//        File file = new File("D:\\data\\fs\\3.jpg");
+//        InputStream input = new FileInputStream(file);
+//        byte[] bytes = new byte[input.available()];
+//        input.read(bytes);
+//        System.out.println(bytes[1]);
+//        System.out.println("bytes2:" + Base64.getEncoder().encodeToString(bytes));
 
         //上传多文件
 //        String v1 = getInstance().uploadFile(new String[]{"D:\\data\\fs\\1.png", "D:\\data\\fs\\1.1.jpg"});
@@ -57,9 +60,126 @@ public class FileKimUtils {
 
 //        通过字节数组上传
 
-        String v3 = getInstance().uploadFile(bytes, "3.jpg");
-        System.out.println(v3);
+//        String v3 = getInstance().uploadFile(bytes, "3.jpg");
+//        System.out.println(v3);
+//            readInputStream(new FileInputStream("D:\\application\\ludashisetup2020.exe")); // 1378
+//        fileSaveAs("D:\\application\\ludashisetup2020.exe","D:\\application\\ludashisetup2020.exe1");// 1630
+        long endTime = System.currentTimeMillis();
+        System.out.println(endTime-startTime);
 
+    }
+
+    public static void compressZip(String sourceFilePath, String zipFilePath) {
+        try (ZipOutputStream zipOutputStream = new ZipOutputStream(new FileOutputStream(zipFilePath))) {
+            File sourceFile = new File(sourceFilePath);
+            compress(sourceFile, zipOutputStream, sourceFile.getName(), true);
+        } catch (Exception e) {
+            throw new RuntimeException("zip error from ZipUtils", e);
+        }
+    }
+
+    private static void compress(File sourceFile, ZipOutputStream zipOutputStream, String name, boolean KeepDirStructure) throws Exception {
+        byte[] buf = new byte[1024];
+        if (sourceFile.isFile()) {
+            zipOutputStream.putNextEntry(new ZipEntry(name));
+            int len;
+            try (FileInputStream in = new FileInputStream(sourceFile);) {
+                while ((len = in.read(buf)) != -1) {
+                    zipOutputStream.write(buf, 0, len);
+                }
+                zipOutputStream.closeEntry();
+            }
+        } else {
+            File[] listFiles = sourceFile.listFiles();
+            if (listFiles == null || listFiles.length == 0) {
+                if (KeepDirStructure) {
+                    zipOutputStream.putNextEntry(new ZipEntry(name + "/"));
+                    zipOutputStream.closeEntry();
+                }
+            } else {
+                for (File file : listFiles) {
+                    if (KeepDirStructure) {
+                        String dirName = name + "/" + file.getName();
+                        compress(file, zipOutputStream, dirName, true);
+                    } else {
+                        compress(file, zipOutputStream, file.getName(), false);
+                    }
+                }
+            }
+        }
+    }
+
+    public static void decompressZip(String srcFilePath, String destDirPath) throws RuntimeException {
+        long start = System.currentTimeMillis();
+        File srcFile = new File(srcFilePath);
+        if (!srcFile.exists()) {
+            throw new RuntimeException(srcFile.getPath() + "所指文件不存在");
+        }
+        try (ZipFile zipFile = new ZipFile(srcFile)) {
+            Enumeration<?> entries = zipFile.entries();
+            while (entries.hasMoreElements()) {
+                ZipEntry entry = (ZipEntry) entries.nextElement();
+                System.out.println("解压" + entry.getName());
+                if (entry.isDirectory()) {
+                    String dirPath = destDirPath + "/" + entry.getName();
+                    File dir = new File(dirPath);
+                    dir.mkdirs();
+                } else {
+                    File targetFile = new File(destDirPath + "/" + entry.getName());
+                    if (!targetFile.getParentFile().exists()) {
+                        targetFile.getParentFile().mkdirs();
+                    }
+                    targetFile.createNewFile();
+                    try (InputStream is = zipFile.getInputStream(entry);
+                         FileOutputStream fos = new FileOutputStream(targetFile);) {
+                        int len;
+                        byte[] buf = new byte[1024];
+                        while ((len = is.read(buf)) != -1) {
+                            fos.write(buf, 0, len);
+                        }
+                    }
+                }
+            }
+            long end = System.currentTimeMillis();
+            System.out.println("解压完成，耗时：" + (end - start) + " ms");
+        } catch (Exception e) {
+            throw new RuntimeException("unzip error from ZipUtils", e);
+        }
+    }
+
+    /**
+     * 文件另存
+     *
+     * @param strOldpath
+     * @param strNewPath
+     * @throws IOException
+     */
+    public static void fileCopy(String strOldpath, String strNewPath) throws IOException {
+        File fOldFile = new File(strOldpath);
+        if (fOldFile.exists()) {
+            int bytesum = 0;
+            int byteread = 0;
+            InputStream inputStream = new FileInputStream(fOldFile);
+            FileOutputStream fileOutputStream = new FileOutputStream(strNewPath);
+            byte[] buffer = new byte[1444];
+            while ((byteread = inputStream.read(buffer)) != -1) {
+                bytesum += byteread; //这一行是记录文件大小的，可以删去
+                fileOutputStream.write(buffer, 0, byteread);//三个参数，第一个参数是写的内容，
+                //第二个参数是从什么地方开始写，第三个参数是需要写的大小
+            }
+            inputStream.close();
+            fileOutputStream.close();
+        }
+    }
+
+    public static void fileSaveAs(String strOldpath, String strNewPath) throws IOException {
+            Files.move(new File(strOldpath).toPath(),new File(strNewPath).toPath());
+    }
+
+    public static byte[] readInputStream(InputStream inputStream) throws IOException {
+        byte[] bytes = new byte[inputStream.available()];
+        inputStream.read(bytes);
+        return bytes;
     }
 
     public static void deleteFolder(File folder) throws Exception {
@@ -71,15 +191,12 @@ public class FileKimUtils {
             if (files != null) {
                 for (File file : files) {
                     if (file.isDirectory()) {
-                        //递归直到目录下没有文件
                         deleteFolder(file);
                     } else {
-                        //删除
                         file.delete();
                     }
                 }
             }
-            //删除
         }
         folder.delete();
     }
@@ -111,8 +228,8 @@ public class FileKimUtils {
     }
 
     /**
-     * 使用FileChannel从文件复制到文件 据说此方法要快些
-     * 大文件可用此方法
+     * 使用FileChannel从文件复制到文件
+     * 大文件可用此方法加速
      */
     public static void copyFileUsingFileChannels(File source, File dest)
             throws IOException {
@@ -245,8 +362,6 @@ public class FileKimUtils {
     public String uploadFile(byte[] bytes, String originalFilename, Map<String, String> headerMap) throws Exception {
         return HttpKimUtils.getInstance().postFile(fsApiurl + "/uploadbytes", bytes, originalFilename, headerMap);
     }
-
-
 
 
 }
