@@ -1,5 +1,12 @@
 package kim.kin.config.security;
 
+import kim.kin.config.security.email.EmailCodeAuthenticationFilter;
+import kim.kin.config.security.email.EmailCodeAuthenticationProvider;
+import kim.kin.config.security.handler.AuthenticationFailureKimImpl;
+import kim.kin.config.security.handler.AuthenticationSuccessKimImpl;
+import kim.kin.config.security.user.UserDetailsServiceImpl;
+import kim.kin.config.security.user.UsernamePasswordKimFilter;
+import kim.kin.repository.UserInfoRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,26 +42,38 @@ public class WebSecurityConfigurerKimAdapter extends WebSecurityConfigurerAdapte
     private final UserDetailsServiceImpl userDetailsServiceImpl;
     private final JwtRequestFilter jwtRequestFilter;
     private final AccessDeniedKimImpl accessDeniedKimImpl;
+    private final AuthenticationFailureKimImpl authenticationFailureKimImpl;
+    private final AuthenticationSuccessKimImpl authenticationSuccessKimImpl;
+    private final JwtTokenUtil jwtTokenUtil;
+    @Autowired
+    private UserInfoRepository userInfoRepository;
 
-
-    public WebSecurityConfigurerKimAdapter(AuthenticationEntryPointKimImpl authenticationEntryPointKimImpl, UserDetailsServiceImpl userDetailsServiceImpl, JwtRequestFilter jwtRequestFilter, AccessDeniedKimImpl accessDeniedKimImpl) {
+    public WebSecurityConfigurerKimAdapter(AuthenticationEntryPointKimImpl authenticationEntryPointKimImpl, UserDetailsServiceImpl userDetailsServiceImpl, JwtRequestFilter jwtRequestFilter, AccessDeniedKimImpl accessDeniedKimImpl, AuthenticationFailureKimImpl authenticationFailureKimImpl, AuthenticationSuccessKimImpl authenticationSuccessKimImpl, JwtTokenUtil jwtTokenUtil) {
         this.authenticationEntryPointKimImpl = authenticationEntryPointKimImpl;
         this.userDetailsServiceImpl = userDetailsServiceImpl;
         this.jwtRequestFilter = jwtRequestFilter;
         this.accessDeniedKimImpl = accessDeniedKimImpl;
+        this.authenticationFailureKimImpl = authenticationFailureKimImpl;
+        this.authenticationSuccessKimImpl = authenticationSuccessKimImpl;
+        this.jwtTokenUtil = jwtTokenUtil;
     }
 
-    /**
-     * configure AuthenticationManager so that it knows from where to load
-     * user for matching credentials
-     * Use BCryptPasswordEncoder
-     *
-     * @param authenticationManagerBuilder authenticationManagerBuilder
-     * @throws Exception Exception
-     */
+    /*
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
         authenticationManagerBuilder.userDetailsService(userDetailsServiceImpl).passwordEncoder(passwordEncoder());
+    } */
+    @Bean
+    public EmailCodeAuthenticationFilter emailCodeAuthenticationFilter() {
+        EmailCodeAuthenticationFilter emailCodeAuthenticationFilter = new EmailCodeAuthenticationFilter();
+        emailCodeAuthenticationFilter.setAuthenticationSuccessHandler(authenticationSuccessKimImpl);
+        emailCodeAuthenticationFilter.setAuthenticationFailureHandler(authenticationFailureKimImpl);
+        return emailCodeAuthenticationFilter;
+    }
+
+    @Bean
+    public EmailCodeAuthenticationProvider emailCodeAuthenticationProvider() {
+        return new EmailCodeAuthenticationProvider(userInfoRepository);
     }
 
     @Bean
@@ -62,10 +81,22 @@ public class WebSecurityConfigurerKimAdapter extends WebSecurityConfigurerAdapte
         return new BCryptPasswordEncoder();
     }
 
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userDetailsServiceImpl).passwordEncoder(passwordEncoder());
+        auth.authenticationProvider(emailCodeAuthenticationProvider());
+    }
+
     @Bean
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
+    }
+
+    @Bean
+    @Override
+    protected AuthenticationManager authenticationManager() throws Exception {
+        return super.authenticationManager();
     }
 
     /**
@@ -106,15 +137,19 @@ public class WebSecurityConfigurerKimAdapter extends WebSecurityConfigurerAdapte
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         Map<RequestMappingInfo, HandlerMethod> handlerMethodMap = getApplicationContext().getBean("requestMappingHandlerMapping", RequestMappingHandlerMapping.class).getHandlerMethods();
         Map<String, Set<String>> anonymousUrls = anonymousUrls(handlerMethodMap);
+
+        httpSecurity.authenticationProvider(emailCodeAuthenticationProvider())
+                .addFilterBefore(emailCodeAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilter(new UsernamePasswordKimFilter(authenticationManager(), jwtTokenUtil));
         // We don't need CSRF for this example
         httpSecurity.csrf().disable()
                 // dont authenticate this particular request
                 .authorizeRequests().antMatchers("/authenticate", "/register").permitAll()
                 // swagger
-                .antMatchers( "/swagger**/**").permitAll()
-                .antMatchers( "/webjars/**").permitAll()
-                .antMatchers( "/v3/**").permitAll()
-                .antMatchers( "/doc.html").permitAll()
+                .antMatchers("/swagger**/**").permitAll()
+                .antMatchers("/webjars/**").permitAll()
+                .antMatchers("/v3/**").permitAll()
+                .antMatchers("/doc.html").permitAll()
 
                 // permitAll OPTIONS
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()

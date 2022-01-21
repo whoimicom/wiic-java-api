@@ -36,31 +36,31 @@ public class JwtTokenUtil implements Serializable {
     @Value("${jwt.expiration}")
     private Long expiration;
 
-    private final UserDetailsServiceImpl userDetailsServiceImpl;
-
-
-    public JwtTokenUtil(UserDetailsServiceImpl userDetailsServiceImpl) {
-        this.userDetailsServiceImpl = userDetailsServiceImpl;
-    }
+//    private final UserDetailsServiceImpl userDetailsServiceImpl;
+//
+//
+//    public JwtTokenUtil(UserDetailsServiceImpl userDetailsServiceImpl) {
+//        this.userDetailsServiceImpl = userDetailsServiceImpl;
+//    }
 
     /**
      * 获取当前登录的用户
      *
      * @return UserDetails
      */
-    public UserDetails getCurrentUser() {
-        final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null) {
-            throw new ReqKimException(HttpStatus.UNAUTHORIZED, "token timeout");
-        }
-        if (authentication.getPrincipal() instanceof UserDetails) {
-            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            String username = userDetails.getUsername();
-            return userDetailsServiceImpl.loadUserByUsername(username);
-        } else {
-            throw new ReqKimException(HttpStatus.UNAUTHORIZED, "UNAUTHORIZED ");
-        }
-    }
+//    public UserDetails getCurrentUser() {
+//        final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        if (authentication == null) {
+//            throw new ReqKimException(HttpStatus.UNAUTHORIZED, "token timeout");
+//        }
+//        if (authentication.getPrincipal() instanceof UserDetails) {
+//            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+//            String username = userDetails.getUsername();
+//            return userDetailsServiceImpl.loadUserByUsername(username);
+//        } else {
+//            throw new ReqKimException(HttpStatus.UNAUTHORIZED, "UNAUTHORIZED ");
+//        }
+//    }
 
     /**
      * retrieve username from jwt token

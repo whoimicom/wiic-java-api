@@ -1,9 +1,8 @@
 package kim.kin.rest;
 
 
-import io.swagger.annotations.Api;
 import kim.kin.config.security.JwtTokenUtil;
-import kim.kin.config.security.UserDetailsServiceImpl;
+import kim.kin.config.security.user.UserDetailsServiceImpl;
 import kim.kin.kklog.LogKimAnnotation;
 import kim.kin.model.MetaVO;
 import kim.kin.model.UserInfoDTO;

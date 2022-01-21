@@ -1,4 +1,4 @@
-package kim.kin.config.security;
+package kim.kin.config.security.user;
 
 import kim.kin.model.UserInfo;
 import kim.kin.repository.UserInfoRepository;

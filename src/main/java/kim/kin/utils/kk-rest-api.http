@@ -19,6 +19,23 @@ Content-Type: application/json;charset=utf-8
 {"username":"kinkim","password":"123456"}
 > {% client.global.set("auth_token", response.body.token); %}
 
+###
+POST http://localhost:10000/promgt-api/email/login?email=im@kin.kim&e_code=123456
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json
+Content-Encoding: utf-8
+
+{"email":"im@kin.kim","e_code":"123456"}
+> {% client.global.set("auth_token", response.body.token); %}
+
+###
+POST http://localhost:10000/promgt-api/login?username=kinkim&password=123456
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json
+Content-Encoding: utf-8
+
 
 
 ###
