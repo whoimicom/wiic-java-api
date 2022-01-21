@@ -27,6 +27,38 @@ public class UserInfo {
 	@Column
 	private String introduction;
 
+	@Column
+	private String email;
+	@Column
+	private String mobile;
+	@Column
+	private String gender;
+
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getMobile() {
+		return mobile;
+	}
+
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
+	}
+
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
 	public String getUsername() {
 		return username;
 	}

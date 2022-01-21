@@ -20,5 +20,11 @@ public interface UserInfoRepository extends CrudRepository<UserInfo, Integer> {
      */
     Optional<UserInfo> findByUsername(String username);
 
+    /**
+     * @param email email
+     * @return
+     */
+    Optional<UserInfo> findByEmail(String email);
+
 
 }
