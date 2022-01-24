@@ -8,6 +8,7 @@ import kim.kin.exception.ReqKimException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -85,7 +86,9 @@ public class JwtTokenUtil implements Serializable {
     public <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
         Jws<Claims> claimsJws = Jwts.parser().setSigningKey(base64EncodedSecretKey).parseClaimsJws(token);
         Object scope = claimsJws.getBody().get("scope");
+        Object authorities = claimsJws.getBody().get("authorities");
         System.out.println(scope);
+        System.out.println(authorities);
         Claims claims = claimsJws.getBody();
         System.out.println("ID: " + claims.getId());
         System.out.println("Subject: " + claims.getSubject());
@@ -97,6 +100,16 @@ public class JwtTokenUtil implements Serializable {
         return claimsResolver.apply(claims);
     }
 
+    public List<GrantedAuthority> getAuthentication(String token) {
+        return (List<GrantedAuthority>) getTokenBody(token).get("authorities");
+    }
+
+    private Claims getTokenBody(String token) {
+        return Jwts.parser()
+                .setSigningKey(base64EncodedSecretKey)
+                .parseClaimsJws(token)
+                .getBody();
+    }
 
     /**
      * check if the token has expired
@@ -123,7 +136,9 @@ public class JwtTokenUtil implements Serializable {
         Map<String, Object> claims = new HashMap<>(10);
         String username = userDetails.getUsername();
         List<String> strings = Arrays.asList("/admin", "/index", "/index.html");
+        Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
         claims.put("scope", strings);
+        claims.put("authorities", authorities);
         return Jwts.builder().setClaims(claims).setSubject(username).setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + expiration * 1000))
                 .signWith(SignatureAlgorithm.HS512, base64EncodedSecretKey).compact();
