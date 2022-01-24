@@ -36,6 +36,7 @@ Cache-Control: no-cache
 Content-Type: application/json
 Content-Encoding: utf-8
 
+> {% client.global.set("auth_token", response.body); %}
 
 
 ###

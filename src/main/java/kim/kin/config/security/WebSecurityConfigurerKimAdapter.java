@@ -40,7 +40,7 @@ public class WebSecurityConfigurerKimAdapter extends WebSecurityConfigurerAdapte
     private static final Logger logger = LoggerFactory.getLogger(WebSecurityConfigurerKimAdapter.class);
     private final AuthenticationEntryPointKimImpl authenticationEntryPointKimImpl;
     private final UserDetailsServiceImpl userDetailsServiceImpl;
-    private final JwtRequestFilter jwtRequestFilter;
+    //    private final JwtRequestFilter jwtRequestFilter;
     private final AccessDeniedKimImpl accessDeniedKimImpl;
     private final AuthenticationFailureKimImpl authenticationFailureKimImpl;
     private final AuthenticationSuccessKimImpl authenticationSuccessKimImpl;
@@ -48,10 +48,10 @@ public class WebSecurityConfigurerKimAdapter extends WebSecurityConfigurerAdapte
     @Autowired
     private UserInfoRepository userInfoRepository;
 
-    public WebSecurityConfigurerKimAdapter(AuthenticationEntryPointKimImpl authenticationEntryPointKimImpl, UserDetailsServiceImpl userDetailsServiceImpl, JwtRequestFilter jwtRequestFilter, AccessDeniedKimImpl accessDeniedKimImpl, AuthenticationFailureKimImpl authenticationFailureKimImpl, AuthenticationSuccessKimImpl authenticationSuccessKimImpl, JwtTokenUtil jwtTokenUtil) {
+    public WebSecurityConfigurerKimAdapter(AuthenticationEntryPointKimImpl authenticationEntryPointKimImpl, UserDetailsServiceImpl userDetailsServiceImpl, AccessDeniedKimImpl accessDeniedKimImpl, AuthenticationFailureKimImpl authenticationFailureKimImpl, AuthenticationSuccessKimImpl authenticationSuccessKimImpl, JwtTokenUtil jwtTokenUtil) {
         this.authenticationEntryPointKimImpl = authenticationEntryPointKimImpl;
         this.userDetailsServiceImpl = userDetailsServiceImpl;
-        this.jwtRequestFilter = jwtRequestFilter;
+//        this.jwtRequestFilter = jwtRequestFilter;
         this.accessDeniedKimImpl = accessDeniedKimImpl;
         this.authenticationFailureKimImpl = authenticationFailureKimImpl;
         this.authenticationSuccessKimImpl = authenticationSuccessKimImpl;
@@ -170,7 +170,8 @@ public class WebSecurityConfigurerKimAdapter extends WebSecurityConfigurerAdapte
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         // Add a filter to validate the tokens with every request
-        httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+//        httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+        httpSecurity.addFilter(new JwtRequestFilter(authenticationManager(), jwtTokenUtil));
     }
 
     private Map<String, Set<String>> anonymousUrls(Map<RequestMappingInfo, HandlerMethod> handlerMethodMap) {

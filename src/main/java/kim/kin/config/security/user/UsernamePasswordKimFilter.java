@@ -99,7 +99,7 @@ public class UsernamePasswordKimFilter extends UsernamePasswordAuthenticationFil
         response.setStatus(HttpServletResponse.SC_OK);
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         PrintWriter writer = response.getWriter();
-        writer.write(new ObjectMapper().writeValueAsString(token));
+        writer.write(new ObjectMapper().writeValueAsString("Bearer "+token));
     }
 
     /**
