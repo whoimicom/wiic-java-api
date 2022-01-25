@@ -27,7 +27,7 @@ public class ShortcutUtils {
 
     public static void main(String[] args) throws IOException {
         formatMarkdown();
-        System.out.println(JwtTokenUtil.AUTH_KIM_TOKEN.length());
+        System.out.println(JwtTokenUtil.AUTH_KIM_PREFIX.length());
     }
 
     /**
