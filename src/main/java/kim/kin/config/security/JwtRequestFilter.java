@@ -37,13 +37,13 @@ public class JwtRequestFilter extends BasicAuthenticationFilter {
 
         final String authHeader = request.getHeader(JwtTokenUtil.AUTH_KIM_HEADER);
         // 如果请求头中没有Authorization信息则直接放行了
-        if (authHeader == null || !authHeader.startsWith(JwtTokenUtil.AUTH_KIM_TOKEN)) {
+        if (authHeader == null || !authHeader.startsWith(JwtTokenUtil.AUTH_KIM_PREFIX)) {
             chain.doFilter(request, response);
             logger.warn("JWT Token does not begin with Bearer String");
         } else {
             // JWT Token is in the form "Bearer token". Remove Bearer word and get only the Token
-            if (authHeader.startsWith(JwtTokenUtil.AUTH_KIM_TOKEN)) {
-                String jwtToken = authHeader.substring(JwtTokenUtil.AUTH_KIM_TOKEN.length());
+            if (authHeader.startsWith(JwtTokenUtil.AUTH_KIM_PREFIX)) {
+                String jwtToken = authHeader.substring(JwtTokenUtil.AUTH_KIM_PREFIX.length());
                 try {
                     String username = jwtTokenUtil.getUsernameFromToken(jwtToken);
                     // Once we get the token validate it.

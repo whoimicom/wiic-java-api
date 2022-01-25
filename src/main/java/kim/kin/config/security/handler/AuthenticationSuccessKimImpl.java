@@ -32,7 +32,7 @@ public class AuthenticationSuccessKimImpl implements AuthenticationSuccessHandle
         response.setCharacterEncoding("UTF-8");
         PrintWriter writer = response.getWriter();
         Map<String, Object> authInfo = new HashMap<>(1) {{
-            put("token", JwtTokenUtil.AUTH_KIM_TOKEN + token);
+            put("token", JwtTokenUtil.AUTH_KIM_PREFIX + token);
         }};
         writer.write(new ObjectMapper().writeValueAsString(authInfo));
     }
