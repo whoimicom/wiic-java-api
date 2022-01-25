@@ -9,7 +9,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -29,7 +29,21 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public User loadUserByUsername(String username) throws UsernameNotFoundException {
         UserInfo userInfo = userInfoRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
-        List<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority("admin"));
+        //通过用户获取权限
+        List<String> permission = new ArrayList<>(1);
+        permission.add("admin");
+        permission.add("/userInfo");
+        permission.add("/currentUser");
+        permission.add("/hello");
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        for (String permissionCode : permission) {
+            if (permissionCode != null && !permissionCode.equals("")) {
+                GrantedAuthority grantedAuthority =
+                        new SimpleGrantedAuthority(permissionCode);
+                authorities.add(grantedAuthority);
+            }
+        }
+//        List<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority("admin"));
         return new User(userInfo.getUsername(), userInfo.getPassword(), authorities);
     }
 
