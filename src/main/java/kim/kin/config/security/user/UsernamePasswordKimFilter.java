@@ -2,6 +2,7 @@ package kim.kin.config.security.user;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kim.kin.config.security.JwtTokenUtil;
+import kim.kin.config.security.SecurityKimParams;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationServiceException;
@@ -76,7 +77,7 @@ public class UsernamePasswordKimFilter extends UsernamePasswordAuthenticationFil
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         PrintWriter writer = response.getWriter();
         Map<String, Object> authInfo = new HashMap<>(1) {{
-            put("token", JwtTokenUtil.AUTH_KIM_PREFIX + token);
+            put("token", SecurityKimParams.AUTH_KIM_PREFIX + token);
         }};
         writer.write(new ObjectMapper().writeValueAsString(authInfo));
     }

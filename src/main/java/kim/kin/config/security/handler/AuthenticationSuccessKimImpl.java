@@ -2,6 +2,7 @@ package kim.kin.config.security.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kim.kin.config.security.JwtTokenUtil;
+import kim.kin.config.security.SecurityKimParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
@@ -32,7 +33,7 @@ public class AuthenticationSuccessKimImpl implements AuthenticationSuccessHandle
         response.setCharacterEncoding("UTF-8");
         PrintWriter writer = response.getWriter();
         Map<String, Object> authInfo = new HashMap<>(1) {{
-            put("token", JwtTokenUtil.AUTH_KIM_PREFIX + token);
+            put("token", SecurityKimParams.AUTH_KIM_PREFIX + token);
         }};
         writer.write(new ObjectMapper().writeValueAsString(authInfo));
     }

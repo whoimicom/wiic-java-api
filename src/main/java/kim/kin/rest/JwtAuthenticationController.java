@@ -2,6 +2,7 @@ package kim.kin.rest;
 
 
 import kim.kin.config.security.JwtTokenUtil;
+import kim.kin.config.security.SecurityKimParams;
 import kim.kin.config.security.user.UserDetailsServiceImpl;
 import kim.kin.kklog.LogKimAnnotation;
 import kim.kin.model.MetaVO;
@@ -46,7 +47,7 @@ public class JwtAuthenticationController {
         User user = userDetailsService.loadUserByUsername(username);
         String token = jwtTokenUtil.generateToken(username, user.getAuthorities());
         Map<String, Object> authInfo = new HashMap<>(1) {{
-            put("token", JwtTokenUtil.AUTH_KIM_PREFIX + token);
+            put("token", SecurityKimParams.AUTH_KIM_PREFIX + token);
         }};
         return ResponseEntity.ok(authInfo);
     }
