@@ -1,6 +1,6 @@
 package kim.kin.utils;
 
-import kim.kin.config.security.JwtTokenUtil;
+import kim.kin.config.security.SecurityKimParams;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -27,7 +27,7 @@ public class ShortcutUtils {
 
     public static void main(String[] args) throws IOException {
         formatMarkdown();
-        System.out.println(JwtTokenUtil.AUTH_KIM_PREFIX.length());
+        System.out.println(SecurityKimParams.AUTH_KIM_PREFIX.length());
     }
 
     /**

@@ -36,8 +36,7 @@ public class JwtTokenUtil implements Serializable {
     @Value("${jwt.expiration}")
     private Long expiration;
 
-    public static final String AUTH_KIM_HEADER = "Authorization";
-    public static final String AUTH_KIM_PREFIX = "Bearer ";
+
 
     /**
      * retrieve username from jwt token
