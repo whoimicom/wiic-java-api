@@ -9,10 +9,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.*;
 import java.util.function.Function;
@@ -23,6 +27,7 @@ import java.util.function.Function;
 @Component
 public class JwtTokenUtil implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = -2550185165626007488L;
 
     /**
@@ -36,32 +41,6 @@ public class JwtTokenUtil implements Serializable {
      */
     @Value("${jwt.expiration}")
     private Long expiration;
-
-//    private final UserDetailsServiceImpl userDetailsServiceImpl;
-//
-//
-//    public JwtTokenUtil(UserDetailsServiceImpl userDetailsServiceImpl) {
-//        this.userDetailsServiceImpl = userDetailsServiceImpl;
-//    }
-
-    /**
-     * 获取当前登录的用户
-     *
-     * @return UserDetails
-     */
-//    public UserDetails getCurrentUser() {
-//        final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        if (authentication == null) {
-//            throw new ReqKimException(HttpStatus.UNAUTHORIZED, "token timeout");
-//        }
-//        if (authentication.getPrincipal() instanceof UserDetails) {
-//            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-//            String username = userDetails.getUsername();
-//            return userDetailsServiceImpl.loadUserByUsername(username);
-//        } else {
-//            throw new ReqKimException(HttpStatus.UNAUTHORIZED, "UNAUTHORIZED ");
-//        }
-//    }
 
     /**
      * retrieve username from jwt token
@@ -100,8 +79,18 @@ public class JwtTokenUtil implements Serializable {
         return claimsResolver.apply(claims);
     }
 
+    /**
+     * 获取权限
+     * @param token token
+     * @return
+     */
     public List<GrantedAuthority> getAuthentication(String token) {
-        return (List<GrantedAuthority>) getTokenBody(token).get("authorities");
+        List<GrantedAuthority> authorities = new ArrayList<>(10);
+        ArrayList value = (ArrayList) getTokenBody(token).get("authorities");
+        value.forEach(o -> {
+            authorities.add(new SimpleGrantedAuthority(o.toString()));
+        });
+        return authorities;
     }
 
     private Claims getTokenBody(String token) {
@@ -129,31 +118,47 @@ public class JwtTokenUtil implements Serializable {
      * 3. According to JWS Compact Serialization(https://tools.ietf.org/html/draft-ietf-jose-json-web-signature-41#section-3.1)
      * compaction of the JWT to a URL-safe string
      *
-     * @param userDetails userDetails
+     * @param username    username
+     * @param authorities authorities
      * @return token
      */
-    public String generateToken(UserDetails userDetails) {
+    public String generateToken(String username, Collection<? extends GrantedAuthority> authorities) {
         Map<String, Object> claims = new HashMap<>(10);
-        String username = userDetails.getUsername();
+//        String username = userDetails.getUsername();
         List<String> strings = Arrays.asList("/admin", "/index", "/index.html");
-        Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
+//        Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
         claims.put("scope", strings);
-        claims.put("authorities", authorities);
-        return Jwts.builder().setClaims(claims).setSubject(username).setIssuedAt(new Date(System.currentTimeMillis()))
+        claims.put("authorities", genAuthorities(authorities));
+        return Jwts.builder()
+                .setClaims(claims)
+                .setSubject(username)
+                .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + expiration * 1000))
-                .signWith(SignatureAlgorithm.HS512, base64EncodedSecretKey).compact();
+                .signWith(SignatureAlgorithm.HS512, base64EncodedSecretKey)
+                .compact();
     }
 
 
     /**
      * validate token
      *
-     * @param token       token
-     * @param userDetails userDetails
+     * @param token    token
+     * @param username username
      * @return result
      */
-    public Boolean validateToken(String token, UserDetails userDetails) {
-        final String username = getUsernameFromToken(token);
-        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+    public Boolean validateToken(String token, String username) {
+        final String tokenUsername = getUsernameFromToken(token);
+        return (tokenUsername.equals(username) && !isTokenExpired(token));
     }
+
+    public List<GrantedAuthority> genAuthorities(Collection<? extends GrantedAuthority> authorities) {
+        Assert.notNull(authorities, "userAuthorities cannot be null");
+        List<GrantedAuthority> list = new ArrayList<>(authorities.size());
+        for (GrantedAuthority authority : authorities) {
+            list.add(new SimpleGrantedAuthority(authority.getAuthority()));
+        }
+        return list;
+    }
+
+
 }

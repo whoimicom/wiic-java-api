@@ -18,9 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 /**
  * 处理身份验证表单提交。
@@ -29,8 +27,8 @@ import java.util.List;
  */
 public class UsernamePasswordKimFilter extends UsernamePasswordAuthenticationFilter {
 
-    private AuthenticationManager authenticationManager;
-    private JwtTokenUtil jwtTokenUtil;
+    private final AuthenticationManager authenticationManager;
+    private final JwtTokenUtil jwtTokenUtil;
 
     public UsernamePasswordKimFilter(AuthenticationManager authenticationManager, JwtTokenUtil jwtTokenUtil) {
         this.authenticationManager = authenticationManager;
@@ -93,13 +91,16 @@ public class UsernamePasswordKimFilter extends UsernamePasswordAuthenticationFil
         }
 
         // 根据用户名，角色创建token并返回json信息
-        String token = jwtTokenUtil.generateToken(user);
+        String token = jwtTokenUtil.generateToken(user.getUsername(),authorities);
 //        String token = JwtTokenUtils.createToken(user.getUsername(), roles, false);
         response.setHeader("Bearer Token", token);
         response.setStatus(HttpServletResponse.SC_OK);
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         PrintWriter writer = response.getWriter();
-        writer.write(new ObjectMapper().writeValueAsString("Bearer "+token));
+        Map<String, Object> authInfo = new HashMap<>(1) {{
+            put("token", "Bearer " + token);
+        }};
+        writer.write(new ObjectMapper().writeValueAsString(authInfo));
     }
 
     /**

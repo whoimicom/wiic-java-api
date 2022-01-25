@@ -11,7 +11,10 @@ import kim.kin.service.UserInfoService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -40,9 +43,8 @@ public class JwtAuthenticationController {
         String username = userInfoDTO.getUsername();
         String password = userInfoDTO.getPassword();
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-        final UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-
-        final String token = jwtTokenUtil.generateToken(userDetails);
+        User user = userDetailsService.loadUserByUsername(username);
+        String token = jwtTokenUtil.generateToken(username, user.getAuthorities());
         Map<String, Object> authInfo = new HashMap<>(1) {{
             put("token", "Bearer " + token);
         }};
@@ -53,6 +55,20 @@ public class JwtAuthenticationController {
     @LogKimAnnotation
     public ResponseEntity<?> saveUser(@RequestBody UserInfoDTO user) {
         return ResponseEntity.ok(userInfoService.save(user));
+    }
+
+    @RequestMapping(value = "/currentUser", method = RequestMethod.POST)
+    public ResponseEntity<?> currentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+        Object principal = authentication.getPrincipal();
+        Object credentials = authentication.getCredentials();
+        Object details = authentication.getDetails();
+        System.out.println(authorities);
+        System.out.println(principal);
+        System.out.println(credentials);
+        System.out.println(details);
+        return ResponseEntity.ok(authentication);
     }
 
     @PostMapping(value = "/user/logout")

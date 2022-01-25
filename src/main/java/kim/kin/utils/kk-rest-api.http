@@ -1,4 +1,5 @@
-###
+
+###register
 
 POST http://localhost:10000/promgt-api/register
 Accept: */*
@@ -9,7 +10,7 @@ Content-Type: application/json;charset=utf-8
 {"username":"admin","password":"111111"}
 
 
-###
+###authenticate
 
 POST http://localhost:10000/promgt-api/authenticate
 Accept: */*
@@ -19,7 +20,7 @@ Content-Type: application/json;charset=utf-8
 {"username":"kinkim","password":"123456"}
 > {% client.global.set("auth_token", response.body.token); %}
 
-###
+###email
 POST http://localhost:10000/promgt-api/email/login?email=im@kin.kim&e_code=123456
 Accept: */*
 Cache-Control: no-cache
@@ -29,19 +30,27 @@ Content-Encoding: utf-8
 {"email":"im@kin.kim","e_code":"123456"}
 > {% client.global.set("auth_token", response.body.token); %}
 
-###
+###login
 POST http://localhost:10000/promgt-api/login?username=kinkim&password=123456
 Accept: */*
 Cache-Control: no-cache
 Content-Type: application/json
 Content-Encoding: utf-8
 
-> {% client.global.set("auth_token", response.body); %}
+> {% client.global.set("auth_token", response.body.token); %}
 
 
-###
+###hello
 
 POST http://localhost:10000/promgt-api/hello
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json;charset=utf-8
+Authorization:  {{auth_token}}
+
+### currentUser
+
+POST http://localhost:10000/promgt-api/currentUser
 Accept: */*
 Cache-Control: no-cache
 Content-Type: application/json;charset=utf-8

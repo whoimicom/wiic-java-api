@@ -7,6 +7,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
@@ -24,6 +25,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author choky
@@ -33,7 +35,7 @@ public class JwtRequestFilter extends BasicAuthenticationFilter {
 
     private final JwtTokenUtil jwtTokenUtil;
 
-    public JwtRequestFilter(AuthenticationManager authenticationManager,  JwtTokenUtil jwtTokenUtil) {
+    public JwtRequestFilter(AuthenticationManager authenticationManager, JwtTokenUtil jwtTokenUtil) {
         super(authenticationManager);
         this.jwtTokenUtil = jwtTokenUtil;
     }
@@ -50,8 +52,6 @@ public class JwtRequestFilter extends BasicAuthenticationFilter {
             return;
         }
         // 如果请求头中有token，则进行解析，并且设置认证信息
-
-
 
 
         String username = null;
@@ -74,14 +74,13 @@ public class JwtRequestFilter extends BasicAuthenticationFilter {
         // Once we get the token validate it.
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
-            List<GrantedAuthority> authorities = jwtTokenUtil.getAuthentication(jwtToken);
-
-            UserDetails userDetails = new User(username, "", authorities);
+            List<GrantedAuthority> authentication = jwtTokenUtil.getAuthentication(jwtToken);
+            User user = new User(username, "", authentication);
             // if token is valid configure Spring Security to manually set
             // authentication
-            if (jwtTokenUtil.validateToken(jwtToken, userDetails)) {
+            if (jwtTokenUtil.validateToken(jwtToken, username)) {
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
-                        userDetails, null, userDetails.getAuthorities());
+                        user, null, authentication);
                 usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 // After setting the Authentication in the context, we specify
                 // that the current user is authenticated. So it passes the
@@ -96,11 +95,11 @@ public class JwtRequestFilter extends BasicAuthenticationFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         boolean result = false;
-        logger.info("getPathInfo:"+request.getPathInfo());
-        logger.info("getRequestURI:"+request.getRequestURI());
-        logger.info("getRequestURL:"+request.getRequestURL());
-        logger.info("getUserPrincipal:"+request.getUserPrincipal());
-        logger.info("getServletPath:"+request.getServletPath());
+        logger.info("getPathInfo:" + request.getPathInfo());
+        logger.info("getRequestURI:" + request.getRequestURI());
+        logger.info("getRequestURL:" + request.getRequestURL());
+        logger.info("getUserPrincipal:" + request.getUserPrincipal());
+        logger.info("getServletPath:" + request.getServletPath());
         String requestURI = request.getRequestURI();
         if (SecurityParams.LOGIN_URI.equals(requestURI)) {
             result = true;
