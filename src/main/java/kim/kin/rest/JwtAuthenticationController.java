@@ -46,7 +46,7 @@ public class JwtAuthenticationController {
         User user = userDetailsService.loadUserByUsername(username);
         String token = jwtTokenUtil.generateToken(username, user.getAuthorities());
         Map<String, Object> authInfo = new HashMap<>(1) {{
-            put("token", "Bearer " + token);
+            put("token", JwtTokenUtil.AUTH_KIM_TOKEN + token);
         }};
         return ResponseEntity.ok(authInfo);
     }

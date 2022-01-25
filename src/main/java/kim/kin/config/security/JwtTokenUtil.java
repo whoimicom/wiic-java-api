@@ -4,15 +4,9 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import kim.kin.exception.ReqKimException;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
@@ -41,6 +35,9 @@ public class JwtTokenUtil implements Serializable {
      */
     @Value("${jwt.expiration}")
     private Long expiration;
+
+    public static final String AUTH_KIM_HEADER = "Authorization";
+    public static final String AUTH_KIM_TOKEN = "Bearer ";
 
     /**
      * retrieve username from jwt token
@@ -80,16 +77,16 @@ public class JwtTokenUtil implements Serializable {
     }
 
     /**
-     * 获取权限
+     * getAuthentication
+     *
      * @param token token
-     * @return
+     * @return List<GrantedAuthority>
      */
+    @SuppressWarnings({"unchecked","rawtypes"})
     public List<GrantedAuthority> getAuthentication(String token) {
         List<GrantedAuthority> authorities = new ArrayList<>(10);
         ArrayList value = (ArrayList) getTokenBody(token).get("authorities");
-        value.forEach(o -> {
-            authorities.add(new SimpleGrantedAuthority(o.toString()));
-        });
+        value.forEach(rule -> authorities.add(new SimpleGrantedAuthority(rule.toString())));
         return authorities;
     }
 
