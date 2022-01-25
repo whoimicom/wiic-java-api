@@ -48,6 +48,7 @@ kim:
   kin:
     channel-no: '000'
     file-path: /data/file
+    web-path: /promgt
 jwt:
   base64EncodedSecretKey: kinkim
   expiration: 36000

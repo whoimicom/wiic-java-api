@@ -49,6 +49,11 @@
       "name": "swagger.try-host",
       "type": "java.lang.String",
       "description": "Description for swagger.try-host."
+    },
+    {
+      "name": "kim.kin.web-path",
+      "type": "java.lang.String",
+      "description": "Description for kim.kin.web-path."
     }
   ]
 }

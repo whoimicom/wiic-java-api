@@ -18,6 +18,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
@@ -36,14 +38,25 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 /**
+ * WebMvcKimConfigurer
+ *
  * @author choky
  */
 @Configuration
 @EnableWebMvc
-public class ConfigurerKimAdapter implements WebMvcConfigurer {
+@RestController
+public class WebMvcKimConfigurer implements WebMvcConfigurer {
 
     @Value("${kim.kin.file-path}")
     private String filePath;
+
+    @Value("${spring.application.name:kin-kim}")
+    private String applicationName;
+
+    @GetMapping("/")
+    public String index() {
+        return applicationName + " service started successfully";
+    }
 
     @Bean
     public CorsFilter corsFilter() {

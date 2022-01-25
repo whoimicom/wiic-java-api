@@ -140,11 +140,12 @@ public class WebSecurityConfigurerKimAdapter extends WebSecurityConfigurerAdapte
 
         httpSecurity.authenticationProvider(emailCodeAuthenticationProvider())
                 .addFilterBefore(emailCodeAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtRequestFilter(authenticationManager(), jwtTokenUtil),UsernamePasswordAuthenticationFilter.class)
                 .addFilter(new UsernamePasswordKimFilter(authenticationManager(), jwtTokenUtil));
         // We don't need CSRF for this example
         httpSecurity.csrf().disable()
                 // dont authenticate this particular request
-                .authorizeRequests().antMatchers("/authenticate", "/register").permitAll()
+                .authorizeRequests().antMatchers("/authenticate", "/register", "/").permitAll()
                 // swagger
                 .antMatchers("/swagger**/**").permitAll()
                 .antMatchers("/webjars/**").permitAll()
@@ -170,8 +171,8 @@ public class WebSecurityConfigurerKimAdapter extends WebSecurityConfigurerAdapte
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         // Add a filter to validate the tokens with every request
-//        httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
-        httpSecurity.addFilter(new JwtRequestFilter(authenticationManager(), jwtTokenUtil));
+//        httpSecurity.addFilterBefore(new JwtRequestFilter(authenticationManager(), jwtTokenUtil), UsernamePasswordAuthenticationFilter.class);
+//        httpSecurity.addFilter(new JwtRequestFilter(authenticationManager(), jwtTokenUtil));
     }
 
     private Map<String, Set<String>> anonymousUrls(Map<RequestMappingInfo, HandlerMethod> handlerMethodMap) {
@@ -190,28 +191,28 @@ public class WebSecurityConfigurerKimAdapter extends WebSecurityConfigurerAdapte
                 if (0 != requestMethods.size()) {
                     HttpMethod httpMethod = HttpMethod.resolve(requestMethods.get(0).name());
                     switch (Objects.requireNonNull(httpMethod)) {
-                        case GET:
+                        case GET -> {
                             assert infoEntry.getKey().getPatternsCondition() != null;
                             get.addAll(infoEntry.getKey().getPatternsCondition().getPatterns());
-                            break;
-                        case POST:
+                        }
+                        case POST -> {
                             assert infoEntry.getKey().getPatternsCondition() != null;
                             post.addAll(infoEntry.getKey().getPatternsCondition().getPatterns());
-                            break;
-                        case PUT:
+                        }
+                        case PUT -> {
                             assert infoEntry.getKey().getPatternsCondition() != null;
                             put.addAll(infoEntry.getKey().getPatternsCondition().getPatterns());
-                            break;
-                        case PATCH:
+                        }
+                        case PATCH -> {
                             assert infoEntry.getKey().getPatternsCondition() != null;
                             patch.addAll(infoEntry.getKey().getPatternsCondition().getPatterns());
-                            break;
-                        case DELETE:
+                        }
+                        case DELETE -> {
                             assert infoEntry.getKey().getPatternsCondition() != null;
                             delete.addAll(infoEntry.getKey().getPatternsCondition().getPatterns());
-                            break;
-                        default:
-                            break;
+                        }
+                        default -> {
+                        }
                     }
                 } else {
                     assert infoEntry.getKey().getPatternsCondition() != null;
