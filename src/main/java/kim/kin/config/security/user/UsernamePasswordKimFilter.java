@@ -20,11 +20,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
 
-/**
- * 处理身份验证表单提交。
- *
- * @author crush
- */
 public class UsernamePasswordKimFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
@@ -63,55 +58,30 @@ public class UsernamePasswordKimFilter extends UsernamePasswordAuthenticationFil
         }
     }
 
-    /**
-     * 成功验证后调用的方法
-     * 如果验证成功，就生成token并返回
-     *
-     * @param request
-     * @param response
-     * @param chain
-     * @param authResult
-     * @throws IOException
-     * @throws ServletException
-     */
     @Override
-    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
+    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException {
 
-        // 查看源代码会发现调用getPrincipal()方法会返回一个实现了`UserDetails`接口的对象
-        // 所以就是JwtUser啦
         Object principal = authResult.getPrincipal();
         User user = (User) principal;
-
-        List<String> roles = new ArrayList<>();
-
+//        List<String> roles = new ArrayList<>();
         // 因为在JwtUser中存了权限信息，可以直接获取，由于只有一个角色就这么干了
         Collection<? extends GrantedAuthority> authorities = user.getAuthorities();
-        for (GrantedAuthority authority : authorities) {
+/*        for (GrantedAuthority authority : authorities) {
             roles.add(authority.getAuthority());
-        }
-
+        }*/
         // 根据用户名，角色创建token并返回json信息
-        String token = jwtTokenUtil.generateToken(user.getUsername(),authorities);
+        String token = jwtTokenUtil.generateToken(user.getUsername(), authorities);
 //        String token = JwtTokenUtils.createToken(user.getUsername(), roles, false);
-        response.setHeader("Bearer Token", token);
+//        response.setHeader("Bearer Token", token);
         response.setStatus(HttpServletResponse.SC_OK);
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         PrintWriter writer = response.getWriter();
         Map<String, Object> authInfo = new HashMap<>(1) {{
-            put("token", "Bearer " + token);
+            put("token", JwtTokenUtil.AUTH_KIM_TOKEN + token);
         }};
         writer.write(new ObjectMapper().writeValueAsString(authInfo));
     }
 
-    /**
-     * 验证失败时候调用的方法
-     *
-     * @param request
-     * @param response
-     * @param failed
-     * @throws IOException
-     * @throws ServletException
-     */
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException {
         response.sendError(HttpServletResponse.SC_FORBIDDEN, "登录失败，账号或密码错误");

@@ -1,5 +1,7 @@
 package kim.kin.utils;
 
+import kim.kin.config.security.JwtTokenUtil;
+
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -25,13 +27,14 @@ public class ShortcutUtils {
 
     public static void main(String[] args) throws IOException {
         formatMarkdown();
+        System.out.println(JwtTokenUtil.AUTH_KIM_TOKEN.length());
     }
 
     /**
      * | Format Specifier | Data Type | Output |
      * | ---              | ---       | ---    |
      *
-     * @throws IOException
+     * @throws IOException exception
      */
     public static void formatMarkdown() throws IOException {
         Stream<String> lines = Files.lines(Paths.get(SOURCE_PATH));
@@ -49,7 +52,7 @@ public class ShortcutUtils {
                 columnCount.set(length);
                 for (int column = 1; column < columnCount.get(); column++) {
                     String value = split.get(column);
-                    AtomicReference<Map<Integer, String>> columnMap = new AtomicReference<>(new HashMap<Integer, String>());
+                    AtomicReference<Map<Integer, String>> columnMap = new AtomicReference<>(new HashMap<>());
                     columnMap.get().put(1, value);
                     columnData.put(column, columnMap.get());
                 }
@@ -73,14 +76,14 @@ public class ShortcutUtils {
             maxLength.put(column, max);
         }
         for (int line = 1; line < countLine.get(); line++) {
-            String allLine = "|";
+            StringBuilder allLine = new StringBuilder("|");
             for (int column = 1; column < columnCount.get(); column++) {
                 Map<Integer, String> integerStringMap = columnData.get(column);
                 String s = integerStringMap.get(line);
                 if (line==2) {
-                    allLine = allLine + String.format("%1$-" + maxLength.get(column) + "s", s).replace(" ","-") + " |";
+                    allLine.append(String.format("%1$-" + maxLength.get(column) + "s", s).replace(" ", "-")).append(" |");
                 }else{
-                    allLine = allLine + String.format("%1$-" + maxLength.get(column) + "s", s) + " |";
+                    allLine.append(String.format("%1$-" + maxLength.get(column) + "s", s)).append(" |");
                 }
 
             }
@@ -119,6 +122,7 @@ public class ShortcutUtils {
         System.out.println("FINISH");
     }
 
+    @SuppressWarnings("WriteOnlyObject")
     public static void formatShortcutHaveBreak() throws IOException {
         Stream<String> lines = Files.lines(Paths.get(SOURCE_PATH));
         String lineSeparator = System.lineSeparator();
