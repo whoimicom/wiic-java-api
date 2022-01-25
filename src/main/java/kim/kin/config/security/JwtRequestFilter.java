@@ -21,7 +21,7 @@ import java.util.List;
 /**
  * @author choky
  */
-@Component
+//@Component
 public class JwtRequestFilter extends BasicAuthenticationFilter {
 
     private final JwtTokenUtil jwtTokenUtil;
@@ -37,9 +37,9 @@ public class JwtRequestFilter extends BasicAuthenticationFilter {
 
         final String authHeader = request.getHeader(SecurityKimParams.AUTH_KIM_HEADER);
         // 如果请求头中没有Authorization信息则直接放行了
-        if (authHeader == null || !authHeader.startsWith(SecurityKimParams.AUTH_KIM_PREFIX)) {
+        if (null == authHeader) {
             chain.doFilter(request, response);
-            logger.warn("JWT Token does not begin with Bearer String");
+            logger.warn("authHeader is null");
         } else {
             // JWT Token is in the form "Bearer token". Remove Bearer word and get only the Token
             if (authHeader.startsWith(SecurityKimParams.AUTH_KIM_PREFIX)) {
@@ -61,8 +61,8 @@ public class JwtRequestFilter extends BasicAuthenticationFilter {
                             SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
                         }
                     }
-//                  chain.doFilter(request, response);
-                    super.doFilterInternal(request, response, chain);
+                    chain.doFilter(request, response);
+//                    super.doFilterInternal(request, response, chain);
                 } catch (IllegalArgumentException e) {
                     System.out.println("Unable to get JWT Token");
                 } catch (ExpiredJwtException e) {
