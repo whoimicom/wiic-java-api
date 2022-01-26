@@ -1,7 +1,7 @@
 package kim.kin.config.security;
 
-import kim.kin.config.security.email.EmailCodeAuthenticationFilter;
-import kim.kin.config.security.email.EmailCodeAuthenticationProvider;
+import kim.kin.config.security.email.EmailAuthenticationFilter;
+import kim.kin.config.security.email.EmailAuthenticationProvider;
 import kim.kin.config.security.handler.AuthenticationFailureKimImpl;
 import kim.kin.config.security.handler.AuthenticationSuccessKimImpl;
 import kim.kin.config.security.user.UserDetailsServiceImpl;
@@ -64,16 +64,16 @@ public class WebSecurityConfigurerKimAdapter extends WebSecurityConfigurerAdapte
         authenticationManagerBuilder.userDetailsService(userDetailsServiceImpl).passwordEncoder(passwordEncoder());
     } */
     @Bean
-    public EmailCodeAuthenticationFilter emailCodeAuthenticationFilter() {
-        EmailCodeAuthenticationFilter emailCodeAuthenticationFilter = new EmailCodeAuthenticationFilter();
-        emailCodeAuthenticationFilter.setAuthenticationSuccessHandler(authenticationSuccessKimImpl);
-        emailCodeAuthenticationFilter.setAuthenticationFailureHandler(authenticationFailureKimImpl);
-        return emailCodeAuthenticationFilter;
+    public EmailAuthenticationFilter emailAuthenticationFilter() {
+        EmailAuthenticationFilter emailAuthenticationFilter = new EmailAuthenticationFilter();
+        emailAuthenticationFilter.setAuthenticationSuccessHandler(authenticationSuccessKimImpl);
+        emailAuthenticationFilter.setAuthenticationFailureHandler(authenticationFailureKimImpl);
+        return emailAuthenticationFilter;
     }
 
     @Bean
-    public EmailCodeAuthenticationProvider emailCodeAuthenticationProvider() {
-        return new EmailCodeAuthenticationProvider(userInfoRepository);
+    public EmailAuthenticationProvider emailAuthenticationProvider() {
+        return new EmailAuthenticationProvider(userInfoRepository);
     }
 
     @Bean
@@ -84,7 +84,7 @@ public class WebSecurityConfigurerKimAdapter extends WebSecurityConfigurerAdapte
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsServiceImpl).passwordEncoder(passwordEncoder());
-        auth.authenticationProvider(emailCodeAuthenticationProvider());
+        auth.authenticationProvider(emailAuthenticationProvider());
     }
 
     @Bean
@@ -138,8 +138,8 @@ public class WebSecurityConfigurerKimAdapter extends WebSecurityConfigurerAdapte
         Map<RequestMappingInfo, HandlerMethod> handlerMethodMap = getApplicationContext().getBean("requestMappingHandlerMapping", RequestMappingHandlerMapping.class).getHandlerMethods();
         Map<String, Set<String>> anonymousUrls = anonymousUrls(handlerMethodMap);
 
-        httpSecurity.authenticationProvider(emailCodeAuthenticationProvider())
-                .addFilterBefore(emailCodeAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+        httpSecurity.authenticationProvider(emailAuthenticationProvider())
+                .addFilterBefore(emailAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(new JwtRequestFilter(authenticationManager(), jwtTokenUtil),UsernamePasswordAuthenticationFilter.class)
                 .addFilter(new UsernamePasswordKimFilter(authenticationManager(), jwtTokenUtil));
         // We don't need CSRF for this example
