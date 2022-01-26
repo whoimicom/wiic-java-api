@@ -2,37 +2,34 @@ package kim.kin.config.security.email;
 
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
-
 import java.util.Collection;
 
-/**
- * @Author: crush
- * @Date: 2021-09-08 21:13
- * version 1.0
- */
-public class EmailCodeAuthenticationToken extends AbstractAuthenticationToken {
 
+public class EmailAuthenticationToken extends AbstractAuthenticationToken {
 
     /**
-     * 这里的 principal 指的是 email 地址（未认证的时候）
+     * email 地址（未认证的时候）
      */
     private final Object principal;
+    private final Object credentials;
 
-    public EmailCodeAuthenticationToken(Object principal) {
-        super((Collection) null);
+    public EmailAuthenticationToken(Object principal,Object credentials) {
+        super(null);
         this.principal = principal;
+        this.credentials=credentials;
         setAuthenticated(false);
     }
 
-    public EmailCodeAuthenticationToken(Object principal, Collection<? extends GrantedAuthority> authorities) {
+    public EmailAuthenticationToken(Object principal,  Object credentials,Collection<? extends GrantedAuthority> authorities) {
         super(authorities);
         this.principal = principal;
+        this.credentials = credentials;
         super.setAuthenticated(true);
     }
 
     @Override
     public Object getCredentials() {
-        return null;
+        return this.credentials;
     }
 
     @Override

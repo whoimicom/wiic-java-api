@@ -6,6 +6,7 @@ import kim.kin.repository.UserInfoRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -19,17 +20,12 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @Author: crush
- * @Date: 2021-09-08 21:14
- * version 1.0
- */
 
-public class EmailCodeAuthenticationProvider implements AuthenticationProvider {
-private static final Logger log = LoggerFactory.getLogger(EmailCodeAuthenticationProvider.class);
+public class EmailAuthenticationProvider implements AuthenticationProvider {
+    private static final Logger log = LoggerFactory.getLogger(EmailAuthenticationProvider.class);
     private UserInfoRepository userInfoRepository;
 
-    public EmailCodeAuthenticationProvider(UserInfoRepository userInfoRepository) {
+    public EmailAuthenticationProvider(UserInfoRepository userInfoRepository) {
         this.userInfoRepository = userInfoRepository;
     }
 
@@ -42,13 +38,16 @@ private static final Logger log = LoggerFactory.getLogger(EmailCodeAuthenticatio
         if (!supports(authentication.getClass())) {
             return null;
         }
-        log.info("EmailCodeAuthentication authentication request: %s", authentication);
-        EmailCodeAuthenticationToken token = (EmailCodeAuthenticationToken) authentication;
-        String email = (String) token.getPrincipal();
-        Object credentials = token.getCredentials();
-        System.out.println(credentials);
+        log.info("EmailAuthenticationProvider  request: %s{}", authentication);
+//        EmailAuthenticationToken token = (EmailAuthenticationToken) authentication;
+        String email = authentication.getPrincipal().toString();
+        String eCode = authentication.getCredentials().toString();
+        Object details = authentication.getDetails();
+        log.info("email:{},eCode:{}", email, eCode);
+        if (!validateCode(email, eCode)) {
+            throw new BadCredentialsException(email.toString());
+        }
         UserInfo userInfo = userInfoRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(email));
-        System.out.println(token.getPrincipal());
         if (userInfo == null) {
             throw new InternalAuthenticationServiceException("无法获取用户信息");
         }
@@ -76,17 +75,29 @@ private static final Logger log = LoggerFactory.getLogger(EmailCodeAuthenticatio
         userDetails.setPassword(userInfo.getPassword());
         userDetails.setLoginTime(LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME));
 
-        EmailCodeAuthenticationToken result = new EmailCodeAuthenticationToken(userDetails, authorities);
-//        EmailCodeAuthenticationToken result = new EmailCodeAuthenticationToken(user, user.getAuthorities());
+        EmailAuthenticationToken result = new EmailAuthenticationToken(userDetails, eCode, authorities);
+//        EmailAuthenticationToken result = new EmailAuthenticationToken(user, user.getAuthorities());
                 /*
                 Details 中包含了 ip地址、 sessionId 等等属性 也可以存储一些自己想要放进去的内容
                 */
-        result.setDetails(token.getDetails());
+        result.setDetails(details);
         return result;
     }
 
     @Override
     public boolean supports(Class<?> aClass) {
-        return EmailCodeAuthenticationToken.class.isAssignableFrom(aClass);
+        return EmailAuthenticationToken.class.isAssignableFrom(aClass);
+    }
+
+    /**
+     * validateCode
+     *
+     * @param email email
+     * @param ecode ecode
+     * @return
+     */
+    private boolean validateCode(String email, String ecode) {
+        //TODO
+        return email.equals(ecode);
     }
 }
