@@ -21,20 +21,16 @@ import java.io.Serializable;
 
 public class EmailAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
     private static final Logger log = LoggerFactory.getLogger(EmailAuthenticationFilter.class);
+    /**
+     * see MediaType.APPLICATION_JSON_UTF8_VALUE
+     */
     public static final String APPLICATION_JSON_UTF8_VALUE = "application/json;charset=UTF-8";
-    private final String AUTH_EMAIL_NAME = "email";
-    private final String AUTH_EMAIL_CODE = "eCode";
 
     @Autowired
     @Override
     public void setAuthenticationManager(AuthenticationManager authenticationManager) {
         super.setAuthenticationManager(authenticationManager);
     }
-
-    /**
-     * 是否 仅仅post方式
-     */
-    private boolean postOnly = true;
 
     /**
      * 通过 传入的 参数 创建 匹配器
@@ -44,14 +40,13 @@ public class EmailAuthenticationFilter extends AbstractAuthenticationProcessingF
         super(new AntPathRequestMatcher("/email/login", "POST"));
     }
 
-
     /**
      * filter 获得 用户名（邮箱） 和 密码（验证码） 装配到 token 上 ，
      * 然后把token 交给 provider 进行授权
      */
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException {
-        if (postOnly && !request.getMethod().equals("POST")) {
+        if (!request.getMethod().equals("POST")) {
             throw new AuthenticationServiceException("Authentication method not supported: " + request.getMethod());
         } else {
             EmailVo emailVo = obtainParam(request);
@@ -84,6 +79,8 @@ public class EmailAuthenticationFilter extends AbstractAuthenticationProcessingF
             emailVo = new ObjectMapper().readValue(stringBuilder.toString(), EmailVo.class);
 
         } else {
+            String AUTH_EMAIL_CODE = "eCode";
+            String AUTH_EMAIL_NAME = "email";
             emailVo = new EmailVo(request.getParameter(AUTH_EMAIL_NAME), request.getParameter(AUTH_EMAIL_CODE));
         }
         log.info(String.valueOf(emailVo));

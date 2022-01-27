@@ -59,6 +59,7 @@ public class JwtAuthenticationController {
     }
 
     @RequestMapping(value = "/currentUser", method = RequestMethod.POST)
+    @LogKimAnnotation
     public ResponseEntity<?> currentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();

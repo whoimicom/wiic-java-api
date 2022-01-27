@@ -1,19 +1,24 @@
 package kim.kin.kklog;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.lang.reflect.Method;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Arrays;
@@ -30,7 +35,10 @@ import java.util.stream.Collectors;
 public class LogKimAspect {
     private static final String UNKNOWN = "unknown";
     ThreadLocal<Long> currentTime = new ThreadLocal<>();
-    private final Logger logger = LoggerFactory.getLogger(LogKimAspect.class);
+    private static final String LINE_SEPARATOR = System.getProperty("line.separator");
+    private final Logger log = LoggerFactory.getLogger(LogKimAspect.class);
+    @Autowired
+    ObjectMapper objectMapper;
 
     /**
      * 配置切入点
@@ -45,19 +53,22 @@ public class LogKimAspect {
     @Around("logPointcut()")
     public Object logAround(ProceedingJoinPoint joinPoint) throws Throwable {
         Object result;
-        currentTime.set(System.currentTimeMillis());
+        long startTime = System.currentTimeMillis();
+        currentTime.set(startTime);
         result = joinPoint.proceed();
         currentTime.remove();
         HttpServletRequest request = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
-        List<Object> collect = Arrays.stream(joinPoint.getArgs()).collect(Collectors.toList());
+        List<Object> collect = Arrays.stream(joinPoint.getArgs()).toList();
         Enumeration<String> headerNames = request.getHeaderNames();
-        logger.debug("header:------------------------------------------------");
+        log.debug("header:------------------------------------------------");
         headerNames.asIterator().forEachRemaining(s -> {
             String header = request.getHeader(s);
-            logger.debug(s + " :" + header);
+            log.debug(s + " :" + header);
         });
-        logger.debug("header:------------------------------------------------");
-        logger.info("ip:" + acquireIp(request) + " args:" + collect + " joinPoint:" + joinPoint);
+        log.debug("header:------------------------------------------------");
+        log.info("ip:" + acquireIp(request) + " args:" + collect + " joinPoint:" + joinPoint);
+        long callMillis = System.currentTimeMillis() - startTime;
+        printLog(acquireIp(request), joinPoint, result, callMillis);
         return result;
     }
 
@@ -67,10 +78,10 @@ public class LogKimAspect {
      */
     @AfterThrowing(pointcut = "logPointcut()", throwing = "e")
     public void logAfterThrowing(JoinPoint joinPoint, Throwable e) {
-        logger.error(e.toString());
+        log.error(e.toString());
         currentTime.remove();
         HttpServletRequest request = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
-        logger.error("ip:" + acquireIp(request) + " joinPoint:" + joinPoint);
+        log.error("ip:" + acquireIp(request) + " joinPoint:" + joinPoint);
     }
 
     /**
@@ -101,5 +112,37 @@ public class LogKimAspect {
             }
         }
         return ip;
+    }
+
+    public void printLog(String ip, ProceedingJoinPoint joinPoint, Object result, long callMillis) {
+        MethodSignature signature = (MethodSignature) joinPoint.getSignature();
+        Method method = signature.getMethod();
+        kim.kin.kklog.LogKimAnnotation logKimAnnotation = method.getAnnotation(kim.kin.kklog.LogKimAnnotation.class);
+        StringBuilder stringBuilder = new StringBuilder(LINE_SEPARATOR);
+        String methodName = joinPoint.getTarget().getClass().getName() + "." + signature.getName() + "()";
+
+        Object[] argValues = joinPoint.getArgs();
+        String[] argNames = ((MethodSignature) joinPoint.getSignature()).getParameterNames();
+        StringBuilder paramIn = new StringBuilder();
+        if (argValues != null) {
+            for (int i = 0; i < argValues.length; i++) {
+                paramIn.append(" ").append(argNames[i]).append(": ").append(argValues[i]);
+            }
+        }
+        stringBuilder.append(methodName).append(logKimAnnotation.value()).append(" invoked  ");
+        stringBuilder.append("Duration[").append(callMillis).append("]ms");
+        stringBuilder.append("Client Ip=").append(ip);
+//        stringBuilder.append(" ,Client Address=").append(StringUtils.getCityInfo(ip));
+        stringBuilder.append(", Input Parameter {").append(LINE_SEPARATOR);
+        stringBuilder.append(paramIn);
+        stringBuilder.append(LINE_SEPARATOR).append("}");
+        stringBuilder.append("Output Parameter:[").append(LINE_SEPARATOR);
+        try {
+            stringBuilder.append(objectMapper.writeValueAsString(result));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        stringBuilder.append("]").append(LINE_SEPARATOR);
+        log.info(stringBuilder.toString());
     }
 }
