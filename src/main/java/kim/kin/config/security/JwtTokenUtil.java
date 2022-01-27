@@ -4,6 +4,8 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -20,7 +22,7 @@ import java.util.function.Function;
  */
 @Component
 public class JwtTokenUtil implements Serializable {
-
+    private static final Logger log = LoggerFactory.getLogger(JwtTokenUtil.class);
     @Serial
     private static final long serialVersionUID = -2550185165626007488L;
 
@@ -35,7 +37,6 @@ public class JwtTokenUtil implements Serializable {
      */
     @Value("${jwt.expiration}")
     private Long expiration;
-
 
 
     /**
@@ -62,16 +63,17 @@ public class JwtTokenUtil implements Serializable {
         Jws<Claims> claimsJws = Jwts.parser().setSigningKey(base64EncodedSecretKey).parseClaimsJws(token);
         Object scope = claimsJws.getBody().get("scope");
         Object authorities = claimsJws.getBody().get("authorities");
-        System.out.println(scope);
-        System.out.println(authorities);
         Claims claims = claimsJws.getBody();
-        System.out.println("ID: " + claims.getId());
-        System.out.println("Subject: " + claims.getSubject());
-        System.out.println("Issuer: " + claims.getIssuer());
-        System.out.println("Expiration: " + claims.getExpiration());
-        System.out.println("getNotBefore: " + claims.getNotBefore());
-        System.out.println("getAudience: " + claims.getAudience());
-        System.out.println("getIssuedAt: " + claims.getIssuedAt());
+
+        String id = claims.getId();
+        String subject = claims.getSubject();
+        String issuer = claims.getIssuer();
+        Date expiration = claims.getExpiration();
+        Date notBefore = claims.getNotBefore();
+        String audience = claims.getAudience();
+        Date issuedAt = claims.getIssuedAt();
+        log.debug("scope:{} authorities:{},id:{} Subject:{} Issuer:{} Expiration:{} getNotBefore:{} getAudience:{} getIssuedAt:{} "
+                , scope, authorities, id, subject, issuer, expiration, notBefore, audience, issuedAt);
         return claimsResolver.apply(claims);
     }
 
@@ -81,7 +83,7 @@ public class JwtTokenUtil implements Serializable {
      * @param token token
      * @return List<GrantedAuthority>
      */
-    @SuppressWarnings({"unchecked","rawtypes"})
+    @SuppressWarnings({"unchecked", "rawtypes"})
     public List<GrantedAuthority> getAuthentication(String token) {
         List<GrantedAuthority> authorities = new ArrayList<>(10);
         ArrayList value = (ArrayList) getTokenBody(token).get("authorities");
