@@ -14,6 +14,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -23,7 +24,7 @@ import java.util.List;
 
 public class EmailAuthenticationProvider implements AuthenticationProvider {
     private static final Logger log = LoggerFactory.getLogger(EmailAuthenticationProvider.class);
-    private UserInfoRepository userInfoRepository;
+    private final UserInfoRepository userInfoRepository;
 
     public EmailAuthenticationProvider(UserInfoRepository userInfoRepository) {
         this.userInfoRepository = userInfoRepository;
@@ -45,7 +46,7 @@ public class EmailAuthenticationProvider implements AuthenticationProvider {
         Object details = authentication.getDetails();
         log.info("email:{},eCode:{}", email, eCode);
         if (!validateCode(email, eCode)) {
-            throw new BadCredentialsException(email.toString());
+            throw new BadCredentialsException(email);
         }
         UserInfo userInfo = userInfoRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(email));
         if (userInfo == null) {
@@ -94,7 +95,7 @@ public class EmailAuthenticationProvider implements AuthenticationProvider {
      *
      * @param email email
      * @param ecode ecode
-     * @return
+     * @return validateResult
      */
     private boolean validateCode(String email, String ecode) {
         //TODO

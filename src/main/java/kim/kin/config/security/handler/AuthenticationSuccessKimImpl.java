@@ -19,7 +19,6 @@ import java.util.Map;
 
 @Component
 public class AuthenticationSuccessKimImpl implements AuthenticationSuccessHandler {
-    @Autowired
     private JwtTokenUtil jwtTokenUtil;
 
     @Override
@@ -36,5 +35,10 @@ public class AuthenticationSuccessKimImpl implements AuthenticationSuccessHandle
             put("token", SecurityKimParams.AUTH_KIM_PREFIX + token);
         }};
         writer.write(new ObjectMapper().writeValueAsString(authInfo));
+    }
+
+    @Autowired
+    public void setJwtTokenUtil(JwtTokenUtil jwtTokenUtil) {
+        this.jwtTokenUtil = jwtTokenUtil;
     }
 }

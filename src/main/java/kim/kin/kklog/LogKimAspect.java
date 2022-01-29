@@ -25,7 +25,6 @@ import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * @author choky
@@ -37,8 +36,7 @@ public class LogKimAspect {
     ThreadLocal<Long> currentTime = new ThreadLocal<>();
     private static final String LINE_SEPARATOR = System.getProperty("line.separator");
     private final Logger log = LoggerFactory.getLogger(LogKimAspect.class);
-    @Autowired
-    ObjectMapper objectMapper;
+    private ObjectMapper objectMapper;
 
     /**
      * 配置切入点
@@ -144,5 +142,9 @@ public class LogKimAspect {
         }
         stringBuilder.append("]").append(LINE_SEPARATOR);
         log.info(stringBuilder.toString());
+    }
+    @Autowired
+    public void setObjectMapper(ObjectMapper objectMapper) {
+        this.objectMapper = objectMapper;
     }
 }
