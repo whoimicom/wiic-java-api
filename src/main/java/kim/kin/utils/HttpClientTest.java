@@ -13,10 +13,11 @@ import java.net.http.HttpResponse;
  * @author kin.kim
  * @Date 2021-09-28
  */
+@SuppressWarnings("unused")
 public class HttpClientTest {
     public void test1() throws IOException, InterruptedException {
         HttpClient client = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder(URI.create("http://www.baidu.com")).build();
+        HttpRequest request = HttpRequest.newBuilder(URI.create("https://www.baidu.com")).build();
         HttpResponse.BodyHandler<String> responseBodyHandler = HttpResponse.BodyHandlers.ofString();
         HttpResponse<String> response = client.send(request, responseBodyHandler);
         String body = response.body();

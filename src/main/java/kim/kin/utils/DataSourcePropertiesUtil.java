@@ -11,6 +11,7 @@ import java.util.Objects;
 /**
  * @author choky
  */
+@SuppressWarnings("ClassCanBeRecord")
 @Service
 public class DataSourcePropertiesUtil {
     private final DataSourceProperties dataSourceProperties;

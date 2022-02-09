@@ -64,7 +64,7 @@ public class WebSecurityConfigurerKimAdapter extends WebSecurityConfigurerAdapte
         authenticationManagerBuilder.userDetailsService(userDetailsServiceImpl).passwordEncoder(passwordEncoder());
     } */
     @Bean
-    public EmailAuthenticationFilter emailAuthenticationFilter() {
+    public EmailAuthenticationFilter emailAuthenticationFilter() throws Exception {
         EmailAuthenticationFilter emailAuthenticationFilter = new EmailAuthenticationFilter();
         emailAuthenticationFilter.setAuthenticationSuccessHandler(authenticationSuccessKimImpl);
         emailAuthenticationFilter.setAuthenticationFailureHandler(authenticationFailureKimImpl);
@@ -87,11 +87,11 @@ public class WebSecurityConfigurerKimAdapter extends WebSecurityConfigurerAdapte
         auth.authenticationProvider(emailAuthenticationProvider());
     }
 
-    @Bean
+/*    @Bean
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
-    }
+    }*/
 
     @Bean
     @Override
