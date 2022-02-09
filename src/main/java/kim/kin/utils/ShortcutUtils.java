@@ -20,6 +20,7 @@ import java.util.stream.Stream;
  * @author kin.kim
  * @Date 2021-10-28
  */
+@SuppressWarnings("unused")
 public class ShortcutUtils {
     public static final String SOURCE_PATH = "C:\\Users\\choky\\Desktop\\online\\shortcut.txt";
     public static final String TARGET_PATH = "C:\\Users\\choky\\Desktop\\online\\shortcut_.txt";

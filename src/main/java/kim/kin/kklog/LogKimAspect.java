@@ -41,6 +41,7 @@ public class LogKimAspect {
     /**
      * 配置切入点
      */
+    @SuppressWarnings("unused")
     @Pointcut("@annotation(kim.kin.kklog.LogKimAnnotation)")
     public void logPointcut() {
     }

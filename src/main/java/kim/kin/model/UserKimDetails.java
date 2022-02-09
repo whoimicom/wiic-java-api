@@ -3,6 +3,7 @@ package kim.kin.model;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
+import java.io.Serial;
 import java.util.Collection;
 
 /**
@@ -10,6 +11,7 @@ import java.util.Collection;
  */
 public class UserKimDetails extends User {
 
+    @Serial
     private static final long serialVersionUID = 2017845963758421135L;
 
 

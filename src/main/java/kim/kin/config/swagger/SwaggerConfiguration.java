@@ -93,8 +93,8 @@ public class SwaggerConfiguration {
                 // operationSelector优先级高于上面两个，配置需要访问授权的请求，效果是对应页面上的请求有没有小锁图标
                 // 将auth开头的请求和类、方法上有指定注解的请求在swagger页面上放行，不使用jwt bearer token 授权方案
                 operationContext -> !operationContext.requestMappingPattern().matches("/auth.*") &&
-                        !operationContext.findControllerAnnotation(AnonymousKimAccess.class).isPresent() &&
-                        !operationContext.findAnnotation(AnonymousKimAccess.class).isPresent()
+                        operationContext.findControllerAnnotation(AnonymousKimAccess.class).isEmpty() &&
+                        operationContext.findAnnotation(AnonymousKimAccess.class).isEmpty()
         );
         return Collections.singletonList(context);
     }
@@ -113,7 +113,7 @@ public class SwaggerConfiguration {
     }
 
     @SafeVarargs
-    private final <T> Set<T> newHashSet(T... ts) {
+    private <T> Set<T> newHashSet(T... ts) {
         if (ts.length > 0) {
             return new LinkedHashSet<>(Arrays.asList(ts));
         }

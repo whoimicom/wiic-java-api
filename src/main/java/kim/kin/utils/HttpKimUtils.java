@@ -65,20 +65,20 @@ public class HttpKimUtils {
         return doRequest("POST", url, bytes, CONNECT_TIMEOUT, READ_TIMEOUT, CONTENT_TYPE_STREAM, headerMap);
     }
 
-    public String postForm(String url, Map<String, String> headerMap) throws SocketTimeoutException, IOException, NoSuchAlgorithmException, KeyManagementException {
+    public String postForm(String url, Map<String, String> headerMap) throws IOException, NoSuchAlgorithmException, KeyManagementException {
         return doRequest("POST", url, "", CONNECT_TIMEOUT, READ_TIMEOUT, CONTENT_TYPE_FORM, headerMap);
     }
 
-    public String postForm(String url, Map<String, String> params, Map<String, String> headerMap) throws SocketTimeoutException, IOException, NoSuchAlgorithmException, KeyManagementException {
+    public String postForm(String url, Map<String, String> params, Map<String, String> headerMap) throws IOException, NoSuchAlgorithmException, KeyManagementException {
         return doRequest("POST", url, buildQuery(params), CONNECT_TIMEOUT, READ_TIMEOUT, CONTENT_TYPE_FORM, headerMap);
     }
 
 
-    public String getForm(String url, Map<String, String> headerMap) throws SocketTimeoutException, IOException, NoSuchAlgorithmException, KeyManagementException {
+    public String getForm(String url, Map<String, String> headerMap) throws IOException, NoSuchAlgorithmException, KeyManagementException {
         return doRequest("GET", url, "", CONNECT_TIMEOUT, READ_TIMEOUT, CONTENT_TYPE_FORM, headerMap);
     }
 
-    public String getForm(String url, Map<String, String> params, Map<String, String> headerMap) throws SocketTimeoutException, IOException, NoSuchAlgorithmException, KeyManagementException {
+    public String getForm(String url, Map<String, String> params, Map<String, String> headerMap) throws IOException, NoSuchAlgorithmException, KeyManagementException {
         return doRequest("GET", url, buildQuery(params), CONNECT_TIMEOUT, READ_TIMEOUT, CONTENT_TYPE_FORM, headerMap);
     }
 
@@ -170,6 +170,7 @@ public class HttpKimUtils {
 
     }
 
+    @SuppressWarnings("unused")
     private class DefaultTrustManager implements X509TrustManager {
         @Override
         public X509Certificate[] getAcceptedIssuers() {

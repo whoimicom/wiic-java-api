@@ -146,7 +146,6 @@ public class WebMvcKimConfigurer implements WebMvcConfigurer {
     @Bean
     @Primary
     public ObjectMapper objectMapper() {
-//        ObjectMapper objectMapper = new ObjectMapper();
         ObjectMapper objectMapper = new ObjectMapper()
                 .registerModule(new ParameterNamesModule())
                 .registerModule(new Jdk8Module())

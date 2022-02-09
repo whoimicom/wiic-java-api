@@ -19,13 +19,14 @@ import java.util.zip.ZipOutputStream;
 /**
  * @author kin.kim
  */
+@SuppressWarnings("unused")
 @Component
 public class FileKimUtils {
 
     //    @Value("${fs.apiurl}")
     //private String fsApiurl = "http://172.16.2.172:10011/huij-fs";
     private final String fsApiurl = "http://172.16.2.160:10016/oa-api/api/pictures";
-    private static FileKimUtils instance = null;
+    private static final FileKimUtils instance = null;
 
     public static FileKimUtils getInstance() {
         if (instance == null) {
@@ -34,7 +35,7 @@ public class FileKimUtils {
         return instance;
     }
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         long startTime = System.currentTimeMillis();
 //        String resp = getInstance().postJson("http://localhost:8080/test/test", "{\"custCmonId\":\"12345678\",\"custNo\":\"111\",\"custNo111\":\"706923\"}");
 //        String resp = getInstance().getForm("http://localhost:10011/huij-fs/testpost");
@@ -65,7 +66,7 @@ public class FileKimUtils {
 //            readInputStream(new FileInputStream("D:\\application\\ludashisetup2020.exe")); // 1378
 //        fileSaveAs("D:\\application\\ludashisetup2020.exe","D:\\application\\ludashisetup2020.exe1");// 1630
         long endTime = System.currentTimeMillis();
-        System.out.println(endTime-startTime);
+        System.out.println(endTime - startTime);
 
     }
 
@@ -150,9 +151,9 @@ public class FileKimUtils {
     /**
      * 文件另存
      *
-     * @param strOldpath
-     * @param strNewPath
-     * @throws IOException
+     * @param strOldpath strOldpath
+     * @param strNewPath strNewPath
+     * @throws IOException IOException
      */
     public static void fileCopy(String strOldpath, String strNewPath) throws IOException {
         File fOldFile = new File(strOldpath);
@@ -173,7 +174,7 @@ public class FileKimUtils {
     }
 
     public static void fileSaveAs(String strOldpath, String strNewPath) throws IOException {
-            Files.move(new File(strOldpath).toPath(),new File(strNewPath).toPath());
+        Files.move(new File(strOldpath).toPath(), new File(strNewPath).toPath());
     }
 
     public static byte[] readInputStream(InputStream inputStream) throws IOException {
@@ -302,8 +303,8 @@ public class FileKimUtils {
 
     /**
      * @param files 多文件路径
-     * @return
-     * @throws Exception
+     * @return httpUrl
+     * @throws Exception Exception
      */
     public String uploadFile(String[] files) throws Exception {
         return getInstance().uploadFile(files, null);
@@ -313,10 +314,10 @@ public class FileKimUtils {
     /**
      * 多文件路径上传
      *
-     * @param files
-     * @param headerMap
-     * @return
-     * @throws Exception
+     * @param files     files
+     * @param headerMap headerMap
+     * @return url
+     * @throws Exception Exception
      */
     public String uploadFile(String[] files, Map<String, String> headerMap) throws Exception {
         return HttpKimUtils.getInstance().uploadMultipartFile(fsApiurl + "/uploads", files, headerMap);
@@ -337,10 +338,10 @@ public class FileKimUtils {
     /**
      * 单文件路径上传
      *
-     * @param filePath
-     * @param headerMap
-     * @return
-     * @throws IOException
+     * @param filePath  filePath
+     * @param headerMap headerMap
+     * @return url
+     * @throws Exception Exception
      */
     public String uploadFile(String filePath, Map<String, String> headerMap) throws Exception {
         return HttpKimUtils.getInstance().postFile(fsApiurl + "/uploadbytes", filePath, headerMap);
@@ -353,11 +354,11 @@ public class FileKimUtils {
     /**
      * 文件字节上传
      *
-     * @param bytes
-     * @param originalFilename
-     * @param headerMap
-     * @return
-     * @throws IOException
+     * @param bytes            bytes
+     * @param originalFilename originalFilename
+     * @param headerMap        headerMap
+     * @return url
+     * @throws Exception Exception
      */
     public String uploadFile(byte[] bytes, String originalFilename, Map<String, String> headerMap) throws Exception {
         return HttpKimUtils.getInstance().postFile(fsApiurl + "/uploadbytes", bytes, originalFilename, headerMap);
