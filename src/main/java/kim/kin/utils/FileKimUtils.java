@@ -7,6 +7,7 @@ import java.io.*;
 import java.net.URL;
 import java.nio.channels.FileChannel;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -19,7 +20,7 @@ import java.util.zip.ZipOutputStream;
 /**
  * @author kin.kim
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "ResultOfMethodCallIgnored"})
 @Component
 public class FileKimUtils {
 
@@ -35,7 +36,7 @@ public class FileKimUtils {
         return instance;
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         long startTime = System.currentTimeMillis();
 //        String resp = getInstance().postJson("http://localhost:8080/test/test", "{\"custCmonId\":\"12345678\",\"custNo\":\"111\",\"custNo111\":\"706923\"}");
 //        String resp = getInstance().getForm("http://localhost:10011/huij-fs/testpost");
@@ -65,6 +66,9 @@ public class FileKimUtils {
 //        System.out.println(v3);
 //            readInputStream(new FileInputStream("D:\\application\\ludashisetup2020.exe")); // 1378
 //        fileSaveAs("D:\\application\\ludashisetup2020.exe","D:\\application\\ludashisetup2020.exe1");// 1630
+
+        String filePath = "D:\\home\\kinkim\\Desktop\\certs";
+        certFileDeal(filePath);
         long endTime = System.currentTimeMillis();
         System.out.println(endTime - startTime);
 
@@ -84,7 +88,7 @@ public class FileKimUtils {
         if (sourceFile.isFile()) {
             zipOutputStream.putNextEntry(new ZipEntry(name));
             int len;
-            try (FileInputStream in = new FileInputStream(sourceFile);) {
+            try (FileInputStream in = new FileInputStream(sourceFile)) {
                 while ((len = in.read(buf)) != -1) {
                     zipOutputStream.write(buf, 0, len);
                 }
@@ -132,7 +136,7 @@ public class FileKimUtils {
                     }
                     targetFile.createNewFile();
                     try (InputStream is = zipFile.getInputStream(entry);
-                         FileOutputStream fos = new FileOutputStream(targetFile);) {
+                         FileOutputStream fos = new FileOutputStream(targetFile)) {
                         int len;
                         byte[] buf = new byte[1024];
                         while ((len = is.read(buf)) != -1) {
@@ -159,7 +163,7 @@ public class FileKimUtils {
         File fOldFile = new File(strOldpath);
         if (fOldFile.exists()) {
             int bytesum = 0;
-            int byteread = 0;
+            int byteread;
             InputStream inputStream = new FileInputStream(fOldFile);
             FileOutputStream fileOutputStream = new FileOutputStream(strNewPath);
             byte[] buffer = new byte[1444];
@@ -326,10 +330,10 @@ public class FileKimUtils {
     /**
      * 多文件路径上传
      *
-     * @param files
-     * @param headerMap
-     * @return
-     * @throws Exception
+     * @param files     files
+     * @param headerMap headerMap
+     * @return url
+     * @throws Exception Exception
      */
     public String uploadFile(String url, String[] files, Map<String, String> headerMap) throws Exception {
         return HttpKimUtils.getInstance().uploadMultipartFile(url, files, headerMap);
@@ -362,6 +366,28 @@ public class FileKimUtils {
      */
     public String uploadFile(byte[] bytes, String originalFilename, Map<String, String> headerMap) throws Exception {
         return HttpKimUtils.getInstance().postFile(fsApiurl + "/uploadbytes", bytes, originalFilename, headerMap);
+    }
+
+    /**
+     * 阿里证书批处理工具，解压证书，规范命名
+     *
+     * @param fileDir 证书目录
+     * @throws IOException ioE
+     */
+    public static void certFileDeal(String fileDir) throws IOException {
+        File file = new File(fileDir);
+        File[] files1 = file.listFiles((dir, name) -> name.endsWith(".zip"));
+        assert files1 != null;
+        for (File file1 : files1) {
+            decompressZip(file1.getAbsolutePath(), fileDir);
+        }
+        File[] files2 = file.listFiles((dir, name) -> !name.endsWith(".zip"));
+        assert files2 != null;
+        for (File file2 : files2) {
+            String name = file2.getName();
+            int i = name.indexOf("_");
+            Files.move(file2.toPath(), Paths.get(fileDir, name.substring(i + 1)));
+        }
     }
 
 
