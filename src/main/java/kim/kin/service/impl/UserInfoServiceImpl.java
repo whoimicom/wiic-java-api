@@ -7,6 +7,9 @@ import kim.kin.service.UserInfoService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * @author choky
  */
@@ -27,5 +30,10 @@ public class UserInfoServiceImpl implements UserInfoService {
         userInfo.setUsername(dto.getUsername());
         userInfo.setPassword(bcryptEncoder.encode(dto.getPassword()));
         return userInfoRepository.save(userInfo);
+    }
+
+    @Override
+    public List<Map<String, Object>> showReplicaStatus() {
+        return userInfoRepository.showReplicaStatus();
     }
 }
