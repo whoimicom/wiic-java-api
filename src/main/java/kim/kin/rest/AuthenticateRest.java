@@ -1,6 +1,7 @@
 package kim.kin.rest;
 
 
+import kim.kin.config.security.AnonymousKimAccess;
 import kim.kin.config.security.JwtTokenUtil;
 import kim.kin.config.security.SecurityKimParams;
 import kim.kin.config.security.user.UserDetailsServiceImpl;
@@ -71,6 +72,13 @@ public class AuthenticateRest {
         System.out.println(credentials);
         System.out.println(details);
         return ResponseEntity.ok(authentication);
+    }
+
+    @RequestMapping(value = "/showReplicaStatus", method = RequestMethod.POST)
+    @AnonymousKimAccess
+    public ResponseEntity<?> showReplicaStatus() {
+        List<Map<String, Object>> maps = userInfoService.showReplicaStatus();
+        return ResponseEntity.ok(maps);
     }
 
     @PostMapping(value = "/user/logout")

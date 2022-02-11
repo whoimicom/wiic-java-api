@@ -1,6 +1,8 @@
 package kim.kin.config.security;
 
 import io.jsonwebtoken.ExpiredJwtException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,7 +24,7 @@ import java.util.List;
  */
 //@Component
 public class JwtRequestFilter extends BasicAuthenticationFilter {
-
+    private static final Logger log = LoggerFactory.getLogger(JwtRequestFilter.class);
     private final JwtTokenUtil jwtTokenUtil;
 
     public JwtRequestFilter(AuthenticationManager authenticationManager, JwtTokenUtil jwtTokenUtil) {
@@ -31,8 +33,7 @@ public class JwtRequestFilter extends BasicAuthenticationFilter {
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
-            throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
 
         final String authHeader = request.getHeader(SecurityKimParams.AUTH_KIM_HEADER);
         // 如果请求头中没有Authorization信息则直接放行了
@@ -76,11 +77,8 @@ public class JwtRequestFilter extends BasicAuthenticationFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         boolean result = false;
-        logger.info("getPathInfo:" + request.getPathInfo());
-        logger.info("getRequestURI:" + request.getRequestURI());
-        logger.info("getRequestURL:" + request.getRequestURL());
-        logger.info("getUserPrincipal:" + request.getUserPrincipal());
-        logger.info("getServletPath:" + request.getServletPath());
+        log.info("getPathInfo:{} getRequestURI:{} getRequestURL:{} getUserPrincipal:{} getServletPath:{}",
+                request.getPathInfo(), request.getRequestURI(), request.getRequestURL(), request.getUserPrincipal(), request.getServletPath());
         String requestURI = request.getRequestURI();
         if (SecurityKimParams.LOGIN_URI.equals(requestURI)) {
             result = true;
@@ -89,6 +87,9 @@ public class JwtRequestFilter extends BasicAuthenticationFilter {
             result = true;
         }
         if (HttpMethod.OPTIONS.toString().equals(request.getMethod())) {
+            result = true;
+        }
+        if ("/showReplicaStatus".equals(request.getServletPath())) {
             result = true;
         }
         return result;

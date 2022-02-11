@@ -1,9 +1,13 @@
 package kim.kin.repository;
 
+import kim.kin.model.ResultKimListMap;
 import kim.kin.model.UserInfo;
+import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 
@@ -16,15 +20,21 @@ public interface UserInfoRepository extends CrudRepository<UserInfo, Integer> {
     /**
      * 根据用户名查找用户
      * @param username 用户名
-     * @return
+     * @return findByUsername
      */
     Optional<UserInfo> findByUsername(String username);
 
     /**
      * @param email email
-     * @return
+     * @return findByEmail
      */
     Optional<UserInfo> findByEmail(String email);
+
+    /**
+     * @return show replica status
+     */
+    @Query(value = "show replica status",resultSetExtractorClass = ResultKimListMap.class )
+    List<Map<String, Object>> showReplicaStatus();
 
 
 }
