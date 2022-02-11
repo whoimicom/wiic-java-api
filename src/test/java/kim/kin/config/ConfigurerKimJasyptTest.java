@@ -16,11 +16,11 @@ public class ConfigurerKimJasyptTest {
     @Autowired
     ConfigurableEnvironment environment;
     @Autowired
-    DataSourcePropertiesUtil test;
+    DataSourcePropertiesUtil dataSourcePropertiesUtil;
+
     @Test
     public void testEnvironmentProperties() throws SQLException {
         assertEquals("kinkim", environment.getProperty("spring.datasource.username"));
-
-        test.test();
+        dataSourcePropertiesUtil.showDatabaseMetaData();
     }
 }

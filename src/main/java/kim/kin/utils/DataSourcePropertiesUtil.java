@@ -5,6 +5,7 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Field;
+import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 import java.util.Objects;
 
@@ -22,21 +23,24 @@ public class DataSourcePropertiesUtil {
         this.dataSourceTransactionManager = dataSourceTransactionManager;
     }
 
-    public void test() throws SQLException {
-        String databaseProductName = Objects.requireNonNull(dataSourceTransactionManager.getDataSource()).getConnection()
-                .getMetaData().getDatabaseProductName();
-        System.out.println(databaseProductName);
+    public void showDatabaseMetaData() throws SQLException {
+        DatabaseMetaData metaData = Objects.requireNonNull(dataSourceTransactionManager.getDataSource()).getConnection().getMetaData();
+        System.out.println(String.format("%1$-" + 27 + "s", "databaseProductName:") + metaData.getDatabaseProductName());
+        System.out.println(String.format("%1$-" + 27 + "s", "getDatabaseProductVersion:") + metaData.getDatabaseProductVersion());
+        System.out.println(String.format("%1$-" + 27 + "s", "getDatabaseMajorVersion:") + metaData.getDatabaseMajorVersion());
+        System.out.println(String.format("%1$-" + 27 + "s", "getDatabaseMinorVersion:") + metaData.getDatabaseMinorVersion());
+        System.out.println(String.format("%1$-" + 27 + "s", "getJDBCMajorVersion:") + metaData.getJDBCMajorVersion());
+        System.out.println(String.format("%1$-" + 27 + "s", "getJDBCMinorVersion:") + metaData.getJDBCMinorVersion());
         printAllFields(dataSourceProperties);
     }
 
     public static void printAllFields(Object obj) {
         Class<?> cls = obj.getClass();
         Field[] fields = cls.getDeclaredFields();
-        System.out.println("共有" + fields.length + "个属性");
         for (Field field : fields) {
             field.setAccessible(true);
             try {
-                System.out.println(field.getName() + ":" + field.get(obj));
+                System.out.println(String.format("%1$-" + 27 + "s", field.getName() + ":") + field.get(obj));
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             }
