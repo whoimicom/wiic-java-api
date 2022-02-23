@@ -1,17 +1,16 @@
 package kim.kin.utils;
 
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
 import java.net.URL;
 import java.nio.channels.FileChannel;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Map;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.util.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
@@ -68,7 +67,8 @@ public class FileKimUtils {
 //        fileSaveAs("D:\\application\\ludashisetup2020.exe","D:\\application\\ludashisetup2020.exe1");// 1630
 
         String filePath = "D:\\home\\kinkim\\Desktop\\certs";
-        certFileDeal(filePath);
+//        certFileDeal(filePath);
+        fileNameTrans("D:\\opt\\workspace\\notes", "_", "-");
         long endTime = System.currentTimeMillis();
         System.out.println(endTime - startTime);
 
@@ -153,7 +153,7 @@ public class FileKimUtils {
     }
 
     /**
-     * 文件另存
+     * 文件拷贝
      *
      * @param strOldpath strOldpath
      * @param strNewPath strNewPath
@@ -168,9 +168,8 @@ public class FileKimUtils {
             FileOutputStream fileOutputStream = new FileOutputStream(strNewPath);
             byte[] buffer = new byte[1444];
             while ((byteread = inputStream.read(buffer)) != -1) {
-                bytesum += byteread; //这一行是记录文件大小的，可以删去
-                fileOutputStream.write(buffer, 0, byteread);//三个参数，第一个参数是写的内容，
-                //第二个参数是从什么地方开始写，第三个参数是需要写的大小
+                bytesum += byteread;
+                fileOutputStream.write(buffer, 0, byteread);
             }
             inputStream.close();
             fileOutputStream.close();
@@ -375,18 +374,50 @@ public class FileKimUtils {
      * @throws IOException ioE
      */
     public static void certFileDeal(String fileDir) throws IOException {
-        File file = new File(fileDir);
-        File[] files1 = file.listFiles((dir, name) -> name.endsWith(".zip"));
-        assert files1 != null;
-        for (File file1 : files1) {
-            decompressZip(file1.getAbsolutePath(), fileDir);
-        }
-        File[] files2 = file.listFiles((dir, name) -> !name.endsWith(".zip"));
-        assert files2 != null;
-        for (File file2 : files2) {
-            String name = file2.getName();
+        File dirFile = new File(fileDir);
+        File[] zipFiles = dirFile.listFiles((dir, name) -> name.endsWith(".zip"));
+        assert zipFiles != null;
+        Arrays.stream(zipFiles).forEach(file -> {
+            decompressZip(file.getAbsolutePath(), fileDir);
+        });
+        File[] certFiles = dirFile.listFiles((dir, name) -> !name.endsWith(".zip"));
+        assert certFiles != null;
+        for (File file : certFiles) {
+            String name = file.getName();
             int i = name.indexOf("_");
-            Files.move(file2.toPath(), Paths.get(fileDir, name.substring(i + 1)));
+            Files.move(file.toPath(), Paths.get(fileDir, name.substring(i + 1)));
+        }
+    }
+
+    /**
+     * 替换文件中包含的字符串
+     *
+     * @param fileDir    fileDir
+     * @param sourceChar sourceChar
+     * @param tarChar    tarChar
+     * @throws IOException IOException
+     */
+    public static void fileNameTrans(String fileDir, String sourceChar, String tarChar) throws IOException {
+        if (new File(fileDir).exists()) {
+            Files.walkFileTree(Paths.get(fileDir), new SimpleFileVisitor<>() {
+                @Override
+                public FileVisitResult visitFile(Path path, BasicFileAttributes attrs) throws IOException {
+                    String fileName = path.getFileName().toString();
+                    String previousPath = path.getParent().toFile().getPath();
+                    String currentPath = path.toFile().getPath();
+                    if (fileName.contains(sourceChar)) {
+                        String newName = fileName.replaceAll(sourceChar, tarChar);
+                        System.out.println(fileName + " " + newName + " " + previousPath + " " + currentPath);
+                        Files.move(path, Paths.get(previousPath, newName));
+                    }
+                    return FileVisitResult.CONTINUE;
+                }
+
+                @Override
+                public FileVisitResult preVisitDirectory(Path path, BasicFileAttributes attrs) throws IOException {
+                    return super.preVisitDirectory(path, attrs);
+                }
+            });
         }
     }
 
