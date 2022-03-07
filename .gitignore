@@ -1,5 +1,5 @@
 HELP.md
-target/
+/target/
 .gradle
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**
@@ -26,7 +26,7 @@ target/
 /dist/
 /nbdist/
 /.nb-gradle/
-build/
+/build/
 
 ### VS Code ###
 .vscode/
