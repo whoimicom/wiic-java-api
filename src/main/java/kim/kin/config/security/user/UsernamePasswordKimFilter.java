@@ -3,6 +3,10 @@ package kim.kin.config.security.user;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kim.kin.config.security.JwtTokenUtil;
 import kim.kin.config.security.SecurityKimParams;
+import kim.kin.config.security.email.EmailAuthenticationFilter;
+import kim.kin.model.ResultVO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationServiceException;
@@ -16,12 +20,16 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import javax.servlet.FilterChain;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.Serializable;
 import java.util.*;
 
-public class UsernamePasswordKimFilter extends UsernamePasswordAuthenticationFilter {
+import static kim.kin.config.security.email.EmailAuthenticationFilter.APPLICATION_JSON_UTF8_VALUE;
 
+public class UsernamePasswordKimFilter extends UsernamePasswordAuthenticationFilter {
+    private static final Logger log = LoggerFactory.getLogger(UsernamePasswordKimFilter.class);
     private final AuthenticationManager authenticationManager;
     private final JwtTokenUtil jwtTokenUtil;
 
@@ -45,17 +53,46 @@ public class UsernamePasswordKimFilter extends UsernamePasswordAuthenticationFil
 //            String username = userInfo.getUsername();
 //            String password = userInfo.getPassword();
 
-            String username = this.obtainUsername(request);
+          /*  String username = this.obtainUsername(request);
             username = username != null ? username : "";
             username = username.trim();
             String password = this.obtainPassword(request);
-            password = password != null ? password : "";
+            password = password != null ? password : "";*/
+
+            UserInfoRecord userInfoRecord = this.obtainParam(request);
+            String username = userInfoRecord.username;
+            String password = userInfoRecord.password;
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(username, password, new ArrayList<>());
             return authenticationManager.authenticate(authentication);
         } catch (Exception e) {
             e.printStackTrace();
             throw new AuthenticationServiceException(e.getMessage());
         }
+    }
+
+    public UserInfoRecord obtainParam(HttpServletRequest request) throws IOException {
+        String contentType = request.getContentType();
+        UserInfoRecord userInfoRecord;
+        if (MediaType.APPLICATION_JSON_VALUE.equalsIgnoreCase(contentType)
+                || APPLICATION_JSON_UTF8_VALUE.equalsIgnoreCase(contentType)) {
+            try (BufferedReader bufferedReader = request.getReader();) {
+                StringBuilder stringBuilder = new StringBuilder();
+                String inputStr;
+                while ((inputStr = bufferedReader.readLine()) != null) {
+                    stringBuilder.append(inputStr);
+                }
+                userInfoRecord = new ObjectMapper().readValue(stringBuilder.toString(), UserInfoRecord.class);
+            }
+        } else {
+            String AUTH_EMAIL_CODE = "username";
+            String AUTH_EMAIL_NAME = "password";
+            userInfoRecord = new UserInfoRecord(request.getParameter(AUTH_EMAIL_NAME), request.getParameter(AUTH_EMAIL_CODE));
+        }
+        log.info(String.valueOf(userInfoRecord));
+        return userInfoRecord;
+    }
+
+    record UserInfoRecord(String username, String password) implements Serializable {
     }
 
     @Override
@@ -76,10 +113,40 @@ public class UsernamePasswordKimFilter extends UsernamePasswordAuthenticationFil
         response.setStatus(HttpServletResponse.SC_OK);
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         PrintWriter writer = response.getWriter();
-        Map<String, Object> authInfo = new HashMap<>(1) {{
+        Map<String, Object> authInfo = new HashMap<>(10) {{
+            //        roles,
+            //        userId,
+            //        username: _username,
+            //        token,
+            //        realName,
+            //        desc,
+/*            userId: '1',
+                    desc: 'manager',
+                    password: '123456',
+                    token: 'fakeToken1',
+                    homePath: '/dashboard/analysis',
+                    roles: [
+            {
+                roleName: 'Super Admin',
+                        value: 'super',
+            },
+      ],*/
+            ArrayList<HashMap<String, String>> arrayList = new ArrayList<>();
+            HashMap<String, String> map = new HashMap<>() {{
+                put("roleName", "Super Admin");
+                put("value", "super");
+            }};
+            arrayList.add(map);
+            put("roles", arrayList);
+            put("userId", "1");
+            put("username", user.getUsername());
+            put("realName", user.getUsername());
+            put("desc", "manager");
             put("token", SecurityKimParams.AUTH_KIM_PREFIX + token);
         }};
-        writer.write(new ObjectMapper().writeValueAsString(authInfo));
+        ResultVO<Object> objectResultVO = new ResultVO<>();
+        objectResultVO.setResult(authInfo);
+        writer.write(new ObjectMapper().writeValueAsString(objectResultVO));
     }
 
     @Override

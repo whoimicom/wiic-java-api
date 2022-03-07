@@ -39,7 +39,7 @@ public class AuthenticateRest {
         this.userInfoService = userInfoService;
     }
 
-    @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
     @LogKimAnnotation
     public ResponseEntity<?> createAuthenticationToken(@RequestBody UserInfoDTO userInfoDTO) {
         String username = userInfoDTO.getUsername();
