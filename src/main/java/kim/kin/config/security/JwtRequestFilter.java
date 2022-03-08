@@ -1,6 +1,7 @@
 package kim.kin.config.security;
 
 import io.jsonwebtoken.ExpiredJwtException;
+import kim.kin.model.UserKimDetails;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpMethod;
@@ -8,7 +9,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
@@ -49,11 +49,10 @@ public class JwtRequestFilter extends BasicAuthenticationFilter {
                     // Once we get the token validate it.
                     if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                         List<GrantedAuthority> authentication = jwtTokenUtil.getAuthentication(jwtToken);
-                        User user = new User(username, "", authentication);
+                        UserKimDetails user = new UserKimDetails(username, authentication);
                         // if token is valid configure Spring Security to manually set authentication
                         if (jwtTokenUtil.validateToken(jwtToken, username)) {
-                            UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
-                                    user, null, authentication);
+                            UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(user, null, authentication);
                             usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                             // After setting the Authentication in the context, we specify
                             // that the current user is authenticated. So it passes the
@@ -64,8 +63,10 @@ public class JwtRequestFilter extends BasicAuthenticationFilter {
                     chain.doFilter(request, response);
 //                    super.doFilterInternal(request, response, chain);
                 } catch (IllegalArgumentException e) {
+                    e.printStackTrace();
                     System.out.println("Unable to get JWT Token");
                 } catch (ExpiredJwtException e) {
+                    e.printStackTrace();
                     System.out.println("JWT Token has expired");
                 }
             } else {

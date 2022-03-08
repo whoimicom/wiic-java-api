@@ -34,6 +34,13 @@ public class UserInfo {
 	@Column
 	private String gender;
 
+	@Column
+	private String desc;
+	@Column
+	private String homePath;
+	@Column
+	private String realName;
+
 
 	public String getEmail() {
 		return email;
@@ -105,5 +112,29 @@ public class UserInfo {
 
 	public void setIntroduction(String introduction) {
 		this.introduction = introduction;
+	}
+
+	public String getDesc() {
+		return desc;
+	}
+
+	public void setDesc(String desc) {
+		this.desc = desc;
+	}
+
+	public String getHomePath() {
+		return homePath;
+	}
+
+	public void setHomePath(String homePath) {
+		this.homePath = homePath;
+	}
+
+	public String getRealName() {
+		return realName;
+	}
+
+	public void setRealName(String realName) {
+		this.realName = realName;
 	}
 }
