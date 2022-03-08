@@ -1,16 +1,39 @@
 package kim.kin.model;
 
-public class ResultVO<T> {
-    private String code = "0";
+public class ResultVO<T extends Object> {
+    private Integer code = 0;
     private T result;
     private String message = "ok";
     private String type = "success";
 
-    public String getCode() {
+    public ResultVO() {
+        super();
+    }
+
+
+    public ResultVO(Integer code, T result, String message, String type) {
+        this.code = code;
+        this.result = result;
+        this.message = message;
+        this.type = type;
+    }
+
+    public static ResultVO success() {
+        ResultVO<Object> resultVO = new ResultVO<>();
+        return resultVO;
+    }
+
+    public static ResultVO success(Object result) {
+        ResultVO<Object> resultVO = new ResultVO<>();
+        resultVO.setResult(result);
+        return resultVO;
+    }
+
+    public Integer getCode() {
         return code;
     }
 
-    public void setCode(String code) {
+    public void setCode(Integer code) {
         this.code = code;
     }
 

@@ -6,10 +6,10 @@ import kim.kin.config.security.JwtTokenUtil;
 import kim.kin.config.security.SecurityKimParams;
 import kim.kin.config.security.user.UserDetailsServiceImpl;
 import kim.kin.kklog.LogKimAnnotation;
-import kim.kin.model.MetaVO;
-import kim.kin.model.UserInfoDTO;
-import kim.kin.model.UserPermissionVO;
+import kim.kin.model.*;
 import kim.kin.service.UserInfoService;
+import kim.kin.utils.SecurityKimUtils;
+import org.apache.catalina.security.SecurityUtil;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -39,18 +39,25 @@ public class AuthenticateRest {
         this.userInfoService = userInfoService;
     }
 
-    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    @RequestMapping(value = "/login1", method = RequestMethod.POST)
     @LogKimAnnotation
     public ResponseEntity<?> createAuthenticationToken(@RequestBody UserInfoDTO userInfoDTO) {
         String username = userInfoDTO.getUsername();
         String password = userInfoDTO.getPassword();
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-        User user = userDetailsService.loadUserByUsername(username);
+        UserKimDetails user = userDetailsService.loadUserByUsername(username);
         String token = jwtTokenUtil.generateToken(username, user.getAuthorities());
         Map<String, Object> authInfo = new HashMap<>(1) {{
             put("token", SecurityKimParams.AUTH_KIM_PREFIX + token);
         }};
         return ResponseEntity.ok(authInfo);
+    }
+
+//    @RequestMapping(value = "/getUserInfo", method = RequestMethod.POST)
+    @GetMapping("/getUserInfo")
+    public ResponseEntity<?> getUserInfo() {
+        UserKimDetails currentUser = SecurityKimUtils.getCurrentUser();
+        return ResponseEntity.ok(ResultVO.success(currentUser));
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)

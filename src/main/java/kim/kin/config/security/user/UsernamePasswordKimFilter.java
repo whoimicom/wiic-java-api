@@ -75,7 +75,7 @@ public class UsernamePasswordKimFilter extends UsernamePasswordAuthenticationFil
         UserInfoRecord userInfoRecord;
         if (MediaType.APPLICATION_JSON_VALUE.equalsIgnoreCase(contentType)
                 || APPLICATION_JSON_UTF8_VALUE.equalsIgnoreCase(contentType)) {
-            try (BufferedReader bufferedReader = request.getReader();) {
+            try (BufferedReader bufferedReader = request.getReader()) {
                 StringBuilder stringBuilder = new StringBuilder();
                 String inputStr;
                 while ((inputStr = bufferedReader.readLine()) != null) {
@@ -144,9 +144,8 @@ public class UsernamePasswordKimFilter extends UsernamePasswordAuthenticationFil
             put("desc", "manager");
             put("token", SecurityKimParams.AUTH_KIM_PREFIX + token);
         }};
-        ResultVO<Object> objectResultVO = new ResultVO<>();
-        objectResultVO.setResult(authInfo);
-        writer.write(new ObjectMapper().writeValueAsString(objectResultVO));
+
+        writer.write(new ObjectMapper().writeValueAsString(ResultVO.success(authInfo)));
     }
 
     @Override

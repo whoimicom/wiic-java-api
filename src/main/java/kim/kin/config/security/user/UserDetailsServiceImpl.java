@@ -1,7 +1,9 @@
 package kim.kin.config.security.user;
 
 import kim.kin.model.UserInfo;
+import kim.kin.model.UserKimDetails;
 import kim.kin.repository.UserInfoRepository;
+import org.springframework.beans.BeanUtils;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -10,6 +12,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -26,7 +29,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     }
 
     @Override
-    public User loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserKimDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserInfo userInfo = userInfoRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
         //通过用户获取权限
@@ -44,7 +47,16 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             }
         }
 //        List<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority("admin"));
-        return new User(userInfo.getUsername(), userInfo.getPassword(), authorities);
+        UserKimDetails userKimDetails = new UserKimDetails(userInfo.getUsername(), userInfo.getPassword(), authorities);
+        BeanUtils.copyProperties(userInfo, userKimDetails, "username", "authorities");
+        ArrayList<HashMap<String, String>> arrayList = new ArrayList<>();
+        HashMap<String, String> map = new HashMap<>() {{
+            put("roleName", "Super Admin");
+            put("value", "super");
+        }};
+        arrayList.add(map);
+        userKimDetails.setRoles(arrayList);
+        return userKimDetails;
     }
 
 
