@@ -194,41 +194,6 @@ public class WebMvcKimConfigurer implements WebMvcConfigurer {
         return objectMapper;
     }
 
-    @InitBinder
-    protected void initBinder(WebDataBinder binder) {
-        binder.registerCustomEditor(LocalDate.class, new PropertyEditorSupport() {
-            @Override
-            public void setAsText(String text) throws IllegalArgumentException {
-                log.debug("initBinder LocalDate[{}]", text);
-                setValue(LocalDate.parse(text, DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-            }
-        });
-        binder.registerCustomEditor(LocalDateTime.class, new PropertyEditorSupport() {
-            @Override
-            public void setAsText(String text) throws IllegalArgumentException {
-                log.debug("initBinder LocalDateTime[{}]", text);
-                setValue(LocalDateTime.parse(text, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-            }
-        });
-        binder.registerCustomEditor(LocalTime.class, new PropertyEditorSupport() {
-            @Override
-            public void setAsText(String text) throws IllegalArgumentException {
-                log.debug("initBinder LocalTime[{}]", text);
-                setValue(LocalTime.parse(text, DateTimeFormatter.ofPattern("HH:mm:ss")));
-            }
-        });
-        binder.registerCustomEditor(Date.class, new PropertyEditorSupport() {
-            @Override
-            public void setAsText(String text) throws IllegalArgumentException {
-                log.debug("initBinder Date[{}]", text);
-                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                try {
-                    setValue(formatter.parse(text));
-                } catch (Exception e) {
-                    throw new RuntimeException(String.format("Error parsing %s to Date", text));
-                }
-            }
-        });
-    }
+
 
 }
