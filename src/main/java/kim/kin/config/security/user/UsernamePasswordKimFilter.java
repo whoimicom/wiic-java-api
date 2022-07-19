@@ -84,8 +84,8 @@ public class UsernamePasswordKimFilter extends UsernamePasswordAuthenticationFil
                 userInfoRecord = new ObjectMapper().readValue(stringBuilder.toString(), UserInfoRecord.class);
             }
         } else {
-            String AUTH_EMAIL_CODE = "username";
-            String AUTH_EMAIL_NAME = "password";
+            String AUTH_EMAIL_NAME = "username";
+            String AUTH_EMAIL_CODE = "password";
             userInfoRecord = new UserInfoRecord(request.getParameter(AUTH_EMAIL_NAME), request.getParameter(AUTH_EMAIL_CODE));
         }
         log.info(String.valueOf(userInfoRecord));
