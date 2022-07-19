@@ -1,22 +1,26 @@
 package kim.kin.rest;
 
 
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Predicate;
 import kim.kin.config.security.AnonymousKimAccess;
 import kim.kin.config.security.JwtTokenUtil;
 import kim.kin.config.security.SecurityKimParams;
 import kim.kin.config.security.user.UserDetailsServiceImpl;
 import kim.kin.kklog.LogKimAnnotation;
 import kim.kin.model.*;
+import kim.kin.repository.UserInfoRepositoryDSL;
 import kim.kin.service.UserInfoService;
 import kim.kin.utils.SecurityKimUtils;
-import org.apache.catalina.security.SecurityUtil;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -31,12 +35,14 @@ public class AuthenticateRest {
     private final JwtTokenUtil jwtTokenUtil;
     private final UserDetailsServiceImpl userDetailsService;
     private final UserInfoService userInfoService;
+    private final UserInfoRepositoryDSL userInfoRepositoryDSL;
 
-    public AuthenticateRest(AuthenticationManager authenticationManager, JwtTokenUtil jwtTokenUtil, UserDetailsServiceImpl userDetailsService, UserInfoService userInfoService) {
+    public AuthenticateRest(AuthenticationManager authenticationManager, JwtTokenUtil jwtTokenUtil, UserDetailsServiceImpl userDetailsService, UserInfoService userInfoService, UserInfoRepositoryDSL userInfoRepositoryDSL) {
         this.authenticationManager = authenticationManager;
         this.jwtTokenUtil = jwtTokenUtil;
         this.userDetailsService = userDetailsService;
         this.userInfoService = userInfoService;
+        this.userInfoRepositoryDSL = userInfoRepositoryDSL;
     }
 
     @RequestMapping(value = "/login1", method = RequestMethod.POST)
@@ -53,7 +59,7 @@ public class AuthenticateRest {
         return ResponseEntity.ok(authInfo);
     }
 
-//    @RequestMapping(value = "/getUserInfo", method = RequestMethod.POST)
+    //    @RequestMapping(value = "/getUserInfo", method = RequestMethod.POST)
     @GetMapping("/getUserInfo")
     public ResponseEntity<?> getUserInfo() {
         UserKimDetails currentUser = SecurityKimUtils.getCurrentUser();
@@ -86,6 +92,29 @@ public class AuthenticateRest {
     public ResponseEntity<?> showReplicaStatus() {
         List<Map<String, Object>> maps = userInfoService.showReplicaStatus();
         return ResponseEntity.ok(maps);
+    }
+
+    @GetMapping("/page")
+    @AnonymousKimAccess
+    public ResponseEntity<?> page(@QuerydslPredicate(root = UserInfo.class) Predicate predicate, final Pageable pageable) {
+        if (predicate == null) predicate = new BooleanBuilder();
+        Page<UserInfo> dsl = userInfoRepositoryDSL.findAll(predicate, pageable);
+        return ResponseEntity.ok(dsl);
+    }
+
+    @GetMapping("/dsl")
+    @AnonymousKimAccess
+    public ResponseEntity<?> dsl() {
+//        if (predicate == null) predicate = new BooleanBuilder();
+        Optional<UserInfo> userInfo = userInfoRepositoryDSL.queryOne(query -> query
+                .select(userInfoRepositoryDSL.entityProjection())
+                .from(QUserInfo.userInfo)
+                .where(QUserInfo.userInfo.username.in("kinkim", "admin"))
+                .orderBy(QUserInfo.userInfo.realName.asc(), QUserInfo.userInfo.id.asc())
+                .limit(1)
+                .offset(1));
+//        Page<UserInfo> dsl = userInfoService.dsl(predicate, pageable);
+        return ResponseEntity.ok(userInfo);
     }
 
     @PostMapping(value = "/user/logout")

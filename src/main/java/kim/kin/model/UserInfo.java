@@ -14,31 +14,31 @@ public class UserInfo {
 
 	@Id
 	private long id;
-	@Column
+	@Column("username")
 	private String username;
-	@Column
+	@Column("password")
 	@JsonIgnore
 	private String password;
-	@Column
+	@Column("enabled")
 	private Boolean enabled=true;
 
-	@Column
+	@Column("avatar")
 	private String avatar;
-	@Column
+	@Column("introduction")
 	private String introduction;
 
-	@Column
+	@Column("email")
 	private String email;
-	@Column
+	@Column("mobile")
 	private String mobile;
-	@Column
+	@Column("gender")
 	private String gender;
 
-	@Column
+	@Column("desc")
 	private String desc;
-	@Column
+	@Column("home_path")
 	private String homePath;
-	@Column
+	@Column("real_name")
 	private String realName;
 
 
@@ -136,5 +136,23 @@ public class UserInfo {
 
 	public void setRealName(String realName) {
 		this.realName = realName;
+	}
+
+	public UserInfo(long id, String username, String password, Boolean enabled, String avatar, String introduction, String email, String mobile, String gender, String desc, String homePath, String realName) {
+		this.id = id;
+		this.username = username;
+		this.password = password;
+		this.enabled = enabled;
+		this.avatar = avatar;
+		this.introduction = introduction;
+		this.email = email;
+		this.mobile = mobile;
+		this.gender = gender;
+		this.desc = desc;
+		this.homePath = homePath;
+		this.realName = realName;
+	}
+
+	public UserInfo() {
 	}
 }

@@ -15,7 +15,7 @@ import java.util.Optional;
  * @author choky
  */
 @Repository
-public interface UserInfoRepository extends CrudRepository<UserInfo, Integer> {
+public interface UserInfoRepository extends CrudRepository<UserInfo, Long> {
 
     /**
      * 根据用户名查找用户
