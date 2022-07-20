@@ -5,6 +5,7 @@ import kim.kin.model.UserKimDetails;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
@@ -65,9 +66,11 @@ public class JwtRequestFilter extends BasicAuthenticationFilter {
                 } catch (IllegalArgumentException e) {
                     e.printStackTrace();
                     System.out.println("Unable to get JWT Token");
+                    throw new AccessDeniedException("Unable to get JWT Token",e);
                 } catch (ExpiredJwtException e) {
                     e.printStackTrace();
                     System.out.println("JWT Token has expired");
+                    throw new AccessDeniedException("JWT Token has expired",e);
                 }
             } else {
                 logger.warn("JWT Token does not begin with Bearer String");

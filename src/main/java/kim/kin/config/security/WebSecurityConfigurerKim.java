@@ -19,17 +19,15 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsByNameServiceWrapper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationProvider;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
@@ -39,6 +37,7 @@ import java.util.*;
 
 /**
  * @author choky
+ * @see <a href="https://spring.io/blog/2022/02/21/spring-security-without-the-websecurityconfigureradapter">spring-security-without-the-websecurityconfigureradapter</a>
  */
 @Configuration
 @EnableWebSecurity
@@ -89,14 +88,14 @@ public class WebSecurityConfigurerKim {
     }
 
 
-//    @Bean//刷新token时自动调用
+    //    @Bean//刷新token时自动调用
 //    public PreAuthenticatedAuthenticationProvider preAuthenticatedAuthenticationProvider() {
 //        PreAuthenticatedAuthenticationProvider provider = new PreAuthenticatedAuthenticationProvider();
 //        provider.setPreAuthenticatedUserDetailsService(new UserDetailsByNameServiceWrapper<>(userDetailsServiceImpl));
 //        return provider;
 //    }
     @Bean
-    DaoAuthenticationProvider daoAuthenticationProvider(){
+    DaoAuthenticationProvider daoAuthenticationProvider() {
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
         daoAuthenticationProvider.setPasswordEncoder(new BCryptPasswordEncoder());
         daoAuthenticationProvider.setUserDetailsService(userDetailsServiceImpl);
@@ -107,12 +106,25 @@ public class WebSecurityConfigurerKim {
     @Bean
     public AuthenticationManager authenticationManager() {
         ProviderManager providerManager = new ProviderManager(Arrays.asList(emailAuthenticationProvider(), daoAuthenticationProvider()));
+        //不擦除认证密码，擦除会导致TokenBasedRememberMeServices因为找不到Credentials再调用UserDetailsService而抛出UsernameNotFoundException
+//        providerManager.setEraseCredentialsAfterAuthentication(false);
         return providerManager;
+    }
+
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return (web) -> web.ignoring()
+                .antMatchers("/register", "/")
+                // swagger3
+                .antMatchers("/swagger**/**")
+                .antMatchers("/webjars/**")
+                .antMatchers("/v3/**")
+                .antMatchers("/doc.html");
     }
 
     @Order(SecurityProperties.BASIC_AUTH_ORDER)
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity,AuthenticationManager authenticationManager) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, AuthenticationManager authenticationManager) throws Exception {
         Map<RequestMappingInfo, HandlerMethod> handlerMethodMap = applicationContext.getBean("requestMappingHandlerMapping", RequestMappingHandlerMapping.class).getHandlerMethods();
         Map<String, Set<String>> anonymousUrls = anonymousUrls(handlerMethodMap);
         httpSecurity
@@ -123,14 +135,7 @@ public class WebSecurityConfigurerKim {
                 .addFilter(new UsernamePasswordKimFilter(authenticationManager, jwtTokenUtil));
         // We don't need CSRF for this example
         httpSecurity.csrf().disable()
-                // dont authenticate this particular request
-                .authorizeRequests().antMatchers("/authenticate", "/register", "/").permitAll()
-                // swagger
-                .antMatchers("/swagger**/**").permitAll()
-                .antMatchers("/webjars/**").permitAll()
-                .antMatchers("/v3/**").permitAll()
-                .antMatchers("/doc.html").permitAll()
-
+                .authorizeRequests()
                 // permitAll OPTIONS
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .antMatchers(HttpMethod.GET, anonymousUrls.get(HttpMethod.GET.toString()).toArray(String[]::new)).permitAll()
