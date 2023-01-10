@@ -66,9 +66,9 @@ public class FileKimUtils {
 //            readInputStream(new FileInputStream("D:\\application\\ludashisetup2020.exe")); // 1378
 //        fileSaveAs("D:\\application\\ludashisetup2020.exe","D:\\application\\ludashisetup2020.exe1");// 1630
 
-        String filePath = "D:\\home\\kinkim\\Desktop\\certs";
-//        certFileDeal(filePath);
-        fileNameTrans("D:\\opt\\workspace\\notes", "_", "-");
+        String filePath = "C:\\Users\\kinkim\\Desktop\\domain";
+        certFileDeal(filePath);
+//        fileNameTrans("D:\\opt\\workspace\\notes", "_", "-");
         long endTime = System.currentTimeMillis();
         System.out.println(endTime - startTime);
 
@@ -237,9 +237,10 @@ public class FileKimUtils {
      */
     public static void copyFileUsingFileChannels(File source, File dest)
             throws IOException {
-        try (FileChannel inputChannel = new FileInputStream(source).getChannel();
-             FileChannel outputChannel = new FileOutputStream(dest).getChannel()) {
-            outputChannel.transferFrom(inputChannel, 0, inputChannel.size());
+        try (FileChannel inputChannel = new FileInputStream(source).getChannel()) {
+            try (FileChannel outputChannel = new FileOutputStream(dest).getChannel()) {
+                outputChannel.transferFrom(inputChannel, 0, inputChannel.size());
+            }
         }
     }
 
@@ -374,18 +375,24 @@ public class FileKimUtils {
      * @throws IOException ioE
      */
     public static void certFileDeal(String fileDir) throws IOException {
+        String certsPath = fileDir + File.separator + "certs";
+        Path path = Paths.get(certsPath);
+        File filePath = new File(certsPath);
+        if (!filePath.exists()) {
+            Files.createDirectory(path);
+        }
         File dirFile = new File(fileDir);
         File[] zipFiles = dirFile.listFiles((dir, name) -> name.endsWith(".zip"));
         assert zipFiles != null;
         Arrays.stream(zipFiles).forEach(file -> {
             decompressZip(file.getAbsolutePath(), fileDir);
         });
-        File[] certFiles = dirFile.listFiles((dir, name) -> !name.endsWith(".zip"));
+        File[] certFiles = dirFile.listFiles((dir, name) -> !name.endsWith(".zip") && !name.contains("certs"));
         assert certFiles != null;
         for (File file : certFiles) {
             String name = file.getName();
             int i = name.indexOf("_");
-            Files.move(file.toPath(), Paths.get(fileDir, name.substring(i + 1)));
+            Files.move(file.toPath(), Paths.get(certsPath, name.substring(i + 1)),StandardCopyOption.REPLACE_EXISTING);
         }
     }
 
