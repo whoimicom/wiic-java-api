@@ -16,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -36,13 +37,15 @@ public class AuthenticateRest {
     private final UserDetailsServiceImpl userDetailsService;
     private final UserInfoService userInfoService;
     private final UserInfoRepositoryDSL userInfoRepositoryDSL;
+    private final JdbcTemplate jdbcTemplate;
 
-    public AuthenticateRest(AuthenticationManager authenticationManager, JwtTokenUtil jwtTokenUtil, UserDetailsServiceImpl userDetailsService, UserInfoService userInfoService, UserInfoRepositoryDSL userInfoRepositoryDSL) {
+    public AuthenticateRest(AuthenticationManager authenticationManager, JwtTokenUtil jwtTokenUtil, UserDetailsServiceImpl userDetailsService, UserInfoService userInfoService, UserInfoRepositoryDSL userInfoRepositoryDSL, JdbcTemplate jdbcTemplate) {
         this.authenticationManager = authenticationManager;
         this.jwtTokenUtil = jwtTokenUtil;
         this.userDetailsService = userDetailsService;
         this.userInfoService = userInfoService;
         this.userInfoRepositoryDSL = userInfoRepositoryDSL;
+        this.jdbcTemplate = jdbcTemplate;
     }
 
     @RequestMapping(value = "/login1", method = RequestMethod.POST)
@@ -100,6 +103,13 @@ public class AuthenticateRest {
         if (predicate == null) predicate = new BooleanBuilder();
         Page<UserInfo> dsl = userInfoRepositoryDSL.findAll(predicate, pageable);
         return ResponseEntity.ok(dsl);
+    }
+    @GetMapping("/temp")
+    @AnonymousKimAccess
+    public ResponseEntity<?> temp() {
+        List<Map<String, Object>> mapList = jdbcTemplate.queryForList("select * from kk_user_info");
+        mapList.forEach(System.out::println);
+        return ResponseEntity.ok(mapList);
     }
 
     @GetMapping("/dsl")
