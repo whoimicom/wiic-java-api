@@ -9,6 +9,7 @@ import kim.kin.config.security.SecurityKimParams;
 import kim.kin.config.security.user.UserDetailsServiceImpl;
 import kim.kin.kklog.LogKimAnnotation;
 import kim.kin.model.*;
+import kim.kin.repository.UserInfoJdbcTemplate;
 import kim.kin.repository.UserInfoRepositoryDSL;
 import kim.kin.service.UserInfoService;
 import kim.kin.utils.SecurityKimUtils;
@@ -38,14 +39,16 @@ public class AuthenticateRest {
     private final UserInfoService userInfoService;
     private final UserInfoRepositoryDSL userInfoRepositoryDSL;
     private final JdbcTemplate jdbcTemplate;
+    private final UserInfoJdbcTemplate userInfoJdbcTemplate;
 
-    public AuthenticateRest(AuthenticationManager authenticationManager, JwtTokenUtil jwtTokenUtil, UserDetailsServiceImpl userDetailsService, UserInfoService userInfoService, UserInfoRepositoryDSL userInfoRepositoryDSL, JdbcTemplate jdbcTemplate) {
+    public AuthenticateRest(AuthenticationManager authenticationManager, JwtTokenUtil jwtTokenUtil, UserDetailsServiceImpl userDetailsService, UserInfoService userInfoService, UserInfoRepositoryDSL userInfoRepositoryDSL, JdbcTemplate jdbcTemplate, UserInfoJdbcTemplate userInfoJdbcTemplate) {
         this.authenticationManager = authenticationManager;
         this.jwtTokenUtil = jwtTokenUtil;
         this.userDetailsService = userDetailsService;
         this.userInfoService = userInfoService;
         this.userInfoRepositoryDSL = userInfoRepositoryDSL;
         this.jdbcTemplate = jdbcTemplate;
+        this.userInfoJdbcTemplate = userInfoJdbcTemplate;
     }
 
     @RequestMapping(value = "/login1", method = RequestMethod.POST)
@@ -110,6 +113,12 @@ public class AuthenticateRest {
         List<Map<String, Object>> mapList = jdbcTemplate.queryForList("select * from kk_user_info");
         mapList.forEach(System.out::println);
         return ResponseEntity.ok(mapList);
+    }
+    @PostMapping("/tempPage")
+    @AnonymousKimAccess
+    public ResponseEntity<?> tempPage(Pageable page) {
+        Page<UserInfo> all = userInfoJdbcTemplate.findAll(page);
+        return ResponseEntity.ok(all);
     }
 
     @GetMapping("/dsl")
