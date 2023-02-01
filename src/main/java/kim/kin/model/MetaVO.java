@@ -1,6 +1,7 @@
 package kim.kin.model;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  *
@@ -12,6 +13,13 @@ public class MetaVO implements Serializable {
 
     private String icon;
 
+    public MetaVO() {
+
+    }
+
+    /**
+     * @return title
+     */
     public String getTitle() {
         return title;
     }
@@ -31,5 +39,17 @@ public class MetaVO implements Serializable {
     public MetaVO(String title, String icon) {
         this.title = title;
         this.icon = icon;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof MetaVO metaVO)) return false;
+        return Objects.equals(getTitle(), metaVO.getTitle()) && Objects.equals(getIcon(), metaVO.getIcon());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getTitle(), getIcon());
     }
 }
