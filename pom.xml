@@ -16,12 +16,6 @@
         <swagger.version>3.0.0</swagger.version>
         <spring-boot.version>3.0.2</spring-boot.version>
     </properties>
-    <!--    <parent>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-parent</artifactId>
-            <version>3.0.2</version>
-            <relativePath/>
-        </parent>-->
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -107,12 +101,6 @@
             <artifactId>spring-security-test</artifactId>
             <scope>test</scope>
         </dependency>
-<!--        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-boot-starter</artifactId>
-            <version>${swagger.version}</version>
-        </dependency>-->
-
         <dependency>
             <groupId>com.github.ulisesbocchio</groupId>
             <artifactId>jasypt-spring-boot-starter</artifactId>
@@ -134,12 +122,6 @@
             <artifactId>jaxb-api</artifactId>
             <version>2.4.0-b180830.0359</version>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>com.infobip</groupId>-->
-<!--            <artifactId>infobip-spring-data-jdbc-querydsl-boot-starter</artifactId>-->
-<!--            <version>8.1.0</version>-->
-<!--        </dependency>-->
-
     </dependencies>
 
     <build>
@@ -183,14 +165,6 @@
                     <target>17</target>
                     <generatedSourcesDirectory>${project.build.directory}/generated-sources/annotations/
                     </generatedSourcesDirectory>
-<!--                    <annotationProcessors>-->
-<!--                        <annotationProcessor>-->
-<!--                            com.infobip.spring.data.jdbc.annotation.processor.SpringDataJdbcAnnotationProcessor-->
-<!--                        </annotationProcessor>-->
-<!--                    </annotationProcessors>-->
-<!--                    <compilerArgs>-->
-<!--                        <arg>-Aquerydsl.generatedAnnotationClass=javax.annotation.Generated</arg>-->
-<!--                    </compilerArgs>-->
                 </configuration>
             </plugin>
 
@@ -223,27 +197,6 @@
                     </buildArgs>
                 </configuration>
             </plugin>
-
-            <!--            <plugin>-->
-            <!--                <groupId>com.querydsl</groupId>-->
-            <!--                <artifactId>querydsl-maven-plugin</artifactId>-->
-            <!--                <version>5.0.0</version>-->
-            <!--                <executions>-->
-            <!--                    <execution>-->
-            <!--                        <goals>-->
-            <!--                            <goal>export</goal>-->
-            <!--                        </goals>-->
-            <!--                    </execution>-->
-            <!--                </executions>-->
-            <!--                <configuration>-->
-            <!--                    &lt;!&ndash;                    <jdbcDriver>org.h2.Driver</jdbcDriver>&ndash;&gt;-->
-            <!--                    &lt;!&ndash;                    <jdbcUrl>jdbc:h2:mem:h2test</jdbcUrl>&ndash;&gt;-->
-            <!--                    <targetFolder>${project.basedir}/target/generated-sources/java</targetFolder>-->
-            <!--                    <sourceFolder>src</sourceFolder>-->
-            <!--                    <packageName>kim.kin</packageName>-->
-            <!--                </configuration>-->
-            <!--            </plugin>-->
-
 
         </plugins>
     </build>
