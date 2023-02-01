@@ -7,11 +7,12 @@ spring:
   jpa:
     show-sql: false
     generate-ddl: false
-  redis:
-    host: localhost
-    password:
-    port: 6379
-    database: 0
+  data:
+    redis:
+      host: localhost
+      password:
+      port: 6379
+      database: 0
 jasypt:
   encryptor:
     algorithm: PBEWITHHMACSHA512ANDAES_256
