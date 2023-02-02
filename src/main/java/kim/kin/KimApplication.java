@@ -7,13 +7,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @author choky
  */
 @SpringBootApplication
-public class PromgtApplication {
+public class KimApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(PromgtApplication.class, args);
+        SpringApplication.run(KimApplication.class, args);
 
        /* System.setProperty("spring.devtools.restart.enabled", "false");
-        ConfigurableApplicationContext context = SpringApplication.run(PromgtApplication.class, args);
+        ConfigurableApplicationContext context = SpringApplication.run(KimApplication.class, args);
         Environment environment = context.getBean(Environment.class);
         String port = environment.getProperty("server.port");
         String contextPath = environment.getProperty("server.servlet.context-path");
