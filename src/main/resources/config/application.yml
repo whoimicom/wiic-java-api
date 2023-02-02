@@ -2,10 +2,10 @@ server:
   port: 10000
   shutdown: GRACEFUL
   servlet:
-    context-path: /promgt-api
+    context-path: /kim-api
 spring:
   application:
-    name: promgt
+    name: kim
   profiles:
     active: sit
   datasource:
