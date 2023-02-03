@@ -3,6 +3,7 @@ package kim.kin.config.security.handler;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Component;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
 
 /**
@@ -22,7 +24,12 @@ import java.io.IOException;
 @Component
 public class AuthenticationFailureKimImpl implements AuthenticationFailureHandler {
     private static final Logger logger = LoggerFactory.getLogger(AuthenticationFailureKimImpl.class);
-    private final ObjectMapper mapper = new ObjectMapper();
+    private ObjectMapper objectMapper;
+
+    @Autowired
+    public void setObjectMapper(ObjectMapper objectMapper) {
+        this.objectMapper = objectMapper;
+    }
 
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException {
@@ -45,6 +52,6 @@ public class AuthenticationFailureKimImpl implements AuthenticationFailureHandle
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setCharacterEncoding("UTF-8");
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
-        response.getWriter().write(mapper.writeValueAsString(ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(authMsg)));
+        response.getWriter().write(objectMapper.writeValueAsString(ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(authMsg)));
     }
 }
