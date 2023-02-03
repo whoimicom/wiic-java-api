@@ -20,9 +20,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.convert.converter.Converter;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -31,7 +29,6 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import java.beans.PropertyEditorSupport;
 import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
@@ -51,7 +48,6 @@ import java.util.Date;
 @EnableWebMvc
 @RestController
 public class WebMvcKimConfigurer implements WebMvcConfigurer {
-    private static final Logger log = LoggerFactory.getLogger(WebMvcKimConfigurer.class);
     @Value("${kim.kin.file-path}")
     private String filePath;
 
@@ -157,6 +153,8 @@ public class WebMvcKimConfigurer implements WebMvcConfigurer {
                 .registerModule(new JavaTimeModule());
         objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
         objectMapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
+        // fix com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
         //LocalDateTime系列序列化和反序列化模块，继承自jsr310，我们在这里修改了日期格式
         JavaTimeModule javaTimeModule = new JavaTimeModule();

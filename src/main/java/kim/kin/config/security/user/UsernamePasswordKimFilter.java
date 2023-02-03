@@ -1,5 +1,6 @@
 package kim.kin.config.security.user;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,12 +24,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-
-import static kim.kin.config.security.email.EmailAuthenticationFilter.APPLICATION_JSON_UTF8_VALUE;
+import java.util.*;
 
 public class UsernamePasswordKimFilter extends UsernamePasswordAuthenticationFilter {
     private static final Logger log = LoggerFactory.getLogger(UsernamePasswordKimFilter.class);
@@ -39,6 +35,7 @@ public class UsernamePasswordKimFilter extends UsernamePasswordAuthenticationFil
         this.authenticationManager = authenticationManager;
         this.jwtTokenUtil = jwtTokenUtil;
     }
+
 
     /**
      * 执行实际的身份验证。
@@ -51,39 +48,30 @@ public class UsernamePasswordKimFilter extends UsernamePasswordAuthenticationFil
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         //输入流中获取到登录的信息
         try {
-//            UserInfo userInfo = new ObjectMapper().readValue(request.getInputStream(), UserInfo.class);
-//            String username = userInfo.getUsername();
-//            String password = userInfo.getPassword();
-
-          /*  String username = this.obtainUsername(request);
-            username = username != null ? username : "";
-            username = username.trim();
-            String password = this.obtainPassword(request);
-            password = password != null ? password : "";*/
-
             UserInfoRecord userInfoRecord = this.obtainParam(request);
             String username = userInfoRecord.username;
             String password = userInfoRecord.password;
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(username, password, new ArrayList<>());
             return authenticationManager.authenticate(authentication);
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
             throw new AuthenticationServiceException(e.getMessage());
         }
     }
 
     public UserInfoRecord obtainParam(HttpServletRequest request) throws IOException {
-        String contentType = request.getContentType();
+        String contentType = Optional.ofNullable(request.getContentType()).orElse("");
         UserInfoRecord userInfoRecord;
-        if (MediaType.APPLICATION_JSON_VALUE.equalsIgnoreCase(contentType)
-                || APPLICATION_JSON_UTF8_VALUE.equalsIgnoreCase(contentType)) {
+        if (contentType.toLowerCase().contains(MediaType.APPLICATION_JSON_VALUE)) {
             try (BufferedReader bufferedReader = request.getReader()) {
                 StringBuilder stringBuilder = new StringBuilder();
                 String inputStr;
                 while ((inputStr = bufferedReader.readLine()) != null) {
                     stringBuilder.append(inputStr);
                 }
-                userInfoRecord = new ObjectMapper().readValue(stringBuilder.toString(), UserInfoRecord.class);
+                ObjectMapper objectMapper = new ObjectMapper();
+                objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+                userInfoRecord = objectMapper.readValue(stringBuilder.toString(), UserInfoRecord.class);
             }
         } else {
             String AUTH_EMAIL_NAME = "username";
@@ -154,4 +142,5 @@ public class UsernamePasswordKimFilter extends UsernamePasswordAuthenticationFil
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException {
         response.sendError(HttpServletResponse.SC_FORBIDDEN, "登录失败，账号或密码错误");
     }
+
 }

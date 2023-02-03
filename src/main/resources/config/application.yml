@@ -20,6 +20,8 @@ spring:
       pool-name: DatebookHikariCP
     type: com.zaxxer.hikari.HikariDataSource
   jackson:
+    deserialization:
+      FAIL_ON_UNKNOWN_PROPERTIES: false
     serialization:
       write-dates-as-timestamps: false
   servlet:
@@ -51,7 +53,7 @@ kim:
   kin:
     channel-no: '000'
     file-path: /data/file
-    web-path: /promgt
+    web-path: /kim-admin
 jwt:
   base64EncodedSecretKey: kinkim
   expiration: 36000

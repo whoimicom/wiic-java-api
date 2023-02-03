@@ -46,7 +46,7 @@ import static org.springframework.http.HttpMethod.*;
  */
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity(prePostEnabled = true)
+@EnableMethodSecurity
 public class WebSecurityConfigurerKim {
     private static final Logger logger = LoggerFactory.getLogger(WebSecurityConfigurerKim.class);
     private final AuthenticationEntryPointKimImpl authenticationEntryPointKimImpl;

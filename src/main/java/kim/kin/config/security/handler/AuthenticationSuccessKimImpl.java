@@ -20,7 +20,12 @@ import java.util.Map;
 @Component
 public class AuthenticationSuccessKimImpl implements AuthenticationSuccessHandler {
     private JwtTokenUtil jwtTokenUtil;
+    private ObjectMapper objectMapper;
 
+    @Autowired
+    public void setObjectMapper(ObjectMapper objectMapper) {
+        this.objectMapper = objectMapper;
+    }
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
 
@@ -34,7 +39,7 @@ public class AuthenticationSuccessKimImpl implements AuthenticationSuccessHandle
         Map<String, Object> authInfo = new HashMap<>(1) {{
             put("token", SecurityKimParams.AUTH_KIM_PREFIX + token);
         }};
-        writer.write(new ObjectMapper().writeValueAsString(authInfo));
+        writer.write(objectMapper.writeValueAsString(authInfo));
     }
 
     @Autowired
