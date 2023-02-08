@@ -123,13 +123,6 @@ public class WebSecurityConfigurerKim {
                 .requestMatchers("/webjars/**")
                 .requestMatchers("/v3/**")
                 .requestMatchers("/doc.html");
-//        return (web) -> web.ignoring()
-//                .antMatchers("/register", "/")
-//                // swagger3
-//                .antMatchers("/swagger**/**")
-//                .antMatchers("/webjars/**")
-//                .antMatchers("/v3/**")
-//                .antMatchers("/doc.html");
     }
 
     @Order(SecurityProperties.BASIC_AUTH_ORDER)
@@ -163,19 +156,11 @@ public class WebSecurityConfigurerKim {
         if (anonymousUrls.get(DELETE.toString()).size() > 0) {
             auth.requestMatchers(DELETE, anonymousUrls.get(DELETE.toString()).toArray(String[]::new)).permitAll();
         }
-//                .requestMatchers(anonymousUrls.get("ALL").toArray(String[]::new)).permitAll()
-
-//                .authorizeRequests()
-//                // permitAll OPTIONS
-//                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-//                .antMatchers(HttpMethod.GET, anonymousUrls.get(HttpMethod.GET.toString()).toArray(String[]::new)).permitAll()
-//                .antMatchers(HttpMethod.POST, anonymousUrls.get(HttpMethod.POST.toString()).toArray(String[]::new)).permitAll()
-//                .antMatchers(HttpMethod.PUT, anonymousUrls.get(HttpMethod.PUT.toString()).toArray(String[]::new)).permitAll()
-//                .antMatchers(HttpMethod.PATCH, anonymousUrls.get(HttpMethod.PATCH.toString()).toArray(String[]::new)).permitAll()
-//                .antMatchers(HttpMethod.DELETE, anonymousUrls.get(HttpMethod.DELETE.toString()).toArray(String[]::new)).permitAll()
-//                .antMatchers(anonymousUrls.get("ALL").toArray(String[]::new)).permitAll()
-//                // all other requests need to be authenticated
-//                .anyRequest().authenticated().and()
+        if (anonymousUrls.get("ALL").size() > 0) {
+            auth.requestMatchers(anonymousUrls.get("ALL").toArray(String[]::new)).permitAll();
+        }
+        // all other requests need to be authenticated
+        auth.anyRequest().authenticated();
 
         // make sure we use stateless session; session won't be used to
         // store user's state.
