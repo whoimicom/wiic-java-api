@@ -53,6 +53,8 @@ public class AuthenticationEntryPointKimImpl implements AuthenticationEntryPoint
             authMsg = "账户已过期！";
         } else if (authException instanceof CredentialsExpiredException) {
             authMsg = "用户密码已过期！";
+        }else if (authException instanceof InsufficientAuthenticationException) {
+            authMsg = "用户名密码错误！";
         }
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setCharacterEncoding("UTF-8");
