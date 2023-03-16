@@ -32,8 +32,8 @@ public class HttpKimUtils {
     private static final String CHARSET = "utf-8";
     private static final int CONNECT_TIMEOUT = 15000;
     private static final int READ_TIMEOUT = 15000;
-    private static HttpKimUtils instance = null;
-    private static ObjectMapper mapper = null;
+    private static HttpKimUtils instance;
+    private static ObjectMapper mapper;
 
 
     public static HttpKimUtils getInstance() {
@@ -56,9 +56,11 @@ public class HttpKimUtils {
 
     public String postFile(String url, String filePath, Map<String, String> headerMap) throws Exception {
         File file = new File(filePath);
-        InputStream input = new FileInputStream(file);
-        byte[] bytes = new byte[input.available()];
-        input.read(bytes);
+        byte[] bytes;
+        try (InputStream input = new FileInputStream(file)) {
+            bytes = new byte[input.available()];
+            input.read(bytes);
+        }
         String originalFilename = Optional.of(file.getName()).orElse("unknownFile");
         headerMap = Optional.ofNullable(headerMap).orElse(new HashMap<>(0));
         headerMap.put("originalFilename", originalFilename);
@@ -186,6 +188,14 @@ public class HttpKimUtils {
         }
     }
 
+    /**
+     * @param url url
+     * @param jsonContent
+     * @return
+     * @throws NoSuchAlgorithmException
+     * @throws IOException
+     * @throws KeyManagementException
+     */
     public String postJson(String url, String jsonContent) throws NoSuchAlgorithmException, IOException, KeyManagementException {
         return doRequest("POST", url, jsonContent, CONNECT_TIMEOUT, READ_TIMEOUT, CONTENT_TYPE_JSON, null);
     }
@@ -231,9 +241,9 @@ public class HttpKimUtils {
     /**
      * Multipart File Upload
      *
-     * @param actionUrl actionUrl
+     * @param actionUrl       actionUrl
      * @param uploadFilePaths uploadFilePaths
-     * @param headerMap headerMap
+     * @param headerMap       headerMap
      * @return
      * @throws IOException
      */
