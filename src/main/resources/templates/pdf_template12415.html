@@ -1,0 +1,109 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ include file="../../inc_common.jsp" %>
+<%@ include file="../../inc_doctype.jsp" %>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Untitled Document</title>
+    <style>
+        @page {
+            margin: 10px 20px;
+            padding: 0 10px;
+        }
+
+        * {
+            font-size: 12px;
+            font-family: "SimSun";
+        }
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            position: relative;
+            text-align: center;
+            height: 71px;
+            line-height: 71px;
+            font-size: 18px;
+            font-weight: bold;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 img {
+            position: absolute;
+            left: 10px;
+            top: 0px;
+        }
+
+        h3 {
+            line-height: 6px;
+        }
+
+        h2 {
+            position: relative;
+            text-align: center;
+            height: 51px;
+            line-height: 31px;
+            font-size: 20px;
+            font-weight: bold;
+            margin: 0;
+            padding: 0;
+        }
+
+        h2 img {
+            position: absolute;
+            left: 10px;
+            top: 8px;
+        }
+
+        table {
+            margin: 7px;
+            table-layout: fixed;
+            width: 98%;
+            margin: 0 auto;
+        }
+
+        table tr td {
+            height: 6px;
+        }
+        p {
+            margin: 0;
+            line-height: 22px;
+        }
+
+        .lineHeightText {
+            line-height: 20px;
+        }
+        .textIndent{ text-indent:2em;}
+    </style>
+</head>
+<body style="width: 100%;">
+    <h1>个人征信授权书</h1>
+    <p class=""><strong>重要提示：</strong></p>
+    <p class="textIndent"><strong>为了保障您的合法权益，您应当阅读并遵守本授权书。请您务必审慎阅读、充分理解本授权书条款内容，特别是免除或者减轻被授权人责任，或限制您权利的条款，相关条款将以加粗形式提示您充分注意。</strong></p>
+    <p class="textIndent"><strong>本授权书依据《征信业管理条例》等法律法规的相关规定拟定，百行征信有限公司是依据《征信业管理条例》成立和运营的持牌个人征信机构。除非您已阅读并接受本授权书所有条款，否则您无权使用被授权人服务平台借款服务。</strong></p>
+    <br />
+    <p class="textIndent">本人向<u><c:if test="${member.loan.fundsSn eq '131'}">重庆两江新区宝升小额贷款股份有限公司</c:if><c:if test="${member.loan.fundsSn != '131'}">重庆两江新区同泽小额贷款有限责任公司</c:if>、百行征信有限公司</u>作以下不可撤销的授权：</p>
+    <p class="textIndent"><strong>一、本人同意<c:if test="${member.loan.fundsSn eq '131'}">重庆两江新区宝升小额贷款股份有限公司</c:if><c:if test="${member.loan.fundsSn != '131'}">重庆两江新区同泽小额贷款有限责任公司</c:if>（本文简称“被授权人”）在办理以下涉及到本人或与本人有关的业务时，可按照法律法规的规定通过百行征信有限公司查询、使用本人信息：</strong></p>
+    <p class="textIndent">&#8377;审核本人授信及贷款申请的；</p>
+    <p class="textIndent">&#8377;审核本人作为担保人或共同还款人的；</p>
+    <p class="textIndent">&#8377;受理法人、其他组织或自然人的授信、贷款申请及贷后风险管理时，需要查询本人作为法人、其他组织或自然人的法定代表人、出资人或关联方的信用状况的；</p>
+    <p class="textIndent">&#8377;受理本人担任法定代表人、负责人或出资人的法人、商户或其他组织的特约商户开户申请，需要查询本人信用状况的；</p>
+    <p class="textIndent">&#8377;处理贷后管理事务（包括贷款额度授予后对额度的管理），进行贷后风险管理；</p>
+    <p class="textIndent">&#8377;处理本人征信异议的。</p>
+    <p class="textIndent"><strong>本授权书所指的本人信息包括本人基本信息、本人信贷信息以及与本人信用相关的其他信息。</strong></p>
+    <p class="textIndent"><strong>二、信息查询期限</strong></p>
+    <p class="textIndent">本授权书下被授权人向百行征信有限公司查询本人信息的期限<strong>自本人确认本授权承诺之日起至本人在被授权人处所有相关业务终结之日止。</strong></p>
+    <p class="textIndent"><strong>如下情形视为本人与被授权人的业务未终结：本人在被授权人处有信贷余额或有授信额度；本人提供担保的授信业务有信贷余额或有授信额度。</strong></p>
+    <p class="textIndent"><strong>三、本人同意被授权人向百行征信有限公司报送本人信息（含历史信息、不良信息、负债信息及偿债履约能力判断信息等）。</strong></p>
+    <p class="textIndent"><strong>四、本人同意百行征信有限公司可向被授权人和有关部门、单位（包括但不限于公安、司法、教育、全国公民身份证号码查询服务中心、通信运营商、社保、公积金、税务、民政、物流、电子商务平台、互联网平台、行业协会等合法留存本人信息的第三方机构等）采集、查询或验证本人信息，并可将采集或查询到的本人信息在本授权书第一条所列的情形下向被授权人提供。</strong></p>
+    <p class="textIndent">五、授权人声明</p>
+    <p class="textIndent"><strong>本人已知悉并理解本授权书所有内容（特别是加粗字体内容）以及由此产生的法律效力，自愿作出上述授权。本授权书是本人真实的意思表示，本人同意承担由此带来的一切法律后果。</strong></p>
+    <p style="padding-top: 6px;">
+        <strong>授权人（签名）：_________________</strong><br />
+        <strong>身份证号码：<u> ${member.creSn} </u></strong><br />
+        <strong>签署日期：${currDate}</strong><br />
+    </p>
+</body>
+</html>
