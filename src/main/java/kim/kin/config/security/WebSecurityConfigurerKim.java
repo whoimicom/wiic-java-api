@@ -48,7 +48,7 @@ import static org.springframework.http.HttpMethod.*;
 @EnableWebSecurity
 @EnableMethodSecurity
 public class WebSecurityConfigurerKim {
-    private static final Logger logger = LoggerFactory.getLogger(WebSecurityConfigurerKim.class);
+    private static final Logger log = LoggerFactory.getLogger(WebSecurityConfigurerKim.class);
     private final AuthenticationEntryPointKimImpl authenticationEntryPointKimImpl;
     private final UserDetailsServiceImpl userDetailsServiceImpl;
     private final AccessDeniedKimImpl accessDeniedKimImpl;
@@ -141,6 +141,7 @@ public class WebSecurityConfigurerKim {
                 .authorizeHttpRequests();
 
         auth.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll();
+        log.info(anonymousUrls.get(GET.toString()).toArray(String[]::new).toString());
         if (anonymousUrls.get(GET.toString()).size() > 0) {
             auth.requestMatchers(GET, anonymousUrls.get(GET.toString()).toArray(String[]::new)).permitAll();
         }
@@ -204,9 +205,10 @@ public class WebSecurityConfigurerKim {
                     } else if (method.equals(DELETE)) {
                         delete.addAll(path);
                     }
-                } else {
-                    all.addAll(infoEntry.getKey().getPatternsCondition().getPatterns());
                 }
+//                else {
+//                    all.addAll(infoEntry.getKey().getPatternsCondition().getPatterns());
+//                }
 
             }
         }
@@ -216,8 +218,8 @@ public class WebSecurityConfigurerKim {
         anonymousUrls.put(HttpMethod.PATCH.toString(), patch);
         anonymousUrls.put(HttpMethod.DELETE.toString(), delete);
         anonymousUrls.put("ALL", all);
-        logger.info(String.valueOf(anonymousUrls));
-        logger.info(Arrays.toString(anonymousUrls.get("ALL").toArray(String[]::new)));
+        log.info(String.valueOf(anonymousUrls));
+        log.info(Arrays.toString(anonymousUrls.get("ALL").toArray(String[]::new)));
         return anonymousUrls;
     }
 
