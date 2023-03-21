@@ -30,9 +30,13 @@ public class ContractRest {
     @GetMapping("/contract/{id}")
     @AnonymousKimAccess
     public String contract(@PathVariable String id, Model model) {
-        record Loan(String repaymentAccount, String channel, String repaymentName, String applySn) {
+        record Loan(String xtSn,String repaymentAccount, String channel, String repaymentName, String applySn) {
         }
-        record Member(String gender, String creSn, String realName, Loan loan, Map<String,String> paramMap) {
+        record MemberClientele(String creSn,String censusAddrDetail) {
+
+        }
+        record Member(String mobile,String email,String gender, String creSn, String realName, Loan loan, Map<String, String> paramMap,
+                      MemberClientele memberClientele) {
         }
         record RepaymentDates(String period, String repaymenDate, String repaymenMoney) {
 
@@ -40,15 +44,20 @@ public class ContractRest {
         record FundsSource(String companyName) {
 
         }
+
         RepaymentDates repaymentDate1 = new RepaymentDates("1", "20230101", "550.00");
         RepaymentDates repaymentDate2 = new RepaymentDates("2", "20230201", "551.00");
         RepaymentDates repaymentDate3 = new RepaymentDates("3", "20230301", "552.00");
         List<RepaymentDates> repaymentDates = Arrays.asList(repaymentDate1, repaymentDate2, repaymentDate3);
         HashMap<String, String> paramMap = new HashMap<>();
         paramMap.put("repaymentBank", "工商银行");
+        paramMap.put("censusProvince", "重庆");
+        paramMap.put("censusCity", "重庆市");
+        paramMap.put("censusDistrict", "渝北区");
         String channel = "08";
-        Loan loan = new Loan("6226***********", channel, "工商银行", "90SDFKSLDFKJ***");
-        Member member = new Member("1", "3333333CRESN", "麻子", loan, paramMap);
+        Loan loan = new Loan("HT22256465********","6226***********", channel, "工商银行", "90SDFKSLDFKJ***");
+        MemberClientele memberClientele = new MemberClientele("XXXXCRESN","金山商业中心");
+        Member member = new Member("18555555555","@5dhj.com","1", "3333333CRESN", "麻子", loan, paramMap, memberClientele);
 
         model.addAttribute("member", member);
         model.addAttribute("repaymentDates", repaymentDates);
