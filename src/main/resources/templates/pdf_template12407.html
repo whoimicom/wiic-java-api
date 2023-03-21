@@ -1,102 +1,21 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ include file="../../inc_common.jsp" %>
-<%@ include file="../../inc_doctype.jsp" %>
-<jsp:useBean id="constant" scope="page" class="com.dragon.plat.common.Constant"></jsp:useBean>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:th="http://www.thymeleaf.org" >
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <title>Untitled Document</title>
     <style>
-        @page {
-            margin: 10px 20px;
-            padding: 0px, 10px;
-        }
-
-        * {
-            font-size: 12px;
-            font-family: "SimSun";
-        }
-
-        body {
-            margin: 0;
-            padding: 0;
-        }
-
-        h1 {
-            position: relative;
-            text-align: center;
-            height: 71px;
-            line-height: 71px;
-            font-size: 18px;
-            font-weight: bold;
-            margin: 0;
-            padding: 0;
-        }
-
-        h1 img {
-            position: absolute;
-            left: 10px;
-            top: 10px;
-        }
-
-        h3 {
-            line-height: 6px;
-        }
-
-        h2 {
-            position: relative;
-            text-align: center;
-            height: 51px;
-            line-height: 31px;
-            font-size: 20px;
-            font-weight: bold;
-            margin: 0;
-            padding: 0;
-        }
-
-        h2 img {
-            position: absolute;
-            left: 10px;
-            top: 8px;
-        }
-
-        table {
-            margin: 7px;
-            table-layout: fixed;
-            width: 98%;
-            margin: 0 auto;
-        }
-
-        table tr td {
-            height: 6px;
-        }
-
-        .p-left {
-            margin: 3px 0;
-        }
-
-        .partition {
-            background: url("images/partition.png") center repeat-x;
-            text-align: center;
-        }
-
-        p {
-            margin: 0;
-        }
-        .fontWeight {
-            font-weight: 600;
-        }
-        .lineHeightText {
-            line-height: 20px;
-        }
-        .textIndent{ text-indent:2em;}
+        @page {  margin: 10px 20px;  padding: 0px, 10px;  }  * {font-size: 12px;font-family: "SimSun",serif;}
+        body {margin: 0;padding: 0;}
+        h1 {position: relative;text-align: center;height: 71px;line-height: 71px;font-size: 18px;font-weight: bold;margin: 0;padding: 0;}  h1 img {position: absolute;left: 10px;top: 10px;}  h3 {line-height: 6px;}  h2 {position: relative;text-align: center;height: 51px;line-height: 31px;font-size: 20px;font-weight: bold;margin: 0;padding: 0;}  h2 img {position: absolute;left: 10px;top: 8px;}  table {margin: 7px;table-layout: fixed;width: 98%;margin: 0 auto;}  table tr td {height: 6px;}  .p-left {margin: 3px 0;}  .partition {background: url("images/partition.png") center repeat-x;text-align: center;}  p {margin: 0;}  .fontWeight {font-weight: 600;}  .lineHeightText {line-height: 20px;}  .textIndent{ text-indent:2em;}
     </style>
 </head>
 
 <body style="width: 100%;">
-    <h1><img width="100px;" height="60px;" src="${fundsSource.companyLogo}" /><p align="right" style="margin-top: 8px;margin-right:40px;">合同编号：${member.loan.xtSn}</p></h1>
+    <h1><img width="100px;" height="60px;" src="http://hw.5dhj.com/huij-fs/file/common/app/images/logo_10_tz.png" /><p align="right" style="margin-top: 8px;margin-right:40px;">合同编号：[[${member.loan.xtSn}]]</p></h1>
     <h1>个人消费借款合同</h1>
     <p class="lineHeightText" style="margin-bottom:10px;">甲方（出借人）：重庆两江新区同泽小额贷款有限责任公司</p>
-    <p class="lineHeightText" style="margin-bottom:15px;">乙方（借款人）：${member.realName} &nbsp;&nbsp;身份证号码：${member.memberClientele.creSn}</p>
+    <p class="lineHeightText" style="margin-bottom:15px;">乙方（借款人）：[[${member.realName}]] &nbsp;&nbsp;身份证号码：[[${member.memberClientele.creSn}]]</p>
 
     <p class="lineHeightText">本着平等、自愿的原则，出借人愿为借款人提供消费借款，并经协商一致，达成如下协议：</p>
     <p class="lineHeightText textIndent"><strong>第一条 借款：</strong>1、借款本金、借款期限、借款利率等基本信息以《个人消费借款借据》（下简称《借据》）为准。借贷关系自借款人在本合同上以电子签章方式签字后即可正式生效，借款起始日为借款合同签订日。2、借款发放方式：出借人将借款人所借款项支付至《借据》上借款人指定账户。
@@ -125,7 +44,7 @@
         <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
         <span>借款人：</span>
         <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
-        <span>合同签订日：${currDate}</span>
+        <span>合同签订日：[[${currDate}]]</span>
     <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
     <span>签署地：重庆市</span>
     </p>
