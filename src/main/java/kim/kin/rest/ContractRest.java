@@ -6,19 +6,20 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author choky
@@ -26,25 +27,39 @@ import java.time.format.DateTimeFormatter;
 @Controller
 public class ContractRest {
 
-    @GetMapping("/contract")
+    @GetMapping("/contract/{id}")
     @AnonymousKimAccess
-    public String contract(Model model) {
-//            <strong>身份证号码：<u> th:text="${member.creSn}" </u></strong><br/>
-//    <strong>授权扣款银行账户：<u> ${member.loan.repaymentAccount} </u></strong><br/>
-//        鉴于授权人于<u> ${currYear} </u>年<u> ${currMonth} </u>月<u> ${currDay}
-//    <strong>签署日期：${currDate}</strong><br/>
-        record Loan(String repaymentAccount) {
+    public String contract(@PathVariable String id, Model model) {
+        record Loan(String repaymentAccount, String channel, String repaymentName, String applySn) {
         }
-        record Member(String creSn, Loan loan, String realName) {
+        record Member(String gender, String creSn, String realName, Loan loan, Map<String,String> paramMap) {
         }
+        record RepaymentDates(String period, String repaymenDate, String repaymenMoney) {
 
-        model.addAttribute("member", new Member("creSn---", new Loan("rem"), "realName"));
+        }
+        record FundsSource(String companyName) {
+
+        }
+        RepaymentDates repaymentDate1 = new RepaymentDates("1", "20230101", "550.00");
+        RepaymentDates repaymentDate2 = new RepaymentDates("2", "20230201", "551.00");
+        RepaymentDates repaymentDate3 = new RepaymentDates("3", "20230301", "552.00");
+        List<RepaymentDates> repaymentDates = Arrays.asList(repaymentDate1, repaymentDate2, repaymentDate3);
+        HashMap<String, String> paramMap = new HashMap<>();
+        paramMap.put("repaymentBank", "工商银行");
+        String channel = "08";
+        Loan loan = new Loan("6226***********", channel, "工商银行", "90SDFKSLDFKJ***");
+        Member member = new Member("1", "3333333CRESN", "麻子", loan, paramMap);
+
+        model.addAttribute("member", member);
+        model.addAttribute("repaymentDates", repaymentDates);
+        model.addAttribute("fundsSource", new FundsSource("hoben-api"));
         String currentDate = LocalDate.now().format(DateTimeFormatter.BASIC_ISO_DATE);
         model.addAttribute("currDate", currentDate);
-        model.addAttribute("currYear", currentDate.substring(0,4));
-        model.addAttribute("currMonth", currentDate.substring(4,6));
-        model.addAttribute("currDay", currentDate.substring(6,8));
-        return "pdf_template12403.html";
+        model.addAttribute("currYear", currentDate.substring(0, 4));
+        model.addAttribute("currMonth", currentDate.substring(4, 6));
+        model.addAttribute("currDay", currentDate.substring(6, 8));
+//        return "pdf_template12403.html";
+        return "pdf_template" + id + ".html";
     }
 
     @GetMapping("/gen")
@@ -58,7 +73,7 @@ public class ContractRest {
 //            InputStream inputStream = classPathResource.getInputStream();
             builder.useFont(classPathResource.getFile(), "SimSun");
             builder.useFastMode();
-            builder.withUri("http://localhost:1987/kim-api/contract");
+            builder.withUri("http://localhost:1987/kim-api/contract/12404");
 //            builder.withHtmlContent(Files.readString(Paths.get("d:\\pdf.html")), "d:\\pdf.html");
             builder.toStream(os);
             builder.run();
