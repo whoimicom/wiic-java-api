@@ -26,27 +26,30 @@ import java.util.Map;
 @Controller
 public class ContractRest {
 
+    /**
+     * 查看模板
+     * <a href="http://localhost:1987/kim-api/contract/12405">...</a>
+     * @param id 模板编号
+     * @param model model
+     * @return 模板
+     */
     @GetMapping("/contract/{id}")
     @AnonymousKimAccess
     public String contract(@PathVariable String id, Model model) {
         record Loan(String downDate, String perMonthDate, String periods, String loanAmt, String borrowReason,
-                    String xtSn,
-                    String repaymentAccount,
-                    String channel, String repaymentName, String applySn, String fundsSn) {
+                    String xtSn, String repaymentAccount, String channel, String repaymentName, String applySn,
+                    String fundsSn) {
         }
         record MemberClientele(String creSn, String censusAddrDetail, String bodies, String creValid,
                                String companyName, String companyAddrDetail, String liveAddrDetail) {
 
         }
         record Member(String qq, String nationality, String birthday, String mobile, String email, String gender,
-                      String creSn,
-                      String realName, Loan loan,
-                      Map<String, String> paramMap,
+                      String creSn, String realName, Loan loan, Map<String, String> paramMap,
                       MemberClientele memberClientele) {
         }
         record RepaymentDates(String period, String repaymenDate, String planPrincipal, String planServiceFee,
                               String repaymenMoney) {
-
         }
         record FundsSource(String companyName, String companyLogo) {
 
@@ -54,7 +57,6 @@ public class ContractRest {
         record ContactothersHb(String parentsName, String family1Name, String contactName, String parentsTel,
                                String family1Tel, String contactTel, String parentsRel, String family1Relation,
                                String contactRel) {
-
         }
         HashMap<String, String> paramMap = new HashMap<>();
         paramMap.put("repaymentBank", "工商银行");
@@ -81,7 +83,7 @@ public class ContractRest {
         Loan loan = new Loan("20230101", "1日", "18", "5000", "购买XXXX", "HT22256465********", "6226***********", channel, "麻子", "APPLYSNXXX***", "131");
         MemberClientele memberClientele = new MemberClientele("XXXXCRESN", "金山商业中心", "渝北", "20550101", "**公司", "**路**街道**号", "**路**街道**号");
         Member member = new Member("QQ*****", "汉", "20230101", "18555555555", "@5dhj.com", "1", "3333333CRESN", "麻子", loan, paramMap, memberClientele);
-        FundsSource fundsSource = new FundsSource("hoben-api", "http://hw.5dhj.com/huij-fs/file/common/app/images/logo_10_tz.png");
+        FundsSource fundsSource = new FundsSource("hoben-api", "https://hw.5dhj.com/huij-fs/file/common/app/images/logo_10_tz.png");
         ContactothersHb contactothersHb = new ContactothersHb("麻大", "麻三", "麻烦", "185*******", "185*******", "185*******", "父子", "母子", "朋友 ");
         model.addAttribute("member", member);
         model.addAttribute("repaymentDates", repaymentDates);
@@ -103,10 +105,16 @@ public class ContractRest {
         return temp;
     }
 
+    /**
+     * 生成根据模板生成PDF
+     * <a href="http://localhost:1987/kim-api/genpdf/12405">...</a>
+     * @param id 模板编号
+     * @return 路径
+     */
     @GetMapping("/gen/{id}")
     @AnonymousKimAccess
     @ResponseBody
-    public String gen(@PathVariable String id) {
+    public String genpdf(@PathVariable String id) {
         int nano = LocalDateTime.now().getSecond();
         try (OutputStream os = new FileOutputStream("d:\\contract.pdf")) {
             PdfRendererBuilder builder = new PdfRendererBuilder();
