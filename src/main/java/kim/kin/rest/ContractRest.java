@@ -94,6 +94,7 @@ public class ContractRest {
         model.addAttribute("currDay", currentDate.substring(6, 8));
         model.addAttribute("contactothersHb", contactothersHb);
         model.addAttribute("srviceRat", "3%");
+        model.addAttribute("yearRat", "18%");
         model.addAttribute("LoanAmtUp", "伍仟");
         model.addAttribute("latDate", "20230301");
 //        return "pdf_template12403.html";
