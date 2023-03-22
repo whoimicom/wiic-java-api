@@ -93,6 +93,7 @@ public class ContractRest {
         model.addAttribute("currMonth", currentDate.substring(4, 6));
         model.addAttribute("currDay", currentDate.substring(6, 8));
         model.addAttribute("contactothersHb", contactothersHb);
+        model.addAttribute("srviceRat", "3%");
 //        return "pdf_template12403.html";
         String temp = "pdf_template" + id + ".html";
         System.out.println(temp);
