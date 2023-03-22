@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -33,10 +32,10 @@ public class ContractRest {
         record Loan(String downDate, String perMonthDate, String periods, String loanAmt, String borrowReason,
                     String xtSn,
                     String repaymentAccount,
-                    String channel, String repaymentName, String applySn) {
+                    String channel, String repaymentName, String applySn, String fundsSn) {
         }
         record MemberClientele(String creSn, String censusAddrDetail, String bodies, String creValid,
-                               String companyName, String companyAddrDetail,String liveAddrDetail) {
+                               String companyName, String companyAddrDetail, String liveAddrDetail) {
 
         }
         record Member(String qq, String nationality, String birthday, String mobile, String email, String gender,
@@ -79,8 +78,8 @@ public class ContractRest {
         RepaymentDates repaymentDate3 = new RepaymentDates("3", "20230301", "5000", "100", "552.00");
         List<RepaymentDates> repaymentDates = Arrays.asList(repaymentDate1, repaymentDate2, repaymentDate3);
 
-        Loan loan = new Loan("20230101", "1日", "18", "5000", "购买XXXX", "HT22256465********", "6226***********", channel, "麻子", "APPLYSNXXX***");
-        MemberClientele memberClientele = new MemberClientele("XXXXCRESN", "金山商业中心", "渝北", "20550101", "**公司", "**路**街道**号","**路**街道**号");
+        Loan loan = new Loan("20230101", "1日", "18", "5000", "购买XXXX", "HT22256465********", "6226***********", channel, "麻子", "APPLYSNXXX***", "131");
+        MemberClientele memberClientele = new MemberClientele("XXXXCRESN", "金山商业中心", "渝北", "20550101", "**公司", "**路**街道**号", "**路**街道**号");
         Member member = new Member("QQ*****", "汉", "20230101", "18555555555", "@5dhj.com", "1", "3333333CRESN", "麻子", loan, paramMap, memberClientele);
         FundsSource fundsSource = new FundsSource("hoben-api", "http://hw.5dhj.com/huij-fs/file/common/app/images/logo_10_tz.png");
         ContactothersHb contactothersHb = new ContactothersHb("麻大", "麻三", "麻烦", "185*******", "185*******", "185*******", "父子", "母子", "朋友 ");
@@ -95,13 +94,15 @@ public class ContractRest {
         model.addAttribute("currDay", currentDate.substring(6, 8));
         model.addAttribute("contactothersHb", contactothersHb);
 //        return "pdf_template12403.html";
-        return "pdf_template" + id + ".html";
+        String temp = "pdf_template" + id + ".html";
+        System.out.println(temp);
+        return temp;
     }
 
     @GetMapping("/gen/{id}")
     @AnonymousKimAccess
     @ResponseBody
-    public String gen(@PathVariable String id, Model model) {
+    public String gen(@PathVariable String id) {
         int nano = LocalDateTime.now().getSecond();
         try (OutputStream os = new FileOutputStream("d:\\contract.pdf")) {
             PdfRendererBuilder builder = new PdfRendererBuilder();
@@ -109,16 +110,14 @@ public class ContractRest {
 //            InputStream inputStream = classPathResource.getInputStream();
             builder.useFont(classPathResource.getFile(), "SimSun");
             builder.useFastMode();
-            builder.withUri("http://localhost:1987/kim-api/contract/"+id);
+            builder.withUri("http://localhost:1987/kim-api/contract/" + id);
 //            builder.withHtmlContent(Files.readString(Paths.get("d:\\pdf.html")), "d:\\pdf.html");
             builder.toStream(os);
             builder.run();
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
         System.out.println(LocalDateTime.now().getSecond() - nano);
-        return "pdf_template12403.html";
+        return "d:\\contract.pdf  pdf_template" + id + ".html";
     }
 }
