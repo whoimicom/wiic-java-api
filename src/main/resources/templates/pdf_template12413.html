@@ -1,13 +1,13 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="zh">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <title>Untitled Document</title>
-    <style>
+    <style type="text/css">
         @page {
             margin: 10px 20px;
-            padding: 0px, 10px;
+            padding: 0 10px;
         }
 
         * {font-size: 12px;font-family: "SimSun", serif;}
@@ -28,9 +28,9 @@
 
         table tr td {height: 6px;}
 
-        .p-left {margin: 3px 0;}
+        /*.p-left {margin: 3px 0;}*/
 
-        .partition {background: url("images/partition.png") center repeat-x;text-align: center;}
+        /*.partition {background: url("images/partition.png") center repeat-x;text-align: center;}*/
 
         div {margin: 0;}
 
@@ -43,15 +43,15 @@
 <body style="width: 100%;">
 <div>
     <h1>
-        <img width="100px;" height="60px;" src="${fundsSource.companyLogo}"/>
+        <img width="100px;" height="60px;" src="http://hw.5dhj.com/huij-fs/file/common/app/images/logo_10_tz.png" alt="img"/>
     </h1>
     <h1>
         个人信用报告查询与上报授权书
     </h1>
-    <div class="lineHeightText">申请编号：${member.loan.xtSn}</div>
-    <div class="lineHeightText">授权人：${member.realName}</div>
+    <div class="lineHeightText">申请编号：[[${member.loan.xtSn}]]</div>
+    <div class="lineHeightText">授权人：[[${member.realName}]]</div>
     <div class="lineHeightText">证件名称：身份证</div>
-    <div class="lineHeightText">证件号码：${member.creSn}</div>
+    <div class="lineHeightText">证件号码：[[${member.creSn}]]</div>
     <div class="lineHeightText">受权人：重庆两江新区同泽小额贷款有限责任公司</div>
     <div class="lineHeightText">授权内容：</div>
     <div class="lineHeightText textIndent">
@@ -63,7 +63,7 @@
     </div>
     <div class="lineHeightText">特此授权！</div>
     <div style="padding-top: 6px;">授权人（签名）：</div>
-    <div style="padding-top: 6px;">日期：${currDate}</div>
+    <div style="padding-top: 6px;">日期：[[${currDate}]]</div>
 </div>
 </body>
 
