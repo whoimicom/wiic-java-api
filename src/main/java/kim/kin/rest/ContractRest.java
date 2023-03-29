@@ -44,7 +44,7 @@ public class ContractRest {
                                String companyName, String companyAddrDetail, String liveAddrDetail) {
 
         }
-        record Member(String qq, String nationality, String birthday, String mobile, String email, String gender,
+        record Member(String applyTime,String qq, String nationality, String birthday, String mobile, String email, String gender,
                       String creSn, String realName, Loan loan, Map<String, String> paramMap,
                       MemberClientele memberClientele) {
         }
@@ -58,6 +58,7 @@ public class ContractRest {
                                String family1Tel, String contactTel, String parentsRel, String family1Relation,
                                String contactRel) {
         }
+        String currentDate = LocalDate.now().format(DateTimeFormatter.BASIC_ISO_DATE);
         HashMap<String, String> paramMap = new HashMap<>();
         paramMap.put("repaymentBank", "工商银行");
         paramMap.put("gender", "女");
@@ -82,14 +83,14 @@ public class ContractRest {
 
         Loan loan = new Loan("20230101", "1日", "18", "5000", "购买XXXX", "HT22256465********", "6226***********", channel, "麻子", "APPLYSNXXX***", "131");
         MemberClientele memberClientele = new MemberClientele("XXXXCRESN", "金山商业中心", "渝北", "20550101", "**公司", "**路**街道**号", "**路**街道**号");
-        Member member = new Member("QQ*****", "汉", "20230101", "18555555555", "@5dhj.com", "1", "3333333CRESN", "麻子", loan, paramMap, memberClientele);
+        Member member = new Member( currentDate, "QQ*****", "汉", "20230101", "18555555555", "@5dhj.com", "1", "3333333CRESN", "麻子", loan, paramMap, memberClientele);
         FundsSource fundsSource = new FundsSource("hoben-api", "https://hw.5dhj.com/huij-fs/file/common/app/images/logo_10_tz.png");
         ContactothersHb contactothersHb = new ContactothersHb("麻大", "麻三", "麻烦", "185*******", "185*******", "185*******", "父子", "母子", "朋友 ");
         model.addAttribute("member", member);
         model.addAttribute("repaymentDates", repaymentDates);
         model.addAttribute("monthRat", "0.15%");
         model.addAttribute("fundsSource", fundsSource);
-        String currentDate = LocalDate.now().format(DateTimeFormatter.BASIC_ISO_DATE);
+
         model.addAttribute("currDate", currentDate);
         model.addAttribute("currYear", currentDate.substring(0, 4));
         model.addAttribute("currMonth", currentDate.substring(4, 6));
@@ -99,6 +100,10 @@ public class ContractRest {
         model.addAttribute("yearRat", "18%");
         model.addAttribute("LoanAmtUp", "伍仟");
         model.addAttribute("latDate", "20230301");
+        model.addAttribute("name", "麻三");
+        model.addAttribute("creSn", "XXXXCRESN");
+        model.addAttribute("bankCardNo", "6226***********");
+        model.addAttribute("bankDesc", "工行银行");
 //        return "pdf_template12403.html";
         String temp = "pdf_template" + id + ".html";
         System.out.println(temp);
