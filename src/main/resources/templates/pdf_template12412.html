@@ -73,13 +73,13 @@
         <td colspan="8">[[${member.paramMap.repaymentBank}]]</td>
     </tr>
 </table>
-<p class="textIndent" style="margin-top: 10px;margin-bottom:10px;">借款人签章：<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;日期：<u>
+<p class="textIndent" style="margin-top: 10px;margin-bottom:10px;">借款人签章：<u>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</u>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;日期：<u>
     [[${currDate}]] </u></p>
 <p class="textIndent">附：《还款指引》</p>
 <h2 style="height: 45px;">还款指引</h2>
-<p style="line-height: 20px">尊敬的&nbsp;[[${member.realName}]]&nbsp;
+<p style="line-height: 20px">尊敬的&#160;[[${member.realName}]]&#160;
     <th:block th:text="${member.gender eq '0'?'先生':'女士'}"></th:block>
-    <br/>&nbsp;&nbsp;您于[[${currDate}]]签订编号为[[${member.loan.xtSn}]]的《个人消费借款合同》，借款金额[[${member.loan.loanAmt}]]元，借款期数[[${member.loan.periods}]]期，每期还款金额见下表
+    <br/>&#160;&#160;您于[[${currDate}]]签订编号为[[${member.loan.xtSn}]]的《个人消费借款合同》，借款金额[[${member.loan.loanAmt}]]元，借款期数[[${member.loan.periods}]]期，每期还款金额见下表
 </p>
 <table border="1" cellspacing="0" cellpadding="0" style="margin-top: 10px;">
     <tr>
@@ -120,6 +120,6 @@
     客服热线进行咨询。
 </p>
 <p>3、以上所列还款金额仅限正常按期按时还款，如您有逾期，按《个人消费借款合同》的约定，您仍需要承担合同约定的逾期费用。</p>
-<h3 style="text-align: right;margin-top: 40px;">申请人（签章）：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;日期：[[${currDate}]]&nbsp;&nbsp;&nbsp;&nbsp;</h3>
+<h3 style="text-align: right;margin-top: 40px;">申请人（签章）：&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;日期：[[${currDate}]]&#160;&#160;&#160;&#160;</h3>
 </body>
 </html>
