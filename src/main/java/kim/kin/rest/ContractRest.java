@@ -9,9 +9,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -123,15 +124,26 @@ public class ContractRest {
         int nano = LocalDateTime.now().getSecond();
         try (OutputStream os = new FileOutputStream("d:\\contract.pdf")) {
             PdfRendererBuilder builder = new PdfRendererBuilder();
-            ClassPathResource classPathResource = new ClassPathResource("fonts/SimSun.ttf");
+//            ClassPathResource classPathResource = new ClassPathResource("fonts/SimSun.ttf");
 //            InputStream inputStream = classPathResource.getInputStream();
-            builder.useFont(classPathResource.getFile(), "SimSun");
+//            builder.useFont(classPathResource.getFile(), "SimSun");
             builder.useFastMode();
+
+            String userHome = System.getProperty("user.home");
+            String fontPath = userHome + "/SimSun.ttf";
+            Path path = Paths.get(fontPath);
+            if (!Files.exists(path)) {
+                ClassPathResource classPathResource = new ClassPathResource("fonts/SimSun.ttf");
+                InputStream inputStream = classPathResource.getInputStream();
+                Files.copy(inputStream, path);
+            }
+            builder.useFont(new File(fontPath), "SimSun");
             builder.withUri("http://localhost:1987/kim-api/contract/" + id);
 //            builder.withHtmlContent(Files.readString(Paths.get("d:\\pdf.html")), "d:\\pdf.html");
             builder.toStream(os);
             builder.run();
         } catch (IOException e) {
+            e.printStackTrace();
             throw new RuntimeException(e);
         }
         System.out.println(LocalDateTime.now().getSecond() - nano);

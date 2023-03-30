@@ -7,6 +7,7 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>kim-api</name>
     <description>kim-api</description>
+    <packaging>jar</packaging>
 
     <properties>
         <java.version>17</java.version>
@@ -14,8 +15,10 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <swagger.version>3.0.0</swagger.version>
-        <spring-boot.version>3.0.4</spring-boot.version>
+        <spring-boot.version>3.0.5</spring-boot.version>
         <openhtml.version>1.0.10</openhtml.version>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -182,6 +185,16 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>${spring-boot.version}</version>
+                <configuration>
+                    <mainClass>kim.kin.KimApplication</mainClass>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -195,7 +208,7 @@
                 </configuration>
             </plugin>
 
-            <plugin>
+            <!--<plugin>
                 <groupId>org.graalvm.buildtools</groupId>
                 <artifactId>native-maven-plugin</artifactId>
                 <version>0.9.19</version>
@@ -220,10 +233,10 @@
                     <mainClass>kim.kin.KimApplication</mainClass>
                     <imageName>kim-api</imageName>
                     <buildArgs>
-                        <buildArg>--verbose</buildArg>
+                        <buildArg>&#45;&#45;verbose</buildArg>
                     </buildArgs>
                 </configuration>
-            </plugin>
+            </plugin>-->
 
         </plugins>
     </build>
