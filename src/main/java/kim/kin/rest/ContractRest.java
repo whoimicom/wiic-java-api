@@ -2,6 +2,8 @@ package kim.kin.rest;
 
 import com.openhtmltopdf.pdfboxout.PdfRendererBuilder;
 import kim.kin.config.security.AnonymousKimAccess;
+import kim.kin.utils.PdfUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,10 +18,7 @@ import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author choky
@@ -27,10 +26,18 @@ import java.util.Map;
 @Controller
 public class ContractRest {
 
+    private PdfUtils pdfUtils;
+
+    @Autowired
+    public void setPdfUtils(PdfUtils pdfUtils) {
+        this.pdfUtils = pdfUtils;
+    }
+
     /**
      * 查看模板
      * <a href="http://localhost:1987/kim-api/contract/12405">...</a>
-     * @param id 模板编号
+     *
+     * @param id    模板编号
      * @param model model
      * @return 模板
      */
@@ -45,7 +52,8 @@ public class ContractRest {
                                String companyName, String companyAddrDetail, String liveAddrDetail) {
 
         }
-        record Member(String applyTime,String qq, String nationality, String birthday, String mobile, String email, String gender,
+        record Member(String applyTime, String qq, String nationality, String birthday, String mobile, String email,
+                      String gender,
                       String creSn, String realName, Loan loan, Map<String, String> paramMap,
                       MemberClientele memberClientele) {
         }
@@ -84,7 +92,7 @@ public class ContractRest {
 
         Loan loan = new Loan("20230101", "1日", "18", "5000", "购买XXXX", "HT22256465********", "6226***********", channel, "麻子", "APPLYSNXXX***", "131");
         MemberClientele memberClientele = new MemberClientele("XXXXCRESN", "金山商业中心", "渝北", "20550101", "**公司", "**路**街道**号", "**路**街道**号");
-        Member member = new Member( currentDate, "QQ*****", "汉", "20230101", "18555555555", "@5dhj.com", "1", "3333333CRESN", "麻子", loan, paramMap, memberClientele);
+        Member member = new Member(currentDate, "QQ*****", "汉", "20230101", "18555555555", "@5dhj.com", "1", "3333333CRESN", "麻子", loan, paramMap, memberClientele);
         FundsSource fundsSource = new FundsSource("hoben-api", "https://hw.5dhj.com/huij-fs/file/common/app/images/logo_10_tz.png");
         ContactothersHb contactothersHb = new ContactothersHb("麻大", "麻三", "麻烦", "185*******", "185*******", "185*******", "父子", "母子", "朋友 ");
         model.addAttribute("member", member);
@@ -114,6 +122,7 @@ public class ContractRest {
     /**
      * 生成根据模板生成PDF
      * <a href="http://localhost:1987/kim-api/genpdf/12405">...</a>
+     *
      * @param id 模板编号
      * @return 路径
      */
@@ -134,12 +143,12 @@ public class ContractRest {
             Path path = Paths.get(fontPath);
             if (!Files.exists(path)) {
                 ClassPathResource classPathResource = new ClassPathResource("fonts/SimSun.ttf");
-                InputStream inputStream = classPathResource.getInputStream();
-                Files.copy(inputStream, path);
+                try (InputStream inputStream = classPathResource.getInputStream()) {
+                    Files.copy(inputStream, path);
+                }
             }
             builder.useFont(new File(fontPath), "SimSun");
             builder.withUri("http://localhost:1987/kim-api/contract/" + id);
-//            builder.withHtmlContent(Files.readString(Paths.get("d:\\pdf.html")), "d:\\pdf.html");
             builder.toStream(os);
             builder.run();
         } catch (IOException e) {
@@ -148,5 +157,40 @@ public class ContractRest {
         }
         System.out.println(LocalDateTime.now().getSecond() - nano);
         return "d:\\contract.pdf  pdf_template" + id + ".html";
+    }
+
+    @GetMapping("/generatePdf")
+    @AnonymousKimAccess
+    @ResponseBody
+    public String generatePdf() {
+        int nano = LocalDateTime.now().getSecond();
+        List<String> list = Arrays.asList("12403", "12404", "12405", "12406", "12407", "12412", "12413", "12414", "12415", "12417");
+        Random random = new Random();
+        int nextInt = random.nextInt();
+        int size = Math.abs(nextInt % list.size());
+        String id = list.get(size);
+        String uri = "http://localhost:1987/kim-api/contract/" + id;
+        String outputPath = "d:\\contract\\" + id + "-" + nextInt + ".pdf";
+        try (OutputStream os = new FileOutputStream(outputPath)) {
+/*            PdfRendererBuilder builder = new PdfRendererBuilder();
+            builder.useFastMode();
+            String userHome = System.getProperty("user.home");
+            String fontPath = userHome + "/SimSun.ttf";
+            Path path = Paths.get(fontPath);
+            if (!Files.exists(path)) {
+                ClassPathResource classPathResource = new ClassPathResource("fonts/SimSun.ttf");
+                try (InputStream inputStream = classPathResource.getInputStream()) {
+                    Files.copy(inputStream, path);
+                }
+            }
+            builder.useFont(new File(fontPath), "SimSun");*/
+
+            pdfUtils.generatePdf(uri,outputPath);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        System.out.println(LocalDateTime.now().getSecond() - nano);
+        return outputPath;
     }
 }
