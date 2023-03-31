@@ -17,32 +17,35 @@
 
         table {word-break: break-all; }
 
-        table tr {height: 20px;padding: 0px;}
+        table tr {height: 20px;padding: 0;}
 
         td {padding: 0;}
 
-        .p-left {margin: 3px 0;}
+        /*.p-left {margin: 3px 0;}*/
 
         p {line-height: 14px;margin: 2px;}
 
         h3 {margin: 2px;height: 14px;}
 
-        .lineHeightText {
-            line-height: 20px;
-        }
+        /*.lineHeightText {line-height: 20px;}*/
 
         .textIndent { text-indent: 2em;}
     </style>
 </head>
 
 <body style="width: 100%;">
-<h2><img width="100px;" height="60px;" src="http://hw.5dhj.com/huij-fs/file/common/app/images/logo_10_tz.png"/></h2>
+<h2><img width="100px;" height="60px;" src="https://hw.5dhj.com/huij-fs/file/common/app/images/logo_10_tz.png"
+         alt="img"/></h2>
 <h2>个人消费借款借据</h2>
 <p align="right" style="margin-top: 8px;margin-right:40px;">借据编号：[[${member.loan.xtSn}]]</p><br/>
 <p class="textIndent">
-    兹有<u> [[${member.realName}]] </u>（身份证号<u> [[${member.creSn}]] </u>）于<u> [[${currYear}]] </u>年<u> [[${currMonth}]] </u>月<u>
-    [[${currDay}]] </u>日向重庆两江新区同泽小额贷款有限责任公司申请借款用于[[${member.loan.borrowReason}]]，并签署了编号为<u>
-    [[${member.loan.xtSn}]] </u>的《个人消费借款合同》，借款信息如下：
+    兹有<span style="text-decoration: underline;"> [[${member.realName}]] </span>（身份证号<span
+        style="text-decoration: underline;"> [[${member.creSn}]] </span>）于<span style="text-decoration: underline;"> [[${currYear}]] </span>年<span
+        style="text-decoration: underline;">
+    [[${currMonth}]] </span>月<span style="text-decoration: underline;">
+    [[${currDay}]] </span>日向重庆两江新区同泽小额贷款有限责任公司申请借款用于[[${member.loan.borrowReason}]]，并签署了编号为<span
+        style="text-decoration: underline;">
+    [[${member.loan.xtSn}]] </span>的《个人消费借款合同》，借款信息如下：
 </p>
 <table border="1" cellspacing="0" cellpadding="0" style="margin-top: 10px;">
     <tr>
@@ -73,8 +76,9 @@
         <td colspan="8">[[${member.paramMap.repaymentBank}]]</td>
     </tr>
 </table>
-<p class="textIndent" style="margin-top: 10px;margin-bottom:10px;">借款人签章：<u>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</u>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;日期：<u>
-    [[${currDate}]] </u></p>
+<p class="textIndent" style="margin-top: 10px;margin-bottom:10px;">借款人签章：<span style="text-decoration: underline;">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;日期：<span
+        style="text-decoration: underline;">
+    [[${currDate}]] </span></p>
 <p class="textIndent">附：《还款指引》</p>
 <h2 style="height: 45px;">还款指引</h2>
 <p style="line-height: 20px">尊敬的&#160;[[${member.realName}]]&#160;
@@ -89,22 +93,22 @@
         <td><h3 style="text-align: center;">借款利息</h3></td>
         <td><h3 style="text-align: center;">每月支付金额（元）</h3></td>
     </tr>
-<!--    <c:forEach var="repayment" items="[[${repaymentDates}]]" varStatus="paystatus">-->
-        <tr th:each="repayment:${repaymentDates}">
-            <td><p style="text-align: center;" th:text="${repayment.period}"></p></td>
-            <td><p style="text-align: center;" th:text="${repayment.repaymenDate}"></p></td>
-            <td><p style="text-align: center;" th:text="${repayment.planPrincipal}"></p></td>
-            <td><p style="text-align: center;" th:text="${repayment.planServiceFee}" ></p></td>
-            <td><p style="text-align: center;" th:text="${repayment.repaymenMoney}" ></p></td>
-        </tr>
-<!--    </c:forEach>-->
+    <!--    <c:forEach var="repayment" items="[[${repaymentDates}]]" varStatus="paystatus">-->
+    <tr th:each="repayment:${repaymentDates}">
+        <td><p style="text-align: center;" th:text="${repayment.period}"></p></td>
+        <td><p style="text-align: center;" th:text="${repayment.repaymenDate}"></p></td>
+        <td><p style="text-align: center;" th:text="${repayment.planPrincipal}"></p></td>
+        <td><p style="text-align: center;" th:text="${repayment.planServiceFee}"></p></td>
+        <td><p style="text-align: center;" th:text="${repayment.repaymenMoney}"></p></td>
+    </tr>
+    <!--    </c:forEach>-->
 </table>
 <h3>说明：</h3>
 <p>1、若每月支付日大于当月总天数，则当月支付日为当月最后一日。</p>
 <p>2、您可以通过以下方式进行还款：</p>
 <p>（1）银行代扣还款：请您保证在每个还款日前将足够的还款额存入您指定的账户以便划扣。如您的银行代扣账户有变动，请致电客服热线（
     <th:block th:switch="${member.loan.channel}">
-        <th:block th:case="087">0238-9696-722 </th:block>
+        <th:block th:case="087">0238-9696-722</th:block>
         <th:block th:case="083">023-86003522</th:block>
         <th:block th:case="*">4000-353-999</th:block>
     </th:block>
@@ -113,7 +117,7 @@
 </p>
 <p>（2）拨打
     <th:block th:switch="${member.loan.channel}">
-        <th:block th:case="087">0238-9696-722 </th:block>
+        <th:block th:case="087">0238-9696-722</th:block>
         <th:block th:case="083">023-86003522</th:block>
         <th:block th:case="*">4000-353-999</th:block>
     </th:block>

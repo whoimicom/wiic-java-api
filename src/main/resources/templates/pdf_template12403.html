@@ -1,6 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns:th="http://www.thymeleaf.org" lang="zh">
+<!--<html xmlns:th="http://www.thymeleaf.org" lang="zh">-->
+<html  lang="zh">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <title>Untitled Document</title>
@@ -10,7 +11,7 @@
             padding: 0 10px;
         }
 
-        * {font-size: 12px;font-family: "SimSun",serif;}
+        * {font-size: 12px;font-family: "SimSun", serif;}
 
         body {margin: 0;padding: 0;}
 
@@ -24,7 +25,7 @@
 
         h2 img {position: absolute;left: 10px;top: 8px;}
 
-        table {margin: 7px;table-layout: fixed;width: 98%;margin: 0 auto;}
+        table {margin: 7px;table-layout: fixed;width: 98%;}
 
         table tr td {height: 6px;}
 
@@ -71,7 +72,8 @@
     <span><strong>被授权人2签章：</strong></span>
     <br/>
     <strong>身份证号码：<span style="text-decoration: underline;"> [[${member.creSn}]] </span></strong><br/>
-    <strong>授权扣款银行账户：<span style="text-decoration: underline;"> [[${member.loan.repaymentAccount}]] </span></strong><br/>
+    <strong>授权扣款银行账户：<span
+            style="text-decoration: underline;"> [[${member.loan.repaymentAccount}]] </span></strong><br/>
     <strong>签署日期：[[${currDate}]]</strong><br/>
 </p>
 </body>

@@ -1,6 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns:th="http://www.thymeleaf.org" lang="zh">
+<!--<html xmlns:th="http://www.thymeleaf.org" lang="zh">-->
+<html lang="zh">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <title>Untitled Document</title>
@@ -16,9 +17,11 @@
 
         h1 {position: relative;text-align: center;height: 71px;line-height: 71px;font-size: 18px;font-weight: bold;margin: 0;padding: 0;}
 
-        h1 img {position: absolute;left: 10px;top: 0px;}
+        h1 img {position: absolute;left: 10px;top: 0;}
 
-        table {border: 1px solid #999;margin: 8px;margin: 0 auto;}
+        table {border: 1px solid #999;margin: 8px;}
+
+        /*table {border: 1px solid #999;margin: 8px;margin: 0 auto;}*/
 
         table td {border: 1px solid #999;}
 
@@ -33,7 +36,8 @@
 </head>
 
 <body style="width: 100%;">
-<h1>个人消费借款申请表<img width="100px;" height="60px;" src="http://hw.5dhj.com/huij-fs/file/common/app/images/logo_10_tz.png" alt="img"/></h1>
+<h1>个人消费借款申请表<img width="100px;" height="60px;"
+                           src="http://hw.5dhj.com/huij-fs/file/common/app/images/logo_10_tz.png" alt="img"/></h1>
 <p>请确保您填写的申请资料完整、正确，审批人员可能会与您电话核实相关资料&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;申请编号：[[${member.loan.xtSn}]]</p>
 <table cellspacing="0" cellpadding="0" border="1" style="width: 100%;table-layout:fixed;">
     <tr>
