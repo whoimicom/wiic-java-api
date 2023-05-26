@@ -1,5 +1,5 @@
 ###  jdbc temp
-POST http://localhost:10000/promgt-api/tempPage
+POST {{url}}/tempPage
 Accept: */*
 Cache-Control: no-cache
 Content-Type: application/json
@@ -8,7 +8,7 @@ Accept-Charset: utf-8
 {"page":0,"size":20}
 
 ###  jdbc temp
-GET http://localhost:10000/promgt-api/temp
+GET {{url}}/temp
 Accept: */*
 Cache-Control: no-cache
 Content-Type: application/json;charset=utf-8
@@ -16,7 +16,7 @@ Accept-Charset: utf-8
 
 ### register
 
-POST http://localhost:10000/promgt-api/register
+POST {{url}}/register
 Accept: */*
 Cache-Control: no-cache
 Content-Type: application/json;charset=utf-8
@@ -27,7 +27,7 @@ Content-Type: application/json;charset=utf-8
 
 ###authenticate
 
-POST http://localhost:10000/promgt-api/authenticate
+POST {{url}}/authenticate
 Accept: */*
 Cache-Control: no-cache
 Content-Type: application/json;charset=utf-8
@@ -36,7 +36,7 @@ Content-Type: application/json;charset=utf-8
 > {% client.global.set("auth_token", response.body.token); %}
 
 ###email
-POST http://localhost:10000/promgt-api/email/login?email=im@kin.kim&eCode=123456
+POST {{url}}/email/login?email=im@kin.kim&eCode=123456
 Accept: */*
 Cache-Control: no-cache
 Content-Type: application/json
@@ -46,7 +46,7 @@ Content-Encoding: utf-8
 > {% client.global.set("auth_token", response.body.token); %}
 
 ###login
-POST http://localhost:10000/promgt-api/login?username=kinkim&password=123456
+POST {{url}}/login?username=kinkim&password=123456
 Accept: */*
 Cache-Control: no-cache
 Content-Type: application/json
@@ -57,7 +57,7 @@ Content-Encoding: utf-8
 
 ###hello
 
-POST http://localhost:10000/promgt-api/hello
+POST {{url}}/hello
 Accept: */*
 Cache-Control: no-cache
 Content-Type: application/json;charset=utf-8
@@ -65,7 +65,7 @@ Authorization:  {{auth_token}}
 
 ### currentUser
 
-POST http://localhost:10000/promgt-api/currentUser
+POST {{url}}/currentUser
 Accept: */*
 Cache-Control: no-cache
 Content-Type: application/json;charset=utf-8
