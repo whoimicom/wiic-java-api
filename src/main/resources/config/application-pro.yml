@@ -26,8 +26,3 @@ jasypt:
     #    public-key-location: classpath:id_rsa_pkcs8.pem
     private-key-location: file:/home/devops/.ssh/id_rsa_pkcs8
     public-key-location: file:/home/devops/.ssh/id_rsa_pkcs8.pem
-kim:
-  kin:
-    logpath: ${user.home}/data/logs
-
-
