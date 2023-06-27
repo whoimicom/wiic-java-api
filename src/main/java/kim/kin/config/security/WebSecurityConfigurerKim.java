@@ -22,8 +22,7 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
-import org.springframework.security.config.annotation.web.configurers.AuthorizeHttpRequestsConfigurer;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -110,20 +109,19 @@ public class WebSecurityConfigurerKim {
 
     @Bean
     public AuthenticationManager authenticationManager() {
-        ProviderManager providerManager = new ProviderManager(Arrays.asList(emailAuthenticationProvider(), daoAuthenticationProvider()));
         //不擦除认证密码，擦除会导致TokenBasedRememberMeServices因为找不到Credentials再调用UserDetailsService而抛出UsernameNotFoundException
 //        providerManager.setEraseCredentialsAfterAuthentication(false);
-        return providerManager;
+        return new ProviderManager(Arrays.asList(emailAuthenticationProvider(), daoAuthenticationProvider()));
     }
 
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        return web -> web.ignoring().requestMatchers("/register", "/")
-                .requestMatchers("/swagger**/**")
-                .requestMatchers("/webjars/**")
-                .requestMatchers("/v3/**")
-                .requestMatchers("/doc.html");
-    }
+//    @Bean
+//    public WebSecurityCustomizer webSecurityCustomizer() {
+//        return web -> web.ignoring().requestMatchers("/register", "/")
+//                .requestMatchers("/swagger**/**")
+//                .requestMatchers("/webjars/**")
+//                .requestMatchers("/v3/**")
+//                .requestMatchers("/doc.html");
+//    }
 
     @Order(SecurityProperties.BASIC_AUTH_ORDER)
     @Bean
@@ -137,10 +135,37 @@ public class WebSecurityConfigurerKim {
                 .addFilterBefore(new JwtRequestFilter(authenticationManager, jwtTokenUtil), UsernamePasswordAuthenticationFilter.class)
                 .addFilter(new UsernamePasswordKimFilter(authenticationManager, jwtTokenUtil));
         // We don't need CSRF for this example
-        AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry auth = httpSecurity.csrf().disable()
-                .authorizeHttpRequests();
+        httpSecurity.csrf(AbstractHttpConfigurer::disable);
+//        AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry auth = httpSecurity.csrf().disable().authorizeHttpRequests();
 
-        auth.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll();
+
+        httpSecurity.authorizeHttpRequests(authorizationManagerRequestMatcherRegistry -> {
+            authorizationManagerRequestMatcherRegistry.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll();
+            log.info(Arrays.toString(anonymousUrls.get(GET.toString()).toArray(String[]::new)));
+            if (anonymousUrls.get(GET.toString()).size() > 0) {
+                authorizationManagerRequestMatcherRegistry.requestMatchers(GET, anonymousUrls.get(GET.toString()).toArray(String[]::new)).permitAll();
+            }
+            if (anonymousUrls.get(POST.toString()).size() > 0) {
+                authorizationManagerRequestMatcherRegistry.requestMatchers(POST, anonymousUrls.get(POST.toString()).toArray(String[]::new)).permitAll();
+            }
+            if (anonymousUrls.get(PUT.toString()).size() > 0) {
+                authorizationManagerRequestMatcherRegistry.requestMatchers(POST, anonymousUrls.get(PUT.toString()).toArray(String[]::new)).permitAll();
+            }
+            if (anonymousUrls.get(PATCH.toString()).size() > 0) {
+                authorizationManagerRequestMatcherRegistry.requestMatchers(PATCH, anonymousUrls.get(PATCH.toString()).toArray(String[]::new)).permitAll();
+            }
+            if (anonymousUrls.get(DELETE.toString()).size() > 0) {
+                authorizationManagerRequestMatcherRegistry.requestMatchers(DELETE, anonymousUrls.get(DELETE.toString()).toArray(String[]::new)).permitAll();
+            }
+            if (anonymousUrls.get("ALL").size() > 0) {
+                authorizationManagerRequestMatcherRegistry.requestMatchers(anonymousUrls.get("ALL").toArray(String[]::new)).permitAll();
+            }
+            // all other requests need to be authenticated
+            authorizationManagerRequestMatcherRegistry.anyRequest().authenticated();
+        });
+
+
+/*        auth.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll();
         log.info(anonymousUrls.get(GET.toString()).toArray(String[]::new).toString());
         if (anonymousUrls.get(GET.toString()).size() > 0) {
             auth.requestMatchers(GET, anonymousUrls.get(GET.toString()).toArray(String[]::new)).permitAll();
@@ -160,15 +185,17 @@ public class WebSecurityConfigurerKim {
         if (anonymousUrls.get("ALL").size() > 0) {
             auth.requestMatchers(anonymousUrls.get("ALL").toArray(String[]::new)).permitAll();
         }
-        // all other requests need to be authenticated
-        auth.anyRequest().authenticated();
+        auth.anyRequest().authenticated();*/
 
         // make sure we use stateless session; session won't be used to
         // store user's state.
-        auth.and().exceptionHandling().authenticationEntryPoint(authenticationEntryPointKimImpl)
-                .accessDeniedHandler(accessDeniedKimImpl)
-                .and().sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        httpSecurity.exceptionHandling(httpSecurityExceptionHandlingConfigurer -> httpSecurityExceptionHandlingConfigurer.authenticationEntryPoint(authenticationEntryPointKimImpl)
+                .accessDeniedHandler(accessDeniedKimImpl));
+        httpSecurity.sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+//        auth.and().exceptionHandling().authenticationEntryPoint(authenticationEntryPointKimImpl)
+//                .accessDeniedHandler(accessDeniedKimImpl)
+//                .and().sessionManagement()
+//                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         return httpSecurity.build();
 
         // Add a filter to validate the tokens with every request

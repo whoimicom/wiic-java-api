@@ -59,12 +59,10 @@ public class LogKimAspect {
         HttpServletRequest request = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
         List<Object> collect = Arrays.stream(joinPoint.getArgs()).toList();
         Enumeration<String> headerNames = request.getHeaderNames();
-        log.debug("header:------------------------------------------------");
         headerNames.asIterator().forEachRemaining(s -> {
             String header = request.getHeader(s);
-            log.debug(s + " :" + header);
+            log.info("{}:{}", s, header);
         });
-        log.debug("header:------------------------------------------------");
         log.info("ip:" + acquireIp(request) + " args:" + collect + " joinPoint:" + joinPoint);
         long callMillis = System.currentTimeMillis() - startTime;
         printLog(acquireIp(request), joinPoint, result, callMillis);
@@ -144,6 +142,7 @@ public class LogKimAspect {
         stringBuilder.append("]").append(LINE_SEPARATOR);
         log.info(stringBuilder.toString());
     }
+
     @Autowired
     public void setObjectMapper(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;

@@ -39,8 +39,8 @@ public class AuthenticationEntryPointKimImpl implements AuthenticationEntryPoint
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response,
                          AuthenticationException authException) throws IOException {
-        log.info("AuthenticationEntryPoint:{}", authException.getMessage());
-        String authMsg = authException.getMessage();
+        log.info("AuthenticationEntryPoint: instance:{},message:{}", authException.getClass(), authException.getMessage());
+        String authMsg = authException.getClass() + " message:" + authException.getMessage();
         if (authException instanceof UsernameNotFoundException) {
             authMsg = "用户不存在！";
         } else if (authException instanceof BadCredentialsException) {
@@ -53,8 +53,6 @@ public class AuthenticationEntryPointKimImpl implements AuthenticationEntryPoint
             authMsg = "账户已过期！";
         } else if (authException instanceof CredentialsExpiredException) {
             authMsg = "用户密码已过期！";
-        }else if (authException instanceof InsufficientAuthenticationException) {
-            authMsg = "用户名密码错误！";
         }
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setCharacterEncoding("UTF-8");
