@@ -2,8 +2,9 @@
 
 <configuration scan="true" scanPeriod="60 seconds" debug="false">
     <jmxConfigurator/>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
     <springProperty scope="context" name="contextName" source="server.servlet.context-path"/>
-    <property name="path" value="${user.home}/logs/${contextName}"/>
+    <property name="logDir" value="${user.home}/logs/${contextName}"/>
     <property name="level" value="info"/>
     <property name="maxHistory" value="90"/>
     <property name="maxFileSize" value="512MB"/>
@@ -19,9 +20,9 @@
         </encoder>
     </appender>
     <appender name="ALL" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${path}/all.log</file>
+        <file>${logDir}/all.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <fileNamePattern>${path}/%d{yyyyMMdd}.all.%i.log</fileNamePattern>
+            <fileNamePattern>${logDir}/%d{yyyyMMdd}.all.%i.log</fileNamePattern>
             <maxFileSize>${maxFileSize}</maxFileSize>
             <maxHistory>${maxHistory}</maxHistory>
             <totalSizeCap>${totalSizeCap}</totalSizeCap>
@@ -31,14 +32,14 @@
         </encoder>
     </appender>
     <appender name="ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${path}/error.log</file>
+        <file>${logDir}/error.log</file>
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
             <level>ERROR</level>
             <onMatch>ACCEPT</onMatch>
             <onMismatch>DENY</onMismatch>
         </filter>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <fileNamePattern>${path}/%d{yyyyMMdd}.error.%i.log</fileNamePattern>
+            <fileNamePattern>${logDir}/%d{yyyyMMdd}.error.%i.log</fileNamePattern>
             <maxFileSize>${maxFileSize}</maxFileSize>
             <maxHistory>${maxHistory}</maxHistory>
             <totalSizeCap>${totalSizeCap}</totalSizeCap>
@@ -48,14 +49,14 @@
         </encoder>
     </appender>
     <appender name="INFO" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${path}/info.log</file>
+        <file>${logDir}/info.log</file>
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
             <level>INFO</level>
             <onMatch>ACCEPT</onMatch>
             <onMismatch>DENY</onMismatch>
         </filter>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <fileNamePattern>${path}/%d{yyyyMMdd}.info.%i.log</fileNamePattern>
+            <fileNamePattern>${logDir}/%d{yyyyMMdd}.info.%i.log</fileNamePattern>
             <maxFileSize>${maxFileSize}</maxFileSize>
             <maxHistory>${maxHistory}</maxHistory>
             <totalSizeCap>${totalSizeCap}</totalSizeCap>
@@ -92,7 +93,7 @@
             <pattern>${pattern}</pattern>
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <fileNamePattern>${path}/%d{yyyyMMdd}.class.%i.log</fileNamePattern>
+            <fileNamePattern>${logDir}/%d{yyyyMMdd}.class.%i.log</fileNamePattern>
             <maxFileSize>${maxFileSize}</maxFileSize>
             <maxHistory>${maxHistory}</maxHistory>
             <totalSizeCap>${totalSizeCap}</totalSizeCap>
