@@ -15,7 +15,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <swagger.version>3.0.0</swagger.version>
-        <spring-boot.version>3.0.5</spring-boot.version>
+        <spring-boot.version>3.1.1</spring-boot.version>
         <openhtml.version>1.0.10</openhtml.version>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
