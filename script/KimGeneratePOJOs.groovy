@@ -3,6 +3,7 @@ import com.intellij.database.model.ObjectKind
 import com.intellij.database.util.Case
 import com.intellij.database.util.DasUtil
 import java.io.*
+import java.nio.charset.StandardCharsets
 import java.time.LocalDateTime
 
 /*
@@ -21,7 +22,7 @@ typeMapping = [
         (~/(?i)datetime|timestamp/)              : "java.time.LocalDateTime",
         (~/(?i)date/)                            : "java.time.LocalDate",
         (~/(?i)time/)                            : "java.time.LocalTime",
-        (~/(?i)blob|binary|bfile|clob|raw|image/): "InputStream",
+        (~/(?i)blob|binary|bfile|clob|raw|image/): "java.io.InputStream",
         (~/(?i)/)                                : "String"
 ]
 
@@ -34,7 +35,7 @@ def generate(table, dir) {
     def className = javaName(table.getName(), true)
     def fields = calcFields(table)
     packageName = getPackageName(dir)
-    PrintWriter printWriter = new PrintWriter(new OutputStreamWriter(new FileOutputStream(new File(dir, className + ".java")), "UTF-8"))
+    PrintWriter printWriter = new PrintWriter(new OutputStreamWriter(new FileOutputStream(new File(dir.toString(), className + ".java")), StandardCharsets.UTF_8))
     printWriter.withPrintWriter { out -> generate(out, className, fields, table) }
 
 //    new File(dir, className + ".java").withPrintWriter { out -> generate(out, className, fields,table) }
