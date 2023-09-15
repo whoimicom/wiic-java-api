@@ -14,18 +14,21 @@ import java.nio.file.Paths;
 
 @Component
 public class PdfUtils {
-    @Value("${kim.kin.font-family}")
+    @Value("${fonts.font-family}")
     private String fontFamily;
+
+    @Value("${fonts.suffix}")
+    private String suffix;
 
     public void generatePdf(String htmlUrl, String outputPath) throws IOException {
 //        String fontFamily = "Alibaba-PuHuiTi-Light";
 //        String fontFamily = "SimSun";
         try (OutputStream os = new FileOutputStream(outputPath)) {
             PdfRendererBuilder pdfRendererBuilder = new PdfRendererBuilder();
-            String fontPath = System.getProperty("user.home") + "/" + fontFamily + ".ttf";
+            String fontPath = System.getProperty("user.home") + "/" + fontFamily + "." + suffix;
             Path path = Paths.get(fontPath);
             if (!Files.exists(path)) {
-                ClassPathResource classPathResource = new ClassPathResource("fonts/" + fontFamily + ".ttf");
+                ClassPathResource classPathResource = new ClassPathResource("fonts/" + fontFamily + "." + suffix);
                 try (InputStream inputStream = classPathResource.getInputStream()) {
                     Files.copy(inputStream, path);
                 }

@@ -63,8 +63,11 @@ kim:
     channel-no: '000'
     file-path: /data/file
     web-path: /kim-admin
-    font-Family: Alibaba-PuHuiTi-Light
-#    font-Family: SimSun
+fonts:
+#  font-Family: SourceSans3-Regular
+# font-Family: SimSun
+  font-Family: Alibaba-PuHuiTi-Light
+  suffix: ttf
 jwt:
   base64EncodedSecretKey: kinkim
   expiration: 36000
