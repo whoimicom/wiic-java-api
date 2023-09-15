@@ -63,6 +63,8 @@ kim:
     channel-no: '000'
     file-path: /data/file
     web-path: /kim-admin
+    font-Family: Alibaba-PuHuiTi-Light
+#    font-Family: SimSun
 jwt:
   base64EncodedSecretKey: kinkim
   expiration: 36000

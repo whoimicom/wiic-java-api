@@ -4,6 +4,7 @@ import com.openhtmltopdf.pdfboxout.PdfRendererBuilder;
 import kim.kin.config.security.AnonymousKimAccess;
 import kim.kin.utils.PdfUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,6 +26,9 @@ import java.util.*;
  */
 @Controller
 public class ContractRest {
+
+    @Value("${kim.kin.font-family}")
+    private String fontFamily;
 
     private PdfUtils pdfUtils;
 
@@ -113,6 +117,7 @@ public class ContractRest {
         model.addAttribute("creSn", "XXXXCRESN");
         model.addAttribute("bankCardNo", "6226***********");
         model.addAttribute("bankDesc", "工行银行");
+        model.addAttribute("fontFamily", fontFamily);
 //        return "pdf_template12403.html";
         String temp = "pdf_template" + id + ".html";
         System.out.println(temp);
@@ -129,34 +134,36 @@ public class ContractRest {
     @GetMapping("/gen/{id}")
     @AnonymousKimAccess
     @ResponseBody
-    public String genpdf(@PathVariable String id) {
+    public String genpdf(@PathVariable String id) throws IOException {
         int nano = LocalDateTime.now().getSecond();
-        try (OutputStream os = new FileOutputStream("d:\\contract.pdf")) {
-            PdfRendererBuilder builder = new PdfRendererBuilder();
-//            ClassPathResource classPathResource = new ClassPathResource("fonts/SimSun.ttf");
-//            InputStream inputStream = classPathResource.getInputStream();
-//            builder.useFont(classPathResource.getFile(), "SimSun");
-            builder.useFastMode();
 
+/*        try (OutputStream os = new FileOutputStream("d:\\contract.pdf")) {
+            PdfRendererBuilder builder = new PdfRendererBuilder();
+            builder.useFastMode();
             String userHome = System.getProperty("user.home");
-            String fontPath = userHome + "/SimSun.ttf";
+            String fontPath = userHome + "/Alibaba-PuHuiTi-Light.ttf";
             Path path = Paths.get(fontPath);
             if (!Files.exists(path)) {
-                ClassPathResource classPathResource = new ClassPathResource("fonts/SimSun.ttf");
+                ClassPathResource classPathResource = new ClassPathResource("fonts/Alibaba-PuHuiTi-Light.ttf");
                 try (InputStream inputStream = classPathResource.getInputStream()) {
                     Files.copy(inputStream, path);
                 }
             }
-            builder.useFont(new File(fontPath), "SimSun");
+            builder.useFont(new File(fontPath), "Alibaba-PuHuiTi-Light");
             builder.withUri("http://localhost:1987/kim-api/contract/" + id);
             builder.toStream(os);
             builder.run();
         } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException(e);
-        }
+        }*/
+        String uri = "http://localhost:1987/kim-api/contract/" + id;
+        int nextInt = new Random().nextInt();
+        String outputPath = "d:\\contract\\" + id + "-" + nextInt + ".pdf";
+        pdfUtils.generatePdf(uri,outputPath);
+
         System.out.println(LocalDateTime.now().getSecond() - nano);
-        return "d:\\contract.pdf  pdf_template" + id + ".html";
+        return outputPath +"  pdf_template" + id + ".html";
     }
 
     @GetMapping("/generatePdf")
