@@ -1,11 +1,9 @@
 package kim.kin.rest;
 
-import com.openhtmltopdf.pdfboxout.PdfRendererBuilder;
 import kim.kin.config.security.AnonymousKimAccess;
 import kim.kin.utils.PdfUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,9 +11,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -27,7 +22,7 @@ import java.util.*;
 @Controller
 public class ContractRest {
 
-    @Value("${kim.kin.font-family}")
+    @Value("${fonts.font-family}")
     private String fontFamily;
 
     private PdfUtils pdfUtils;
@@ -135,35 +130,11 @@ public class ContractRest {
     @AnonymousKimAccess
     @ResponseBody
     public String genpdf(@PathVariable String id) throws IOException {
-        int nano = LocalDateTime.now().getSecond();
-
-/*        try (OutputStream os = new FileOutputStream("d:\\contract.pdf")) {
-            PdfRendererBuilder builder = new PdfRendererBuilder();
-            builder.useFastMode();
-            String userHome = System.getProperty("user.home");
-            String fontPath = userHome + "/Alibaba-PuHuiTi-Light.ttf";
-            Path path = Paths.get(fontPath);
-            if (!Files.exists(path)) {
-                ClassPathResource classPathResource = new ClassPathResource("fonts/Alibaba-PuHuiTi-Light.ttf");
-                try (InputStream inputStream = classPathResource.getInputStream()) {
-                    Files.copy(inputStream, path);
-                }
-            }
-            builder.useFont(new File(fontPath), "Alibaba-PuHuiTi-Light");
-            builder.withUri("http://localhost:1987/kim-api/contract/" + id);
-            builder.toStream(os);
-            builder.run();
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }*/
         String uri = "http://localhost:1987/kim-api/contract/" + id;
         int nextInt = new Random().nextInt();
-        String outputPath = "d:\\contract\\" + id + "-" + nextInt + ".pdf";
-        pdfUtils.generatePdf(uri,outputPath);
-
-        System.out.println(LocalDateTime.now().getSecond() - nano);
-        return outputPath +"  pdf_template" + id + ".html";
+        String outputPath = "d:\\contract\\" + id + "-" + fontFamily + "-" + nextInt + ".pdf";
+        pdfUtils.generatePdf(uri, outputPath);
+        return outputPath + "  pdf_template" + id + ".html";
     }
 
     @GetMapping("/generatePdf")
@@ -177,22 +148,9 @@ public class ContractRest {
         int size = Math.abs(nextInt % list.size());
         String id = list.get(size);
         String uri = "http://localhost:1987/kim-api/contract/" + id;
-        String outputPath = "d:\\contract\\" + id + "-" + nextInt + ".pdf";
-        try (OutputStream os = new FileOutputStream(outputPath)) {
-/*            PdfRendererBuilder builder = new PdfRendererBuilder();
-            builder.useFastMode();
-            String userHome = System.getProperty("user.home");
-            String fontPath = userHome + "/SimSun.ttf";
-            Path path = Paths.get(fontPath);
-            if (!Files.exists(path)) {
-                ClassPathResource classPathResource = new ClassPathResource("fonts/SimSun.ttf");
-                try (InputStream inputStream = classPathResource.getInputStream()) {
-                    Files.copy(inputStream, path);
-                }
-            }
-            builder.useFont(new File(fontPath), "SimSun");*/
-
-            pdfUtils.generatePdf(uri,outputPath);
+        String outputPath = "d:\\contract\\" + id + "-" + fontFamily + "-" + nextInt + ".pdf";
+        try (OutputStream ignored = new FileOutputStream(outputPath)) {
+            pdfUtils.generatePdf(uri, outputPath);
         } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException(e);
