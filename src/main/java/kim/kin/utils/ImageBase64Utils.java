@@ -1,5 +1,7 @@
 package kim.kin.utils;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -8,6 +10,7 @@ import java.nio.file.Paths;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
+import java.util.HashMap;
 import java.util.Optional;
 
 
@@ -66,16 +69,16 @@ public class ImageBase64Utils {
     }
 
     public static void main(String[] args) throws IOException, NoSuchAlgorithmException, KeyManagementException {
-        String s = ImageBase64Utils.getImageStr("D:\\2.jpg");
-        base64Str2Image(s,"d:\\2.3.jpg");
+        String s = ImageBase64Utils.getImageStr("D:\\4.jpg");
+//        base64Str2Image(s,"d:\\2.3.jpg");
 //        System.out.println(s);
-  /*      HashMap<String, Object> map = new HashMap<>();
+        HashMap<String, Object> map = new HashMap<>();
         String[] value = {s};
         String[] image = {"image"};
         map.put("key", image);
         map.put("value", value);
         ObjectMapper objectMapper = new ObjectMapper();
         String string = HttpKimUtils.getInstance().postJson("http://hw.5dhj.com:9998/ocr/prediction", objectMapper.writeValueAsString(map));
-        System.out.println(string);*/
+        System.out.println(string);
     }
 }
