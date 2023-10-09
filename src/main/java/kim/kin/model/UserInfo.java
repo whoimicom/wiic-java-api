@@ -9,7 +9,7 @@ import org.springframework.data.relational.core.mapping.Table;
 /**
  * @author choky
  */
-@Table("kk_user_info")
+@Table("kim_user_info")
 public class UserInfo {
 
 	@Id
