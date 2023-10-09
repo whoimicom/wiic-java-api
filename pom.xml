@@ -5,13 +5,13 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.8</version>
+        <version>2.7.15</version>
         <relativePath/>
     </parent>
     <groupId>kim.kin</groupId>
-    <artifactId>promgt-api</artifactId>
+    <artifactId>kim-api</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>promgt-api</name>
+    <name>kim-api</name>
     <description>Porject Management</description>
 
     <properties>
