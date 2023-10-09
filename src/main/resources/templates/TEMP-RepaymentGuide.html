@@ -50,15 +50,15 @@
     </span>
 </div>
 <h2>服务费支付指引</h2>
-<p>
-<h3 style="line-height: 20px">尊敬的<span style="text-decoration: underline;">&#160;[[${member.realName}]]&#160; </span>
-    <th:block th:text="${member.gender eq '0'?'先生':'女士'}"></th:block>
-    <br/>
-    &#160;&#160;非常感谢您选择[[${fundsSource.companyName}]]（简称“红犇”）的分期服务。希望我们的服务在提高您生活品质的同时，让您的生活更加便利、现代。<br/>
-    &#160;&#160;以下是您服务费支付详情：<br/>
-    &#160;&#160;您于[[${currDate}]]签订编号为[[${member.loan.applySn}]]的《服务合同》，服务费支付金额见下表
-</h3>
-</p>
+<div>
+    <h3 style="line-height: 20px">尊敬的<span style="text-decoration: underline;">&#160;[[${member.realName}]]&#160; </span>
+        <th:block th:text="${member.gender eq '0'?'先生':'女士'}"></th:block>
+        <br/>
+        &#160;&#160;非常感谢您选择[[${fundsSource.companyName}]]（简称“红犇”）的分期服务。希望我们的服务在提高您生活品质的同时，让您的生活更加便利、现代。<br/>
+        &#160;&#160;以下是您服务费支付详情：<br/>
+        &#160;&#160;您于[[${currDate}]]签订编号为[[${member.loan.applySn}]]的《服务合同》，服务费支付金额见下表
+    </h3>
+</div>
 <table border="1" cellspacing="0" cellpadding="0" style="margin-top: 100px;">
     <tr>
         <td><h3 style="text-align: center;">支付期数</h3></td>
