@@ -16,7 +16,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 /**
- * @author choky
+ * 合同生成
+ * @author kinkim
  */
 @Controller
 public class ContractRest {
@@ -33,7 +34,7 @@ public class ContractRest {
 
     /**
      * 查看模板
-     * <a href="http://localhost:1987/kim-api/contract/ApplicationForm">...</a>
+     * localhost:1987/kim-api/contract/ApplicationForm
      *
      * @param tempName 模板名称
      * @param model    model
@@ -42,14 +43,13 @@ public class ContractRest {
     @GetMapping("/contract/{tempName}")
     @AnonymousKimAccess
     public String contract(@PathVariable String tempName, Model model) {
-//        FundsSource1 fundsSource = new FundsSource1("hoben-api", "https://hw.5dhj.com/huij-fs/file/common/app/images/logo_10_tz.png");
         LocalDate now = LocalDate.now();
         LocalDate sixMouthsLater = now.plusMonths(6);
         String sixMouthsLaterStr = sixMouthsLater.format(DateTimeFormatter.ISO_LOCAL_DATE);
         String currentDate = now.format(DateTimeFormatter.ISO_LOCAL_DATE);
-        String yyyy = currentDate.substring(0,4);
-        String mm = currentDate.substring(5,7);
-        String dd = currentDate.substring(8,10);
+        String yyyy = currentDate.substring(0, 4);
+        String mm = currentDate.substring(5, 7);
+        String dd = currentDate.substring(8, 10);
         //客户信息
         record Customer(String name, String gender, String birthday, String tel, String qq, String email,
                         String idNo, String idProvince, String idCity,
@@ -59,8 +59,8 @@ public class ContractRest {
                         String companyCity, String companyDistrict, String companyAddrDetail) {
         }
         Customer customer = new Customer("KINKIM", "M", "20231010", "185****0088", "198799**", "im@kin.kim",
-                "511586xxxxxx023354", "四川省", "广安市", "**县", "**路**街道**号",
-                "XXX县", "20991231", "重庆", "重庆市", "**区", "**路**街道**号",
+                "511586xxxxxx023354", "**省", "**市", "**县", "**路**街道**号",
+                "**县", "20991231", "**省", "**市", "**区", "**路**街道**号",
                 "汉", "非自然现象研究院", "重庆", "重庆", "XXX北", "**路**街道**号");
         //合同信息
         record Contact(String name, String tel, String relation) {
@@ -72,17 +72,18 @@ public class ContractRest {
         );
         //贷款信息
         record Loan(String id, String amount, String amountUp, String periods, String purpose, String monthRate,
-                    String repaymentMethod, String firstPayDate, String perPayDate, String repaymentName, String repaymentAccount,
+                    String repaymentMethod, String firstPayDate, String perPayDate, String repaymentName,
+                    String repaymentAccount,
                     String repaymentBank, String contractDate, String expirationDate) {
         }
         Loan loan = new Loan("LOAN" + currentDate, "6000", "六千元整", "6", "消费", "0.35%",
-                "等额本息", "20231010", "1010", "KINKIM", "2423450923845", "平安银行",currentDate,sixMouthsLaterStr);
+                "等额本息", "20231010", "1010", "KINKIM", "2423450923845", "平安银行", currentDate, sixMouthsLaterStr);
         // 资方信息
         record Capital(String name, String shortName, String logoAddr, String bankName, String bankAccount,
                        String legalRepresentative, String registrationAddr, String tel, String contactAddr) {
 
         }
-        Capital capital = new Capital("XX融资担保有限公司", "担保公司", "https://asdasd.png", "XX银行", "33333333****333333", "XX法人", "XX省XX市", "0826-*****", "XX省XX市");
+        Capital capital = new Capital("XX融资担保有限公司", "担保公司", "http://localhost:1987/kim-api/loan.png", "XX银行", "33333333****333333", "XX法人", "XX省XX市", "0826-*****", "XX省XX市");
         record Repayment(String stages, String date, String principal, String serviceFee, String monthlyPayment) {
 
         }
@@ -119,7 +120,7 @@ public class ContractRest {
 
     /**
      * 生成根据模板生成PDF
-     * <a href="http://localhost:1987/kim-api/generate/ApplicationForm">...</a>
+     * localhost:1987/kim-api/generate/ApplicationForm
      *
      * @param tempName 模板名称
      * @return 路径
@@ -136,7 +137,7 @@ public class ContractRest {
     }
 
     /**
-     * <a href="http://localhost:1987/kim-api/generateAll">...</a>
+     * localhost:1987/kim-api/generateAll
      */
     @GetMapping("/generateAll")
     @AnonymousKimAccess

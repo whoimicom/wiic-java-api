@@ -2,7 +2,6 @@ package kim.kin.utils;
 
 import com.openhtmltopdf.pdfboxout.PdfRendererBuilder;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ResourceUtils;
@@ -20,10 +19,14 @@ public class PdfUtils {
     @Value("${fonts.suffix}")
     private String suffix;
 
-    public void generatePdf(String htmlUrl, String outputPath) throws IOException {
+    public void generatePdf(String htmlUrl, String outputFilePath) throws IOException {
 //        String fontFamily = "Alibaba-PuHuiTi-Light";
 //        String fontFamily = "SimSun";
-        try (OutputStream os = new FileOutputStream(outputPath)) {
+        Path parent = Paths.get(outputFilePath).getParent();
+        if (!Files.exists(parent)) {
+            Files.createDirectories(parent);
+        }
+        try (OutputStream os = new FileOutputStream(outputFilePath)) {
             PdfRendererBuilder pdfRendererBuilder = new PdfRendererBuilder();
             String fontPath = System.getProperty("user.home") + "/" + fontFamily + "." + suffix;
             Path path = Paths.get(fontPath);
