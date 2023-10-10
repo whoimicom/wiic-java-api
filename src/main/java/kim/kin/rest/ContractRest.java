@@ -33,7 +33,7 @@ public class ContractRest {
 
     /**
      * 查看模板
-     * <a href="http://localhost:1987/kim-api/contract/12405">...</a>
+     * <a href="http://localhost:1987/kim-api/contract/ApplicationForm">...</a>
      *
      * @param tempName 模板名称
      * @param model    model
@@ -43,7 +43,14 @@ public class ContractRest {
     @AnonymousKimAccess
     public String contract(@PathVariable String tempName, Model model) {
 //        FundsSource1 fundsSource = new FundsSource1("hoben-api", "https://hw.5dhj.com/huij-fs/file/common/app/images/logo_10_tz.png");
-        String currentDate = LocalDate.now().format(DateTimeFormatter.BASIC_ISO_DATE);
+        LocalDate now = LocalDate.now();
+        LocalDate sixMouthsLater = now.plusMonths(6);
+        String sixMouthsLaterStr = sixMouthsLater.format(DateTimeFormatter.ISO_LOCAL_DATE);
+        String currentDate = now.format(DateTimeFormatter.ISO_LOCAL_DATE);
+        String yyyy = currentDate.substring(0,4);
+        String mm = currentDate.substring(5,7);
+        String dd = currentDate.substring(8,10);
+        //客户信息
         record Customer(String name, String gender, String birthday, String tel, String qq, String email,
                         String idNo, String idProvince, String idCity,
                         String idDistrict, String idAddrDetail, String idIssuePlace, String idValidity,
@@ -52,9 +59,10 @@ public class ContractRest {
                         String companyCity, String companyDistrict, String companyAddrDetail) {
         }
         Customer customer = new Customer("KINKIM", "M", "20231010", "185****0088", "198799**", "im@kin.kim",
-                "511586xxxxxx023354", "四川", "广安", "XX县", "**路**街道**号",
-                "XXX县", "20991231", "重庆", "重庆", "重庆", "**路**街道**号",
+                "511586xxxxxx023354", "四川省", "广安市", "**县", "**路**街道**号",
+                "XXX县", "20991231", "重庆", "重庆市", "**区", "**路**街道**号",
                 "汉", "非自然现象研究院", "重庆", "重庆", "XXX北", "**路**街道**号");
+        //合同信息
         record Contact(String name, String tel, String relation) {
         }
         List<Contact> contacts = Arrays.asList(
@@ -62,14 +70,14 @@ public class ContractRest {
                 new Contact("B", "199****7777", "B关系"),
                 new Contact("C", "133****7777", "C关系")
         );
-
+        //贷款信息
         record Loan(String id, String amount, String amountUp, String periods, String purpose, String monthRate,
-                    String repaymentMethod,
-                    String firstPayDate, String perPayDate, String repaymentName, String repaymentAccount,
-                    String repaymentBank) {
+                    String repaymentMethod, String firstPayDate, String perPayDate, String repaymentName, String repaymentAccount,
+                    String repaymentBank, String contractDate, String expirationDate) {
         }
         Loan loan = new Loan("LOAN" + currentDate, "6000", "六千元整", "6", "消费", "0.35%",
-                "等额本息", "20231010", "1010", "KINKIM", "2423450923845", "平安银行");
+                "等额本息", "20231010", "1010", "KINKIM", "2423450923845", "平安银行",currentDate,sixMouthsLaterStr);
+        // 资方信息
         record Capital(String name, String shortName, String logoAddr, String bankName, String bankAccount,
                        String legalRepresentative, String registrationAddr, String tel, String contactAddr) {
 
@@ -78,13 +86,14 @@ public class ContractRest {
         record Repayment(String stages, String date, String principal, String serviceFee, String monthlyPayment) {
 
         }
+        //还款计划
         List<Repayment> repayments = Arrays.asList(
-                new Repayment("1", "20231010", "500", "50", "550"),
-                new Repayment("2", "20231010", "500", "50", "550"),
-                new Repayment("3", "20231010", "500", "50", "550"),
-                new Repayment("4", "20231010", "500", "50", "550"),
-                new Repayment("5", "20231010", "500", "50", "550"),
-                new Repayment("6", "20231010", "500", "50", "550")
+                new Repayment("1", "20231110", "500", "50", "550"),
+                new Repayment("2", "20231210", "500", "50", "550"),
+                new Repayment("3", "20240110", "500", "50", "550"),
+                new Repayment("4", "20240210", "500", "50", "550"),
+                new Repayment("5", "20240310", "500", "50", "550"),
+                new Repayment("6", "20240410", "500", "50", "550")
         );
 
         model.addAttribute("customer", customer);
@@ -92,19 +101,17 @@ public class ContractRest {
         model.addAttribute("loan", loan);
         model.addAttribute("repayments", repayments);
         model.addAttribute("capital", capital);
+
         model.addAttribute("currentDate", currentDate);
-        model.addAttribute("contractDate", currentDate);
-        model.addAttribute("contractEndDate", LocalDate.now().plusDays(180));
-        model.addAttribute("contractYear", currentDate.substring(0, 4));
-        model.addAttribute("contractMonth", currentDate.substring(4, 6));
-        model.addAttribute("contractDay", currentDate.substring(6, 8));
+        model.addAttribute("contractYear", yyyy);
+        model.addAttribute("contractMonth", mm);
+        model.addAttribute("contractDay", dd);
 
         model.addAttribute("xtSn", "T" + currentDate);
         model.addAttribute("customerHotline", "100861001010000");
         model.addAttribute("customerGender", "男");
 
         model.addAttribute("fontFamily", fontFamily);
-//        return "pdf_template12403.html";
         String temp = "TEMP-" + tempName + ".html";
         System.out.println(temp);
         return temp;
@@ -112,12 +119,12 @@ public class ContractRest {
 
     /**
      * 生成根据模板生成PDF
-     * <a href="http://localhost:1987/kim-api/generateByName/ApplicationForm">...</a>
+     * <a href="http://localhost:1987/kim-api/generate/ApplicationForm">...</a>
      *
      * @param tempName 模板名称
      * @return 路径
      */
-    @GetMapping("/generateByName/{tempName}")
+    @GetMapping("/generate/{tempName}")
     @AnonymousKimAccess
     @ResponseBody
     public String generateByName(@PathVariable String tempName) throws IOException {
@@ -140,7 +147,7 @@ public class ContractRest {
                 "LetterOfAssignment", "LoanContract", "RepaymentGuide", "ServiceContract");
         Random random = new Random();
         int nextInt = random.nextInt();
-        int size = Math.abs(nextInt % list.size());
+//        int size = Math.abs(nextInt % list.size());
 //        String tempName = list.get(size);
         list.forEach(tempName -> {
             String uri = "http://localhost:1987/kim-api/contract/" + tempName;
