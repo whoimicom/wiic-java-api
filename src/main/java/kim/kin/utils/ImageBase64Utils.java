@@ -74,7 +74,7 @@ public class ImageBase64Utils {
 //        System.out.println(s);
         HashMap<String, Object> map = new HashMap<>();
         String[] value = {s};
-        String[] image = {"image"};
+        String[] image = {"static/image"};
         map.put("key", image);
         map.put("value", value);
         ObjectMapper objectMapper = new ObjectMapper();

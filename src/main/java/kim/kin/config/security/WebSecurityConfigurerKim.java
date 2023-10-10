@@ -138,26 +138,26 @@ public class WebSecurityConfigurerKim {
         httpSecurity.csrf(AbstractHttpConfigurer::disable);
 //        AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry auth = httpSecurity.csrf().disable().authorizeHttpRequests();
 
-
         httpSecurity.authorizeHttpRequests(authorizationManagerRequestMatcherRegistry -> {
             authorizationManagerRequestMatcherRegistry.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll();
+            authorizationManagerRequestMatcherRegistry.requestMatchers("/**.png").permitAll();
             log.info(Arrays.toString(anonymousUrls.get(GET.toString()).toArray(String[]::new)));
-            if (anonymousUrls.get(GET.toString()).size() > 0) {
+            if (!anonymousUrls.get(GET.toString()).isEmpty()) {
                 authorizationManagerRequestMatcherRegistry.requestMatchers(GET, anonymousUrls.get(GET.toString()).toArray(String[]::new)).permitAll();
             }
-            if (anonymousUrls.get(POST.toString()).size() > 0) {
+            if (!anonymousUrls.get(POST.toString()).isEmpty()) {
                 authorizationManagerRequestMatcherRegistry.requestMatchers(POST, anonymousUrls.get(POST.toString()).toArray(String[]::new)).permitAll();
             }
-            if (anonymousUrls.get(PUT.toString()).size() > 0) {
+            if (!anonymousUrls.get(PUT.toString()).isEmpty()) {
                 authorizationManagerRequestMatcherRegistry.requestMatchers(POST, anonymousUrls.get(PUT.toString()).toArray(String[]::new)).permitAll();
             }
-            if (anonymousUrls.get(PATCH.toString()).size() > 0) {
+            if (!anonymousUrls.get(PATCH.toString()).isEmpty()) {
                 authorizationManagerRequestMatcherRegistry.requestMatchers(PATCH, anonymousUrls.get(PATCH.toString()).toArray(String[]::new)).permitAll();
             }
-            if (anonymousUrls.get(DELETE.toString()).size() > 0) {
+            if (!anonymousUrls.get(DELETE.toString()).isEmpty()) {
                 authorizationManagerRequestMatcherRegistry.requestMatchers(DELETE, anonymousUrls.get(DELETE.toString()).toArray(String[]::new)).permitAll();
             }
-            if (anonymousUrls.get("ALL").size() > 0) {
+            if (!anonymousUrls.get("ALL").isEmpty()) {
                 authorizationManagerRequestMatcherRegistry.requestMatchers(anonymousUrls.get("ALL").toArray(String[]::new)).permitAll();
             }
             // all other requests need to be authenticated
@@ -216,7 +216,7 @@ public class WebSecurityConfigurerKim {
             AnonymousKimAccess anonymousKimAccess = handlerMethod.getMethodAnnotation(AnonymousKimAccess.class);
             if (null != anonymousKimAccess) {
                 List<RequestMethod> requestMethods = new ArrayList<>(infoEntry.getKey().getMethodsCondition().getMethods());
-                if (0 != requestMethods.size()) {
+                if (!requestMethods.isEmpty()) {
                     HttpMethod httpMethod = HttpMethod.valueOf(requestMethods.get(0).name());
                     HttpMethod method = Objects.requireNonNull(httpMethod);
                     Set<String> path = Optional.of(infoEntry).map(Map.Entry::getKey).map(RequestMappingInfo::getPatternsCondition).map(PatternsRequestCondition::getPatterns)
