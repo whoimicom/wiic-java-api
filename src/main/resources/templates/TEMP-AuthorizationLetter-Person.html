@@ -1,6 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns:th="http://www.thymeleaf.org" lang="zh">
+<!--<html xmlns:th="http://www.thymeleaf.org" lang="zh">-->
+<html lang="zh">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <title>Untitled Document</title>
@@ -46,11 +47,12 @@
 </p>
 <br/>
 <p class="textIndent">本人向<span style="text-decoration: underline;">
-    <th:block th:text="${member.loan.fundsSn eq '131'?'重庆两江新区宝升小额贷款股份有限公司':'重庆两江新区同泽小额贷款有限责任公司'}" />
-    、百行征信有限公司</span>作以下不可撤销的授权：
+<!--    <th:block th:text="${fundsSource.fundsSn eq '131'?'XXXCompany':'YYYCompany'}" />-->
+    [[${fundsSource.name}]]</span>作以下不可撤销的授权：
 </p>
 <p class="textIndent"><strong>一、本人同意
-    <th:block th:text="${member.loan.fundsSn eq '131'?'重庆两江新区宝升小额贷款股份有限公司':'重庆两江新区同泽小额贷款有限责任公司'}" />
+    <!--    <th:block th:text="${fundsSource.fundsSn eq '131'?'XXXCompany':'YYYCompany'}" />-->
+    [[${fundsSource.name}]]
     （本文简称“被授权人”）在办理以下涉及到本人或与本人有关的业务时，可按照法律法规的规定通过百行征信有限公司查询、使用本人信息：</strong>
 </p>
 <p class="textIndent">&#8377;审核本人授信及贷款申请的；</p>
@@ -65,15 +67,15 @@
 </p>
 <p class="textIndent"><strong>二、信息查询期限</strong></p>
 <p class="textIndent">
-    本授权书下被授权人向百行征信有限公司查询本人信息的期限<strong>自本人确认本授权承诺之日起至本人在被授权人处所有相关业务终结之日止。</strong>
+    本授权书下被授权人向XX征信有限公司查询本人信息的期限<strong>自本人确认本授权承诺之日起至本人在被授权人处所有相关业务终结之日止。</strong>
 </p>
 <p class="textIndent">
     <strong>如下情形视为本人与被授权人的业务未终结：本人在被授权人处有信贷余额或有授信额度；本人提供担保的授信业务有信贷余额或有授信额度。</strong>
 </p>
 <p class="textIndent">
-    <strong>三、本人同意被授权人向百行征信有限公司报送本人信息（含历史信息、不良信息、负债信息及偿债履约能力判断信息等）。</strong>
+    <strong>三、本人同意被授权人向XX征信有限公司报送本人信息（含历史信息、不良信息、负债信息及偿债履约能力判断信息等）。</strong>
 </p>
-<p class="textIndent"><strong>四、本人同意百行征信有限公司可向被授权人和有关部门、单位（包括但不限于公安、司法、教育、全国公民身份证号码查询服务中心、通信运营商、社保、公积金、税务、民政、物流、电子商务平台、互联网平台、行业协会等合法留存本人信息的第三方机构等）采集、查询或验证本人信息，并可将采集或查询到的本人信息在本授权书第一条所列的情形下向被授权人提供。</strong>
+<p class="textIndent"><strong>四、本人同意XX征信有限公司可向被授权人和有关部门、单位（包括但不限于公安、司法、教育、全国公民身份证号码查询服务中心、通信运营商、社保、公积金、税务、民政、物流、电子商务平台、互联网平台、行业协会等合法留存本人信息的第三方机构等）采集、查询或验证本人信息，并可将采集或查询到的本人信息在本授权书第一条所列的情形下向被授权人提供。</strong>
 </p>
 <p class="textIndent">五、授权人声明</p>
 <p class="textIndent">
@@ -81,8 +83,8 @@
 </p>
 <p style="padding-top: 6px;">
     <strong>授权人（签名）：_________________</strong><br/>
-    <strong>身份证号码：<span style="text-decoration: underline;"> [[${member.creSn}]] </span></strong><br/>
-    <strong>签署日期：[[${currDate}]]</strong><br/>
+    <strong>身份证号码：<span style="text-decoration: underline;"> [[${customer.idNo}]] </span></strong><br/>
+    <strong>签署日期：[[${contractDate}]]</strong><br/>
 </p>
 </body>
 </html>
