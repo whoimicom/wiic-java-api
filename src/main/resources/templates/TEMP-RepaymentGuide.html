@@ -41,22 +41,17 @@
 <body style="width: 100%;">
 <div style="padding:15px 0;border-bottom:1px solid #f00;overflow: hidden;position: relative;text-align: right;">
     <!-- <img style="position: absolute;left:10px;top:0px;" width="50px;" height="50px;" src="${fundsSource.companyLogo}" /> -->
-    <span style="bottom:30px;right:10px;color:black;font-size:1.5em;font-weight:bold;">客服热线
-        <th:block th:switch="${member.loan.channel}">
-            <th:block th:case="087">0238-9696-722 </th:block>
-            <th:block th:case="083">023-86003522</th:block>
-            <th:block th:case="*">4000-353-999</th:block>
-        </th:block>
+    <span style="bottom:30px;right:10px;color:black;font-size:1.5em;font-weight:bold;">客服热线 [[${customerHotline}]]
     </span>
 </div>
 <h2>服务费支付指引</h2>
 <div>
-    <h3 style="line-height: 20px">尊敬的<span style="text-decoration: underline;">&#160;[[${member.realName}]]&#160; </span>
-        <th:block th:text="${member.gender eq '0'?'先生':'女士'}"></th:block>
+    <h3 style="line-height: 20px">尊敬的<span style="text-decoration: underline;">&#160;[[${customer.name}]]&#160; </span>
+        <th:block th:text="${member.gender eq 'M'?'先生':'女士'}"></th:block>
         <br/>
-        &#160;&#160;非常感谢您选择[[${fundsSource.companyName}]]（简称“红犇”）的分期服务。希望我们的服务在提高您生活品质的同时，让您的生活更加便利、现代。<br/>
+        &#160;&#160;非常感谢您选择[[${fundsSource.companyName}]]（简称“[[${fundsSource.shortName}]]”）的分期服务。希望我们的服务在提高您生活品质的同时，让您的生活更加便利、现代。<br/>
         &#160;&#160;以下是您服务费支付详情：<br/>
-        &#160;&#160;您于[[${currDate}]]签订编号为[[${member.loan.applySn}]]的《服务合同》，服务费支付金额见下表
+        &#160;&#160;您于[[${contractDate}]]签订编号为[[${loan.id}]]的《服务合同》，服务费支付金额见下表
     </h3>
 </div>
 <table border="1" cellspacing="0" cellpadding="0" style="margin-top: 100px;">
@@ -65,19 +60,19 @@
         <td><h3 style="text-align: center;">支付日期</h3></td>
         <td><h3 style="text-align: center;">每月支付金额（元）</h3></td>
     </tr>
-    <tr th:each="repayment:${repaymentDates}">
-        <td><p style="text-align: center;" th:text="${repayment.period}" ></p></td>
-        <td><p style="text-align: center;" th:text="${repayment.repaymenDate}"></p></td>
-        <td><p style="text-align: center;" th:text="${repayment.repaymenMoney}"></p></td>
+    <tr th:each="repayment:${repayments}">
+        <td><p style="text-align: center;" th:text="${repayment.stages}" ></p></td>
+        <td><p style="text-align: center;" th:text="${repayment.date}"></p></td>
+        <td><p style="text-align: center;" th:text="${repayment.amount}"></p></td>
     </tr>
     <!--<tr>
         <td><p style="text-align: center;">1</p></td>
-        <td><p style="text-align: center;">${member.loan.downDate}</p></td>
+        <td><p style="text-align: center;">${loan.firstPayDate}</p></td>
         <td><p style="text-align: center;">${member.loan.perMonthMoney}</p></td>1
     </tr>
     <tr>
         <td><p style="text-align: center;">2</p></td>
-        <td><p style="text-align: center;">${member.loan.perMonthDate}</p></td>
+        <td><p style="text-align: center;">${loan.perPayDate}</p></td>
         <td><p style="text-align: center;">${member.loan.perMonthMoney}</p></td>1
     </tr>
     <tr>
@@ -94,50 +89,32 @@
 <table border="1" cellspacing="0" cellpadding="0">
     <tr>
         <td><h3>银行账户户名</h3></td>
-        <td><h3>[[${member.loan.repaymentName}]]</h3></td>
+        <td><h3>[[${loan.repaymentName}]]</h3></td>
     </tr>
     <tr>
         <td><h3>银行账号</h3></td>
-        <td><h3>[[${member.loan.repaymentAccount}]]</h3></td>
+        <td><h3>[[${loan.repaymentAccount}]]</h3></td>
     </tr>
     <tr>
         <td><h3>银行账户开户行</h3></td>
-        <td><h3>[[${member.paramMap.repaymentBank}]]</h3></td>
+        <td><h3>[[${loan.repaymentBank}]]</h3></td>
     </tr>
 </table>
-<p>（2）拨打
-    <th:block th:switch="${member.loan.channel}">
-        <th:block th:case="087">0238-9696-722 </th:block>
-        <th:block th:case="083">023-86003522</th:block>
-        <th:block th:case="*">4000-353-999</th:block>
-    </th:block>
+<p>（2）拨打 [[${customerHotline}]]
     客服热线进行咨询。
 </p>
-<!--<table border="1" cellspacing="0" cellpadding="0">
-    <tr>
-        <td><h3>收款人账户名称</h3></td>
-        <td><h3>重庆红犇科技有限公司</h3></td>
-    </tr>
-    <tr>
-        <td><h3>收款人账号</h3></td>
-        <td><h3>15000098633734</h3></td>
-    </tr>
-    <tr>
-        <td><h3>收款人开户行</h3></td>
-        <td><h3>平安银行重庆分行沙坪坝支行</h3></td>
-    </tr>
-</table>-->
+
 <p>本人已阅读且知晓上述所有内容，并承诺按时还款。</p>
-<h3 style="text-align: right;margin-top: 40px;">申请人（签章）：&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;日期：[[${currDate}]]&#160;&#160;&#160;&#160;</h3>
+<h3 style="text-align: right;margin-top: 40px;">申请人（签章）：&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;日期：[[${contractDate}]]&#160;&#160;&#160;&#160;</h3>
 <br/>
-<th:block th:unless="${member.loan.channel eq '083' || member.loan.channel eq '087'}">
+<th:block th:unless="${customerHotline eq '083' || customerHotline eq '087'}">
     <div style="width: 100%; height: 75px;">
         <div style="float:left;width: 25%; text-align: center;">
-            <p>惠花APP-安卓版</p>
+            <p>Android-App</p>
             <img src="http://hw.5dhj.com/huij-fs/file/common/app/images/android_qrcode.jpg" width="80px;" height="80px;" alt="img"/>
         </div>
         <div style="float:left;width: 25%;text-align: left;">
-            <p>惠花APP-IOS版</p>
+            <p>IOS-App</p>
             <img src="http://hw.5dhj.com/huij-fs/file/common/app/images/ios_qrcode.jpg" width="80px;" height="80px;" alt="img"/>
         </div>
     </div>
@@ -145,7 +122,7 @@
     <div style="padding-left: 10px;">
         <div style="padding-left: 33px;font-size: 1em;margin-top: 35px;">在线还款、账单查询、预约业务、快来扫码下载吧！</div>
         <div style="padding-left: 33px;font-size: 1em;margin-top: 10px;">
-            扫描上方的二维码下载惠花APP在线自助操作，掌握第一手贷款及合同相关信息若您还有其他疑问和建议，欢迎致电红犇全国客服热线：4000-353-999
+            扫描上方的二维码下载APP在线自助操作，掌握第一手贷款及合同相关信息若您还有其他疑问和建议，欢迎致电[[${fondsSource.shortName}]]全国客服热线：[[${customerHotline}]]
         </div>
     </div>
 </th:block>

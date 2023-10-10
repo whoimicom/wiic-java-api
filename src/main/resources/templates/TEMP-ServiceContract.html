@@ -1,6 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns:th="http://www.thymeleaf.org" lang="zh">
+<!--<html xmlns:th="http://www.thymeleaf.org" lang="zh">-->
+<html  lang="zh">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <title>Untitled Document</title>
@@ -31,29 +32,19 @@
 </head>
 <body style="width: 100%;">
 <h1>服务合同<!--<img width="50px;" height="50px;" src="${fundsSource.companyLogo}" />--></h1>
-<p align="right" style="margin-top: 8px;margin-right:40px;">合同编号：[[${member.loan.applySn}]]</p>
+<p align="right" style="margin-top: 8px;margin-right:40px;">合同编号：[[${loan.id}]]</p>
 <div><span>甲方：[[${fundsSource.companyName}]]</span><br/>
-    <span>乙方：[[${member.realName}]]（身份证号：[[${member.creSn}]]）</span><br/>
+    <span>乙方：[[${customer.name}]]（身份证号：[[${customer.idNo}]]）</span><br/>
 
     <p style="line-height: 20px"><span>本着平等、自愿的原则，甲乙双方经协商一致，达成如下协议：</span><br/><strong>第一条
-        分期信息：</strong>借款本金、利率、借款期限以乙方与重庆两江新区同泽小额贷款有限责任公司于[[${currDate}]]签订的《个人消费借款合同》信息为准。
+        分期信息：</strong>借款本金、利率、借款期限以乙方与[[${fondsSource.name}]]于[[${contractDate}]]签订的《个人消费借款合同》信息为准。
     </p>
 
     <p style="line-height: 20px"><strong>第二条 服务条款：</strong>1、甲方为乙方提供分期服务咨询。2、甲方为乙方分期借款对接第三方机构提供银行卡验卡服务。3、甲方协助乙方按照出借人的要求搜集整理各项资料，并将乙方相关资料报送给出借人。4、甲方协助乙方办理借款手续，促成其与出借人签订借款协议。5、甲方为乙方借款成功后提供借款后的监督及履约管理、还款信息的查询、个人账户及信息的管理及变更维护、重要信息的推送、款项结清证明、还款渠道维护、短信渠道维护、款项差错更正等服务。
     </p>
 
-    <p style="line-height: 20px"><strong>第三条 收费条款：</strong>1、收费内容：综合服务费（包含咨询费、客户服务费、异议处理费、短信提醒费、账户管理费、档案管理费）。2、收费标准：综合服务费=贷款金额*${srviceRat}*分期期数。3、收费方式：按“分期期数”进行分摊收取，具体支付时间及金额以《服务费支付指引》为准。4、乙方提前还款：(1)需同时满足以下几个条件：1）借款人需正常还款三个月及以上（若乙方未正常还款三个月要求结清，甲方有权全额收取乙方前三个月综合服务费、2）应在指定还款日后1-8内电话通知甲方办理提前还款预约；3）乙方当前无逾期；4）通过甲方客服电话（
-        <!--        <c:choose>
-                    <c:when test="${member.loan.channel eq '087'}">0238-9696-722</c:when>
-                    <c:when test="${member.loan.channel eq '083'}">023-86003522</c:when>
-                    <c:otherwise>4000-353-999</c:otherwise>
-                </c:choose>-->
-        <th:block th:switch="${member.loan.channel}">
-            <th:block th:case="087">0238-9696-722</th:block>
-            <th:block th:case="083">023-86003522</th:block>
-            <th:block th:case="*">4000-353-999</th:block>
-        </th:block>
-
+    <p style="line-height: 20px"><strong>第三条 收费条款：</strong>1、收费内容：综合服务费（包含咨询费、客户服务费、异议处理费、短信提醒费、账户管理费、档案管理费）。2、收费标准：综合服务费=贷款金额*[[${loan.monthRate}]]*分期期数。3、收费方式：按“分期期数”进行分摊收取，具体支付时间及金额以《服务费支付指引》为准。4、乙方提前还款：(1)需同时满足以下几个条件：1）借款人需正常还款三个月及以上（若乙方未正常还款三个月要求结清，甲方有权全额收取乙方前三个月综合服务费、2）应在指定还款日后1-8内电话通知甲方办理提前还款预约；3）乙方当前无逾期；4）通过甲方客服电话（
+        [[${fondsSource.name}]]
         ）、微信服务端等渠道申请确认。（2）提前结清服务费（包含手续费和成本补偿费）：乙方应当支付提前还款手续费、成本补偿费，手续费按借款本金×7.25%（最低200元）计收，成本补偿费按月息3%且等额本息计算方式下剩余贷款本金减去等本等息计算方式下剩余贷款本金之差。（3）如果乙方未能于还款日前或者还款日当日存入足额资金，使得提前还款未成功的，乙方若需提前还款需要重新向甲方申请。5、乙方在贷款申请通过出借方放款成功后3日内取消贷款需向甲方支付50元服务费，发放成功3日后申请取消贷款按合同约定的提前结清处理。
     </p>
 
@@ -75,9 +66,9 @@
 
     <p style="line-height: 20px"><strong>第九条 其他约定：</strong>1、乙方通讯地址、住址、工作、电话号码等个人信息发生变动后应于3日内电话或书面通知甲方。2、若本合同的任何条款被任何司法或有权机关认定为无效或不可强制执行，该条款将被从本合同中分离出来，其余条款仍应有效。3、本合同自乙方签署后生效。4、乙方在本合同下的任何通知和文件以及法院送达的各类诉讼文书等法律文书的送达地址为：
         <strong>
-            <span>借款人：[[${member.realName}]]</span>&#160;&#160;
-            <span>地址：[[${member.paramMap.censusProvince}]][[${member.paramMap.censusCity}]][[${member.paramMap.censusDistrict}]][[${member.memberClientele.censusAddrDetail}]]</span>&#160;&#160;
-            <span>联系电话：[[${member.mobile}]]</span>&#160;&#160;
+            <span>借款人：[[${customer.name}]]</span>&#160;&#160;
+            <span>地址：[[${customer.idProvince}]][[${customer.idCity}]][[${customer.idDistrict}]][[${customer.idAddrDetail}]]</span>&#160;&#160;
+            <span>联系电话：[[${member.tel}]]</span>&#160;&#160;
             <span>电子邮箱：[[${member.email}]]</span>
         </strong>。
         <span>乙方保证提供的上述信息真实可靠，合同相对方或法院按乙方提供的送达地址发送相关通知或文件或各类诉讼文书等法律文书，无论是否签收，均视为送达，受送达人拒收的，不影响送达的效力。若约定的送达地址发生变化，乙方应将变更信息提前3日书面通知合同相对方，未按约定方式变更的，原约定送达地址仍为有效送达地址。</span>
@@ -90,9 +81,8 @@
     <span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</span>
     <span>乙方签章：</span>
     <span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</span>
-    <span>合同签订日期：[[${currDate}]]</span>
+    <span>合同签订日期：[[${contractDate}]]</span>
     <span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</span>
-    <!--       <span>合同签订地：重庆市渝北区</span>-->
 </p>
 </body>
 </html>

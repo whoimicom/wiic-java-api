@@ -43,9 +43,9 @@ public class ContractRest {
     @GetMapping("/contract/{id}")
     @AnonymousKimAccess
     public String contract(@PathVariable String id, Model model) {
-        record Loan(String downDate, String perMonthDate, String periods, String loanAmt, String borrowReason,
-                    String xtSn, String repaymentAccount, String channel, String repaymentName, String applySn,
-                    String fundsSn) {
+        record Loan1(String downDate, String perMonthDate, String periods, String loanAmt, String borrowReason,
+                     String xtSn, String repaymentAccount, String channel, String repaymentName, String applySn,
+                     String fundsSn) {
         }
         record MemberClientele(String creSn, String censusAddrDetail, String bodies, String creValid,
                                String companyName, String companyAddrDetail, String liveAddrDetail) {
@@ -53,13 +53,13 @@ public class ContractRest {
         }
         record Member(String applyTime, String qq, String nationality, String birthday, String mobile, String email,
                       String gender,
-                      String creSn, String realName, Loan loan, Map<String, String> paramMap,
+                      String creSn, String realName, Loan1 loan, Map<String, String> paramMap,
                       MemberClientele memberClientele) {
         }
         record RepaymentDates(String period, String repaymenDate, String planPrincipal, String planServiceFee,
                               String repaymenMoney) {
         }
-        record FundsSource(String companyName, String companyLogo) {
+        record FundsSource1(String companyName, String companyLogo) {
 
         }
         record ContactothersHb(String parentsName, String family1Name, String contactName, String parentsTel,
@@ -89,29 +89,63 @@ public class ContractRest {
         RepaymentDates repaymentDate3 = new RepaymentDates("3", "20230301", "5000", "100", "552.00");
         List<RepaymentDates> repaymentDates = Arrays.asList(repaymentDate1, repaymentDate2, repaymentDate3);
 
-        Loan loan = new Loan("20230101", "1日", "18", "5000", "购买XXXX", "HT22256465********", "6226***********", channel, "麻子", "APPLYSNXXX***", "131");
+        Loan1 loan = new Loan1("20230101", "1日", "18", "5000", "购买XXXX", "HT22256465********", "6226***********", channel, "麻子", "APPLYSNXXX***", "131");
         MemberClientele memberClientele = new MemberClientele("XXXXCRESN", "金山商业中心", "渝北", "20550101", "**公司", "**路**街道**号", "**路**街道**号");
         Member member = new Member(currentDate, "QQ*****", "汉", "20230101", "18555555555", "@5dhj.com", "1", "3333333CRESN", "麻子", loan, paramMap, memberClientele);
-        FundsSource fundsSource = new FundsSource("hoben-api", "https://hw.5dhj.com/huij-fs/file/common/app/images/logo_10_tz.png");
+        FundsSource1 fundsSource = new FundsSource1("hoben-api", "https://hw.5dhj.com/huij-fs/file/common/app/images/logo_10_tz.png");
         ContactothersHb contactothersHb = new ContactothersHb("麻大", "麻三", "麻烦", "185*******", "185*******", "185*******", "父子", "母子", "朋友 ");
         model.addAttribute("member", member);
         model.addAttribute("repaymentDates", repaymentDates);
-        model.addAttribute("monthRat", "0.15%");
+        model.addAttribute("loan.monthRate", "0.15%");
         model.addAttribute("fundsSource", fundsSource);
 
-        model.addAttribute("currDate", currentDate);
-        model.addAttribute("currYear", currentDate.substring(0, 4));
-        model.addAttribute("currMonth", currentDate.substring(4, 6));
-        model.addAttribute("currDay", currentDate.substring(6, 8));
+        model.addAttribute("contractDate", currentDate);
+        model.addAttribute("contractYear", currentDate.substring(0, 4));
+        model.addAttribute("contractMonth", currentDate.substring(4, 6));
+        model.addAttribute("contractDay", currentDate.substring(6, 8));
         model.addAttribute("contactothersHb", contactothersHb);
         model.addAttribute("srviceRat", "3%");
         model.addAttribute("yearRat", "18%");
         model.addAttribute("LoanAmtUp", "伍仟");
-        model.addAttribute("latDate", "20230301");
+        model.addAttribute("contractEndDate", "20230301");
         model.addAttribute("name", "麻三");
         model.addAttribute("creSn", "XXXXCRESN");
         model.addAttribute("bankCardNo", "6226***********");
         model.addAttribute("bankDesc", "工行银行");
+
+        record Customer(String name, String genger, String birthday, String tel, String qq, String email,
+                        String idNo, String idProvince, String idCity,
+                        String idDistrict, String idAddrDetail, String idIssuePlace,
+                        String liveProvince, String liveCity, String liveDistrict, String liveAddrDetail,
+                        String idValidity, String nation, String companyName, String companyProvince,
+                        String companyCity, String companyDistrict, String companyAddrDetail) {
+        }
+        record Contact(String name, String tel, String relation) {
+        }
+        record Loan(String id, String amount, String amountUp, String periods, String purpose, String monthRate,
+                    String repaymentMethod,
+                    String firstPayDate, String perPayDate, String repaymentName, String repaymentAccount,
+                    String repaymentBank) {
+        }
+        record FundsSource(String name, String shortName, String logoAddr, String bankName, String bankAccount,
+                           String legalRepresentative, String registrationAddr, String tel, String contactAddr) {
+
+        }
+        record Repayment(String stages, String date, String mount) {
+
+        }
+
+        model.addAttribute("currentDate", currentDate);
+        model.addAttribute("contractDate", currentDate);
+        model.addAttribute("contractEndDate", LocalDate.now().plusDays(180));
+        model.addAttribute("contractYear", currentDate.substring(0, 4));
+        model.addAttribute("contractMonth", currentDate.substring(4, 6));
+        model.addAttribute("contractDay", currentDate.substring(6, 8));
+
+        model.addAttribute("xtSn", "T" + currentDate);
+        model.addAttribute("customerHotline", "100861001010000");
+        model.addAttribute("customerGender", "男");
+
         model.addAttribute("fontFamily", fontFamily);
 //        return "pdf_template12403.html";
         String temp = "pdf_template" + id + ".html";

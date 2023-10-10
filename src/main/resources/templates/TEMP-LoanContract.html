@@ -89,30 +89,30 @@
 <body style="width: 100%;">
 <div style="height: 1000px;width: 100%;text-align: center;">
     <p style="height: 100px;"></p>
-    <h1 style="font-size: 50px;font-weight: bold;width: 550px;margin: 0 auto;">重庆两江新区宝升小额贷款股份有限公司</h1>
+    <h1 style="font-size: 50px;font-weight: bold;width: 550px;margin: 0 auto;">[[${fundsSource.bankName}]]</h1>
     <p style="height: 200px;"></p>
     <h1 style="font-size: 40px;font-weight: bold;">个人借款合同</h1>
 </div>
 <h1>个人借款合同</h1>
-<p align="right" style="margin-top: 8px;margin-right:40px;">合同编号：<span style="text-decoration: underline;"> &#160;[[${member.loan.applySn}]]&#160; </span>
-    <!--（<u> ${currYear} </u>）年借字第<u> ${member.loan.xtSn} </u>号-->
+<p align="right" style="margin-top: 8px;margin-right:40px;">合同编号：<span style="text-decoration: underline;"> &#160;[[${loan.id}]]&#160; </span>
+    <!--（<u> ${contractYear} </u>）年借字第<u> ${xtSn} </u>号-->
 </p>
 <br/>
-<p class="lineHeightText textIndent">贷款人（甲方）：重庆两江新区宝升小额贷款股份有限公司 </p>
-<p class="lineHeightText textIndent">法定代表人： 郑伟京 &#160;</p>
-<p class="lineHeightText textIndent">注册地址：重庆市渝北区财富大道 13 号第 8 层</p>
-<p class="lineHeightText textIndent">联系电话：023-63062222</p>
-<p class="lineHeightText textIndent">联系地址：重庆市渝北区财富中心 A 座 17-6</p>
+<p class="lineHeightText textIndent">贷款人（甲方）：[[${fundsSource.bankName}]] </p>
+<p class="lineHeightText textIndent">法定代表人： [[${fundsSource.legalRepresentative}]] &#160;</p>
+<p class="lineHeightText textIndent">注册地址：[[${fundsSource.registrationAddr}]]</p>
+<p class="lineHeightText textIndent">联系电话：[[${fundsSource.tel}]]</p>
+<p class="lineHeightText textIndent">联系地址：[[${fundsSource.contactAddr}]]</p>
 <br/>
 <p class="lineHeightText textIndent">借款人（乙方）：<span
-        style="text-decoration: underline;"> [[${member.realName}]] </span></p>
-<p class="lineHeightText textIndent">身份证号码：<span style="text-decoration: underline;"> [[${member.memberClientele.creSn}]] </span>
+        style="text-decoration: underline;"> [[${customer.name}]] </span></p>
+<p class="lineHeightText textIndent">身份证号码：<span style="text-decoration: underline;"> [[${customer.idNo}]] </span>
 </p>
 <p class="lineHeightText textIndent">
     住所地：<span style="text-decoration: underline;">
-    [[${member.paramMap.censusProvince}]][[${member.paramMap.censusCity}]][[${member.paramMap.censusDistrict}]][[${member.memberClientele.censusAddrDetail}]] </span>
+    [[${customer.idProvince}]][[${customer.idCity}]][[${customer.idDistrict}]][[${customer.idAddrDetail}]] </span>
 </p>
-<p class="lineHeightText textIndent" style="margin-bottom:15px;">联系电话：<span style="text-decoration: underline;"> [[${member.mobile}]] </span>
+<p class="lineHeightText textIndent" style="margin-bottom:15px;">联系电话：<span style="text-decoration: underline;"> [[${member.tel}]] </span>
 </p>
 
 <p class="lineHeightText">
@@ -122,13 +122,13 @@
 </p>
 <p class="lineHeightText textIndent"><strong>第二条 借款金额与期限</strong></p>
 <p class="lineHeightText textIndent">借款金额为 ¥<span style="text-decoration: underline;">
-    &#160;&#160;[[${member.loan.loanAmt}]]&#160;&#160; </span>元（大写：人民币<span style="text-decoration: underline;"> &#160;&#160;[[${LoanAmtUp}]]&#160;&#160; </span>）。
+    &#160;&#160;[[${loan.amount}]]&#160;&#160; </span>元（大写：人民币<span style="text-decoration: underline;"> &#160;&#160;[[${loan.amountUp}]]&#160;&#160; </span>）。
 </p>
 <p class="lineHeightText textIndent">借款期限<span
-        style="text-decoration: underline;">[[${member.loan.periods}]]&#160; </span>
-    &#160;月（天），自<span style="text-decoration: underline;"> [[${currDate}]] </span>
-    起至<span style="text-decoration: underline;"> [[${latDate}]] </span>止。
-</p><!--${latDate}-->
+        style="text-decoration: underline;">[[${loan.periods}]]&#160; </span>
+    &#160;月（天），自<span style="text-decoration: underline;"> [[${contractDate}]] </span>
+    起至<span style="text-decoration: underline;"> [[${contractEndDate}]] </span>止。
+</p><!--${contractEndDate}-->
 <p class="lineHeightText textIndent">
     实际借款期限、借款金额、发放日期以划款凭证记载为准。划款凭证为本合同组成部分，与本合同具有同等法律效力。</p>
 <p class="lineHeightText textIndent"><strong>第三条 贷款利率</strong></p>
@@ -146,11 +146,11 @@
 <p class="lineHeightText textIndent">（五）乙方未出现任何违反本合同约定的情形。</p>
 <p class="lineHeightText textIndent">（六）其他：_____________________________________________________________</p>
 <p class="lineHeightText textIndent"><strong>二、甲方将贷款划入乙方指定的以下账户：</strong></p>
-<p class="lineHeightText textIndent">户 名：<span style="text-decoration: underline;">&#160;[[${member.loan.repaymentName}]]&#160;&#160;&#160;&#160;&#160;&#160; </span>
+<p class="lineHeightText textIndent">户 名：<span style="text-decoration: underline;">&#160;[[${loan.repaymentName}]]&#160;&#160;&#160;&#160;&#160;&#160; </span>
 </p>
-<p class="lineHeightText textIndent">账 号：<span style="text-decoration: underline;"> &#160;[[${member.loan.repaymentAccount}]] &#160;</span>
+<p class="lineHeightText textIndent">账 号：<span style="text-decoration: underline;"> &#160;[[${loan.repaymentAccount}]] &#160;</span>
 </p>
-<p class="lineHeightText textIndent">开户银行：<span style="text-decoration: underline;"> &#160;[[${member.paramMap.repaymentBank}]]&#160;&#160;&#160;&#160; </span>
+<p class="lineHeightText textIndent">开户银行：<span style="text-decoration: underline;"> &#160;[[${loan.repaymentBank}]]&#160;&#160;&#160;&#160; </span>
 </p>
 <p class="lineHeightText textIndent">若上列账户非借款人本人账户或合同签订后发生变更，乙方应出具受托支付说明书。</p>
 <p class="lineHeightText textIndent">
@@ -176,12 +176,12 @@
 <p class="lineHeightText textIndent">
     （八）分期还款：双方协商约定不同期次的还本金额，利息逐次减少，具体约定以还款计划书为准。</p>
 <p class="lineHeightText textIndent">三、乙方支付利息或者归还本金时，应存入甲方指定以下账户：</p>
-<p class="lineHeightText textIndent">户&#160;&#160;名：<span style="text-decoration: underline;"> &#160;重庆两江新区宝升小额贷款股份有限公司&#160; </span>
+<p class="lineHeightText textIndent">户&#160;&#160;名：<span style="text-decoration: underline;"> &#160;[[${fondsSource.name}]]&#160; </span>
 </p>
-<p class="lineHeightText textIndent">账&#160;&#160;号：<span style="text-decoration: underline;"> &#160;&#160;&#160;230101040026799&#160;&#160; </span>
+<p class="lineHeightText textIndent">账&#160;&#160;号：<span style="text-decoration: underline;"> &#160;&#160;&#160;[[${fondsSource.bankAccount}]]&#160;&#160; </span>
 </p>
 <p class="lineHeightText textIndent">开户银行：<span
-        style="text-decoration: underline;"> 重庆银行股份有限公司龙头寺支行 </span></p>
+        style="text-decoration: underline;"> [[${fundsSource.bankName}]] </span></p>
 <p class="lineHeightText textIndent">
     四、甲方可以通过委托银行代扣代收本息的方式收款，但双方需另行与受托银行签订相关协议，在此情况下，乙方应在本合同约定的结息日或者贷款到期日前将用于支付利息以及归还本金的资金足额存入协议约定账户。</p>
 <p class="lineHeightText textIndent">
@@ -348,17 +348,17 @@
 <p class="lineHeightText textIndent">
 <table cellspacing="0" cellpadding="7">
     <tr>
-        <td>借款人（乙方）: <span style="text-decoration: underline;"> [[${member.realName}]] </span></td>
-        <td>贷款人（甲方）: 重庆两江新区宝升小额贷款股份有限公司</td>
+        <td>借款人（乙方）: <span style="text-decoration: underline;"> [[${customer.name}]] </span></td>
+        <td>贷款人（甲方）: [[${fundsSource.bankName}]]</td>
     </tr>
     <tr>
-        <td><span style="text-decoration: underline;"> [[${currYear}]] </span>年<span
-                style="text-decoration: underline;"> [[${currMonth}]] </span>月<span
-                style="text-decoration: underline;"> [[${currDay}]] </span>日
+        <td><span style="text-decoration: underline;"> [[${contractYear}]] </span>年<span
+                style="text-decoration: underline;"> [[${contractMonth}]] </span>月<span
+                style="text-decoration: underline;"> [[${contractDay}]] </span>日
         </td>
-        <td><span style="text-decoration: underline;"> [[${currYear}]] </span>年<span
-                style="text-decoration: underline;"> [[${currMonth}]] </span>月<span
-                style="text-decoration: underline;"> [[${currDay}]] </span>日
+        <td><span style="text-decoration: underline;"> [[${contractYear}]] </span>年<span
+                style="text-decoration: underline;"> [[${contractMonth}]] </span>月<span
+                style="text-decoration: underline;"> [[${contractDay}]] </span>日
         </td>
     </tr>
 </table>
