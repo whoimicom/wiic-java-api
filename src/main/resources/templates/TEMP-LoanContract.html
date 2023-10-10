@@ -89,7 +89,7 @@
 <body style="width: 100%;">
 <div style="height: 1000px;width: 100%;text-align: center;">
     <p style="height: 100px;"></p>
-    <h1 style="font-size: 50px;font-weight: bold;width: 550px;margin: 0 auto;">[[${fundsSource.bankName}]]</h1>
+    <h1 style="font-size: 50px;font-weight: bold;width: 550px;margin: 0 auto;">[[${capital.bankName}]]</h1>
     <p style="height: 200px;"></p>
     <h1 style="font-size: 40px;font-weight: bold;">个人借款合同</h1>
 </div>
@@ -98,11 +98,11 @@
     <!--（<u> ${contractYear} </u>）年借字第<u> ${xtSn} </u>号-->
 </p>
 <br/>
-<p class="lineHeightText textIndent">贷款人（甲方）：[[${fundsSource.bankName}]] </p>
-<p class="lineHeightText textIndent">法定代表人： [[${fundsSource.legalRepresentative}]] &#160;</p>
-<p class="lineHeightText textIndent">注册地址：[[${fundsSource.registrationAddr}]]</p>
-<p class="lineHeightText textIndent">联系电话：[[${fundsSource.tel}]]</p>
-<p class="lineHeightText textIndent">联系地址：[[${fundsSource.contactAddr}]]</p>
+<p class="lineHeightText textIndent">贷款人（甲方）：[[${capital.bankName}]] </p>
+<p class="lineHeightText textIndent">法定代表人： [[${capital.legalRepresentative}]] &#160;</p>
+<p class="lineHeightText textIndent">注册地址：[[${capital.registrationAddr}]]</p>
+<p class="lineHeightText textIndent">联系电话：[[${capital.tel}]]</p>
+<p class="lineHeightText textIndent">联系地址：[[${capital.contactAddr}]]</p>
 <br/>
 <p class="lineHeightText textIndent">借款人（乙方）：<span
         style="text-decoration: underline;"> [[${customer.name}]] </span></p>
@@ -112,7 +112,7 @@
     住所地：<span style="text-decoration: underline;">
     [[${customer.idProvince}]][[${customer.idCity}]][[${customer.idDistrict}]][[${customer.idAddrDetail}]] </span>
 </p>
-<p class="lineHeightText textIndent" style="margin-bottom:15px;">联系电话：<span style="text-decoration: underline;"> [[${member.tel}]] </span>
+<p class="lineHeightText textIndent" style="margin-bottom:15px;">联系电话：<span style="text-decoration: underline;"> [[${customer.tel}]] </span>
 </p>
 
 <p class="lineHeightText">
@@ -176,12 +176,12 @@
 <p class="lineHeightText textIndent">
     （八）分期还款：双方协商约定不同期次的还本金额，利息逐次减少，具体约定以还款计划书为准。</p>
 <p class="lineHeightText textIndent">三、乙方支付利息或者归还本金时，应存入甲方指定以下账户：</p>
-<p class="lineHeightText textIndent">户&#160;&#160;名：<span style="text-decoration: underline;"> &#160;[[${fondsSource.name}]]&#160; </span>
+<p class="lineHeightText textIndent">户&#160;&#160;名：<span style="text-decoration: underline;"> &#160;[[${capital.name}]]&#160; </span>
 </p>
-<p class="lineHeightText textIndent">账&#160;&#160;号：<span style="text-decoration: underline;"> &#160;&#160;&#160;[[${fondsSource.bankAccount}]]&#160;&#160; </span>
+<p class="lineHeightText textIndent">账&#160;&#160;号：<span style="text-decoration: underline;"> &#160;&#160;&#160;[[${capital.bankAccount}]]&#160;&#160; </span>
 </p>
 <p class="lineHeightText textIndent">开户银行：<span
-        style="text-decoration: underline;"> [[${fundsSource.bankName}]] </span></p>
+        style="text-decoration: underline;"> [[${capital.bankName}]] </span></p>
 <p class="lineHeightText textIndent">
     四、甲方可以通过委托银行代扣代收本息的方式收款，但双方需另行与受托银行签订相关协议，在此情况下，乙方应在本合同约定的结息日或者贷款到期日前将用于支付利息以及归还本金的资金足额存入协议约定账户。</p>
 <p class="lineHeightText textIndent">
@@ -349,7 +349,7 @@
 <table cellspacing="0" cellpadding="7">
     <tr>
         <td>借款人（乙方）: <span style="text-decoration: underline;"> [[${customer.name}]] </span></td>
-        <td>贷款人（甲方）: [[${fundsSource.bankName}]]</td>
+        <td>贷款人（甲方）: [[${capital.bankName}]]</td>
     </tr>
     <tr>
         <td><span style="text-decoration: underline;"> [[${contractYear}]] </span>年<span

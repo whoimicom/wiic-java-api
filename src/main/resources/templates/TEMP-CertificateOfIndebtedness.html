@@ -43,7 +43,7 @@
         style="text-decoration: underline;"> [[${customer.idNo}]] </span>）于<span style="text-decoration: underline;"> [[${contractYear}]] </span>年<span
         style="text-decoration: underline;">
     [[${contractMonth}]] </span>月<span style="text-decoration: underline;">
-    [[${contractDay}]] </span>日向[[${fundsSource.name}]]申请借款用于[[${loan.purpose}]]，并签署了编号为<span
+    [[${contractDay}]] </span>日向[[${capital.name}]]申请借款用于[[${loan.purpose}]]，并签署了编号为<span
         style="text-decoration: underline;">
     [[${xtSn}]] </span>的《个人消费借款合同》，借款信息如下：
 </p>
@@ -93,13 +93,12 @@
         <td><h3 style="text-align: center;">借款利息</h3></td>
         <td><h3 style="text-align: center;">每月支付金额（元）</h3></td>
     </tr>
-    <!--    <c:forEach var="repayment" items="[[${repaymentDates}]]" varStatus="paystatus">-->
-    <tr th:each="repayment:${repaymentDates}">
-        <td><p style="text-align: center;" th:text="${repayment.period}"></p></td>
-        <td><p style="text-align: center;" th:text="${repayment.repaymenDate}"></p></td>
-        <td><p style="text-align: center;" th:text="${repayment.planPrincipal}"></p></td>
-        <td><p style="text-align: center;" th:text="${repayment.planServiceFee}"></p></td>
-        <td><p style="text-align: center;" th:text="${repayment.repaymenMoney}"></p></td>
+    <tr th:each="repayment:${repayments}">
+        <td><p style="text-align: center;" th:text="${repayment.stages}"></p></td>
+        <td><p style="text-align: center;" th:text="${repayment.date}"></p></td>
+        <td><p style="text-align: center;" th:text="${repayment.principal}"></p></td>
+        <td><p style="text-align: center;" th:text="${repayment.serviceFee}"></p></td>
+        <td><p style="text-align: center;" th:text="${repayment.monthlyPayment}"></p></td>
     </tr>
     <!--    </c:forEach>-->
 </table>
