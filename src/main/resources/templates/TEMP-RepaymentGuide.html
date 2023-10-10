@@ -51,7 +51,7 @@
         <br/>
         &#160;&#160;非常感谢您选择[[${capital.name}]]（简称“[[${capital.shortName}]]”）的分期服务。希望我们的服务在提高您生活品质的同时，让您的生活更加便利、现代。<br/>
         &#160;&#160;以下是您服务费支付详情：<br/>
-        &#160;&#160;您于[[${contractDate}]]签订编号为[[${loan.id}]]的《服务合同》，服务费支付金额见下表
+        &#160;&#160;您于[[${loan.contractDate}]]签订编号为[[${loan.id}]]的《服务合同》，服务费支付金额见下表
     </h3>
 </div>
 <table border="1" cellspacing="0" cellpadding="0" style="margin-top: 100px;">
@@ -91,7 +91,7 @@
 </p>
 
 <p>本人已阅读且知晓上述所有内容，并承诺按时还款。</p>
-<h3 style="text-align: right;margin-top: 40px;">申请人（签章）：&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;日期：[[${contractDate}]]&#160;&#160;&#160;&#160;</h3>
+<h3 style="text-align: right;margin-top: 40px;">申请人（签章）：&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;日期：[[${loan.contractDate}]]&#160;&#160;&#160;&#160;</h3>
 <br/>
 <th:block th:unless="${customerHotline eq '083' || customerHotline eq '087'}">
     <div style="width: 100%; height: 75px;">

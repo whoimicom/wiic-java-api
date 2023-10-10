@@ -61,10 +61,10 @@
 
     </tr>
     <tr>
-        <td></td>
+        <td>[[${loan.id}]]</td>
         <td>[[${customer.name}]]</td>
-        <td>[[${contractDate}]]</td>
-        <td>[[${contractEndDate}]]</td>
+        <td>[[${loan.contractDate}]]</td>
+        <td>[[${loan.expirationDate}]]</td>
         <td>[[${loan.amount}]]</td>
         <td>[[${loan.monthRate}]]</td>
         <td>[[${currentDate}]]</td>
@@ -86,7 +86,7 @@
     <span>[[${capital.name}]]（盖章） </span>
 </p>
 <br/>
-<p class="textIndent" style="margin-left: 50%;"><span>[[${contractDate}]]</span></p>
+<p class="textIndent" style="margin-left: 50%;"><span>[[${loan.contractDate}]]</span></p>
 <br/>
 </body>
 
