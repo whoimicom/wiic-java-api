@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>kim.kin</groupId>
     <artifactId>kim-api</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.2-SNAPSHOT</version>
     <name>kim-api</name>
     <description>kim-api</description>
     <packaging>jar</packaging>
@@ -16,8 +16,7 @@
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <swagger.version>3.0.0</swagger.version>
-        <spring-boot.version>3.1.3</spring-boot.version>
+        <spring-boot.version>3.1.4</spring-boot.version>
         <openhtml.version>1.0.10</openhtml.version>
         <jjwt.version>0.11.5</jjwt.version>
     </properties>
@@ -33,11 +32,6 @@
         </dependencies>
     </dependencyManagement>
     <dependencies>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-properties-migrator</artifactId>
-            <scope>runtime</scope>
-        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
@@ -60,7 +54,7 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -115,7 +109,6 @@
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-api</artifactId>
-            <!--            <version>0.11.5</version>-->
             <version>${jjwt.version}</version>
         </dependency>
         <dependency>
@@ -125,7 +118,7 @@
         </dependency>
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt-jackson</artifactId> <!-- or jjwt-gson if Gson is preferred -->
+            <artifactId>jjwt-jackson</artifactId>
             <version>${jjwt.version}</version>
             <scope>runtime</scope>
         </dependency>

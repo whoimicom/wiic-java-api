@@ -1,9 +1,7 @@
 package kim.kin.rest;
 
+import kim.kin.config.security.JwtTokenUtil;
 import kim.kin.config.security.handler.AnonymousKimAccess;
-import kim.kin.config.security.handler.JwtTokenUtil;
-import kim.kin.config.security.handler.SecurityKimParams;
-import kim.kin.config.security.user.UserDetailsServiceImpl;
 import kim.kin.kklog.LogKimAnnotation;
 import kim.kin.model.*;
 import kim.kin.repository.UserInfoJdbcTemplate;
@@ -13,8 +11,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,36 +24,20 @@ import java.util.*;
 @RestController
 @CrossOrigin
 public class AuthenticateRest {
-    private final AuthenticationManager authenticationManager;
     private final JwtTokenUtil jwtTokenUtil;
-    private final UserDetailsServiceImpl userDetailsService;
     private final UserInfoService userInfoService;
 //    private final UserInfoRepositoryDSL userInfoRepositoryDSL;
     private final JdbcTemplate jdbcTemplate;
     private final UserInfoJdbcTemplate userInfoJdbcTemplate;
 
-    public AuthenticateRest(AuthenticationManager authenticationManager, JwtTokenUtil jwtTokenUtil, UserDetailsServiceImpl userDetailsService, UserInfoService userInfoService, JdbcTemplate jdbcTemplate, UserInfoJdbcTemplate userInfoJdbcTemplate) {
-        this.authenticationManager = authenticationManager;
+    public AuthenticateRest( JwtTokenUtil jwtTokenUtil,  UserInfoService userInfoService, JdbcTemplate jdbcTemplate, UserInfoJdbcTemplate userInfoJdbcTemplate) {
         this.jwtTokenUtil = jwtTokenUtil;
-        this.userDetailsService = userDetailsService;
         this.userInfoService = userInfoService;
         this.jdbcTemplate = jdbcTemplate;
         this.userInfoJdbcTemplate = userInfoJdbcTemplate;
     }
 
-    @RequestMapping(value = "/login1", method = RequestMethod.POST)
-    @LogKimAnnotation
-    public ResponseEntity<?> createAuthenticationToken(@RequestBody UserInfoDTO userInfoDTO) {
-        String username = userInfoDTO.getUsername();
-        String password = userInfoDTO.getPassword();
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-        UserKimDetails user = userDetailsService.loadUserByUsername(username);
-        String token = jwtTokenUtil.generateToken(username, user.getAuthorities());
-        Map<String, Object> authInfo = new HashMap<>(1) {{
-            put("token", SecurityKimParams.AUTH_KIM_PREFIX + token);
-        }};
-        return ResponseEntity.ok(authInfo);
-    }
+
 
     //    @RequestMapping(value = "/getUserInfo", method = RequestMethod.POST)
     @GetMapping("/getUserInfo")

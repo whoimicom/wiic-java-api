@@ -2,10 +2,12 @@ server:
   port: 1987
   shutdown: GRACEFUL
   servlet:
-    context-path: /kim-api
+    context-path: /${spring.application.name}
 spring:
   application:
-    name: kim
+    name: kim-api
+  webflux:
+    base-path: /${spring.application.name}
   profiles:
     active: sit
   datasource:
@@ -69,11 +71,5 @@ fonts:
   font-Family: Alibaba-PuHuiTi-Light
   suffix: ttf
 jwt:
-  base64EncodedSecretKey: kinkim
+  base64EncodedSecretKey: kinkimkinkimkinkimkinkimkinkimkinkimkinkimkinkim
   expiration: 36000
-swagger:
-  enable: true
-  application-name: ${spring.application.name}
-  application-version: 1.0
-  application-description: springfox swagger
-  try-host: http://localhost:${server.port}
