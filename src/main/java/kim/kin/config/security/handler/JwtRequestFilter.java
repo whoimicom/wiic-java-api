@@ -1,4 +1,4 @@
-package kim.kin.config.security;
+package kim.kin.config.security.handler;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;

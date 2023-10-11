@@ -1,4 +1,4 @@
-package kim.kin.config.security;
+package kim.kin.config.security.handler;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

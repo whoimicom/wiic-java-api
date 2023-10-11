@@ -1,9 +1,7 @@
-package kim.kin.config.security;
+package kim.kin.config.security.handler;
 
 import kim.kin.config.security.email.EmailAuthenticationFilter;
 import kim.kin.config.security.email.EmailAuthenticationProvider;
-import kim.kin.config.security.handler.AuthenticationFailureKimImpl;
-import kim.kin.config.security.handler.AuthenticationSuccessKimImpl;
 import kim.kin.config.security.user.UserDetailsServiceImpl;
 import kim.kin.config.security.user.UsernamePasswordKimFilter;
 import kim.kin.repository.UserInfoRepository;

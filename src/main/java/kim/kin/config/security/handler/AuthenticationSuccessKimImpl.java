@@ -1,8 +1,6 @@
 package kim.kin.config.security.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import kim.kin.config.security.JwtTokenUtil;
-import kim.kin.config.security.SecurityKimParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
