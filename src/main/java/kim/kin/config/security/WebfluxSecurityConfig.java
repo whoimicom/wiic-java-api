@@ -1,6 +1,9 @@
 package kim.kin.config.security;
 
 import jakarta.annotation.Resource;
+import kim.kin.config.security.handler.AccessDeniedHandlerKimImpl;
+import kim.kin.config.security.handler.AuthenticationFailureHandlerKimImpl;
+import kim.kin.config.security.handler.AuthenticationSuccessHandlerKimImpl;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,22 +37,22 @@ import static org.springframework.security.web.server.util.matcher.ServerWebExch
 @EnableReactiveMethodSecurity
 public class WebfluxSecurityConfig {
     @Resource
-    private AuthenticationConverterImpl authenticationConverter;
+    private AuthenticationConverterKimImpl authenticationConverter;
 
     @Resource
-    private AuthorizationManagerImpl authorizationManager;
+    private AuthorizationManagerKimImpl authorizationManager;
     @Resource
-    private AuthenticationManagerImpl authenticationManager;
+    private AuthenticationManagerKimImpl authenticationManager;
 
     @Resource
-    private AuthenticationSuccessHandlerImpl authenticationSuccessHandler;
+    private AuthenticationSuccessHandlerKimImpl authenticationSuccessHandler;
     @Resource
-    private SecurityContextRepositoryImpl securityContextRepository;
+    private SecurityContextRepositoryKimImpl securityContextRepository;
 
     @Resource
-    private AuthenticationFailureHandlerImpl authenticationFailureHandler;
+    private AuthenticationFailureHandlerKimImpl authenticationFailureHandler;
     @Resource
-    private AccessDeniedHandlerImpl accessDeniedHandler;
+    private AccessDeniedHandlerKimImpl accessDeniedHandler;
     @Resource
     private ApplicationContext applicationContext;
 
@@ -64,10 +67,10 @@ public class WebfluxSecurityConfig {
     }*/
 
     /**
-     * 用于APP
+     * for all
      *
-     * @param serverHttpSecurity
-     * @return
+     * @param serverHttpSecurity serverHttpSecurity
+     * @return SecurityWebFilterChain
      */
     @Order(Ordered.HIGHEST_PRECEDENCE)
     @Bean
@@ -76,8 +79,8 @@ public class WebfluxSecurityConfig {
         Set<String> anonymousUrls = new HashSet<>();
         for (Map.Entry<RequestMappingInfo, HandlerMethod> infoEntry : handlerMethodMap.entrySet()) {
             HandlerMethod handlerMethod = infoEntry.getValue();
-            AnonymousAccess anonymousAccess = handlerMethod.getMethodAnnotation(AnonymousAccess.class);
-            if (null != anonymousAccess) {
+            AnonymousKimAccess anonymousKimAccess = handlerMethod.getMethodAnnotation(AnonymousKimAccess.class);
+            if (null != anonymousKimAccess) {
                 Set<String> path = infoEntry.getKey().getPatternsCondition().getDirectPaths();
                 anonymousUrls.addAll(path);
                 path = path.stream().map(str -> "/gateway-api" + str).collect(Collectors.toSet());
@@ -87,17 +90,17 @@ public class WebfluxSecurityConfig {
 
         serverHttpSecurity.csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .securityContextRepository(securityContextRepository)
-                .securityMatcher(new PathPatternParserServerWebExchangeMatcher("/app/**"))
+//                .securityMatcher(new PathPatternParserServerWebExchangeMatcher("/app/**"))
                 .authorizeExchange(exchanges -> {
 //                            exchanges.anyExchange().authenticated();
 //                             exchange.pathMatchers(pattern).permitAll()
-                                // 拦截认证
-                                if (!anonymousUrls.isEmpty()) {
-                                    exchanges.pathMatchers(anonymousUrls.toArray(new String[0])).permitAll();
-                                }
-                                exchanges.pathMatchers(HttpMethod.OPTIONS).permitAll().anyExchange().access(authorizationManager);
+                            // 拦截认证
+                            if (!anonymousUrls.isEmpty()) {
+                                exchanges.pathMatchers(anonymousUrls.toArray(new String[0])).permitAll();
                             }
-                    )
+                            exchanges.pathMatchers(HttpMethod.OPTIONS).permitAll().anyExchange().access(authorizationManager);
+                        }
+                )
                 .exceptionHandling(exceptionHandlingSpec -> exceptionHandlingSpec.accessDeniedHandler(accessDeniedHandler))
 //                .exceptionHandling().accessDeniedHandler(accessDeniedHandler).and()
                 .addFilterAt(authenticationWebFilter(), SecurityWebFiltersOrder.AUTHENTICATION)
@@ -115,7 +118,7 @@ public class WebfluxSecurityConfig {
         filter.setAuthenticationSuccessHandler(authenticationSuccessHandler);
         filter.setAuthenticationFailureHandler(authenticationFailureHandler);
         filter.setRequiresAuthenticationMatcher(
-                pathMatchers(HttpMethod.POST, "/app/login")
+                pathMatchers(HttpMethod.POST, "/auth/login")
         );
         return filter;
     }
@@ -131,8 +134,8 @@ public class WebfluxSecurityConfig {
     /**
      * 用于WEB
      *
-     * @param http
-     * @return
+     * @param http ServerHttpSecurity
+     * @return SecurityWebFilterChain
      */
     @Bean
     SecurityWebFilterChain webHttpSecurity(ServerHttpSecurity http) {

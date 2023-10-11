@@ -1,5 +1,8 @@
 package kim.kin.config.security;
 
+import jakarta.annotation.Resource;
+import kim.kin.model.UserInfo;
+import kim.kin.repository.UserInfoRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
@@ -12,11 +15,11 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class UserDetailsServiceImpl implements UserDetailsService {
-    private static final Logger log = LoggerFactory.getLogger(UserDetailsServiceImpl.class);
+public class UserDetailsServiceKimImpl implements UserDetailsService {
+    private static final Logger log = LoggerFactory.getLogger(UserDetailsServiceKimImpl.class);
 
-//    @Resource
-//    private AppUserRepository appUserRepository;
+    @Resource
+    private UserInfoRepository userInfoRepository;
 
 
 
@@ -32,10 +35,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-//        AppUser user = appUserRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(username));
-//        String authorities = user.getAuthorities();
+        UserInfo userInfo = userInfoRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(username));
+        log.debug(userInfo.toString());
         String authorities = "/admin,/test,/devople,/app/bills,/app/bills/getBills,RULE_ADMIN";
-        String password = "user.getPassword()";
+        String password = userInfo.getPassword();
         List<GrantedAuthority> authorityList = AuthorityUtils.createAuthorityList(authorities.split(","));
 /*        List<GrantedAuthority> authorityList = new ArrayList<>();
         for (String permissionCode : authorities.split(",")) {
@@ -45,6 +48,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 authorityList.add(grantedAuthority);
             }
         }*/
-        return new UserDetailsImpl(username, password, authorityList);
+        return new UserDetailsKimImpl(username, password, authorityList);
     }
 }

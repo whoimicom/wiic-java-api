@@ -16,12 +16,12 @@ import reactor.core.publisher.Mono;
 
 @Component
 @Primary
-public class AuthenticationManagerImpl implements ReactiveAuthenticationManager {
+public class AuthenticationManagerKimImpl implements ReactiveAuthenticationManager {
     //    @Resource
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @Resource
-    private UserDetailsServiceImpl userDetailsService;
+    private UserDetailsServiceKimImpl userDetailsService;
 
     /**
      * Attempts to authenticate the provided Authentication
@@ -37,13 +37,14 @@ public class AuthenticationManagerImpl implements ReactiveAuthenticationManager 
         if (authentication.isAuthenticated()) {
             return Mono.just(authentication);
         }
-        UserDetails userDetails = userDetailsService.loadUserByUsername(authentication.getName());
+        String username = authentication.getName();
+        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
         String password = userDetails.getPassword();
         if (!passwordEncoder.matches(authentication.getCredentials().toString(), password)) {
             throw new BadCredentialsException("用户不存在或者密码错误");
         }
 
-        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, password, userDetails.getAuthorities());
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(username, password, userDetails.getAuthorities());
         usernamePasswordAuthenticationToken.setDetails(authentication.getDetails());
         SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
         return Mono.just(usernamePasswordAuthenticationToken);
@@ -52,6 +53,7 @@ public class AuthenticationManagerImpl implements ReactiveAuthenticationManager 
     public static void main(String[] args) {
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
         System.out.println(bCryptPasswordEncoder.encode("123456"));
+        //$2a$10$Ni4WOBVSJMFkVVwyRYihMOJo6PybdE/QjE21Jih4m3RCZKq2SMKpm
     }
 
 }

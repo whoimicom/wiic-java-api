@@ -20,10 +20,10 @@ import java.util.List;
  * 从 token 中提取用户凭证
  */
 @Component
-public class SecurityContextRepositoryImpl implements ServerSecurityContextRepository {
-    private static final Logger log = LoggerFactory.getLogger(SecurityContextRepositoryImpl.class);
+public class SecurityContextRepositoryKimImpl implements ServerSecurityContextRepository {
+    private static final Logger log = LoggerFactory.getLogger(SecurityContextRepositoryKimImpl.class);
     @Resource
-    private AuthenticationManagerImpl authenticationManager;
+    private AuthenticationManagerKimImpl authenticationManager;
 
     @Resource
     private JwtTokenUtil jwtTokenUtil;

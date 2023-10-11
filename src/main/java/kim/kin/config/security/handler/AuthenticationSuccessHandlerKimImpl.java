@@ -1,9 +1,12 @@
-package kim.kin.config.security;
+package kim.kin.config.security.handler;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.Resource;
+import kim.kin.common.ResultInfo;
+import kim.kin.config.security.JwtTokenUtil;
+import kim.kin.config.security.UserDetailsKimImpl;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.core.io.buffer.DataBufferFactory;
 import org.springframework.http.HttpHeaders;
@@ -18,7 +21,7 @@ import reactor.core.publisher.Mono;
 import java.nio.charset.StandardCharsets;
 
 @Component
-public class AuthenticationSuccessHandlerImpl implements ServerAuthenticationSuccessHandler {
+public class AuthenticationSuccessHandlerKimImpl implements ServerAuthenticationSuccessHandler {
 
     @Resource
     private JwtTokenUtil jwtTokenUtil;
@@ -32,7 +35,7 @@ public class AuthenticationSuccessHandlerImpl implements ServerAuthenticationSuc
                 .just(webFilterExchange.getExchange().getResponse())
                 .flatMap(response -> {
                     DataBufferFactory dataBufferFactory = response.bufferFactory();
-                    UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+                    UserDetailsKimImpl userDetails = (UserDetailsKimImpl) authentication.getDetails();
                     String username = userDetails.getUsername();
 
                     String bearer = jwtTokenUtil.generateToken(username, username, userDetails.getAuthorities());
@@ -40,7 +43,7 @@ public class AuthenticationSuccessHandlerImpl implements ServerAuthenticationSuc
                     userDetails.setBearer(bearer);
                     DataBuffer dataBuffer;
                     try {
-                        dataBuffer = dataBufferFactory.wrap(objectMapper.writeValueAsBytes(userDetails));
+                        dataBuffer = dataBufferFactory.wrap(objectMapper.writeValueAsBytes(ResultInfo.ok(userDetails)));
                     } catch (JsonProcessingException e) {
                         return Mono.error(new RuntimeException(e));
                     }

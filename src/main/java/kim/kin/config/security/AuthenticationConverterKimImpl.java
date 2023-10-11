@@ -18,9 +18,9 @@ import java.util.Map;
 import java.util.Optional;
 
 @Component
-public class AuthenticationConverterImpl extends ServerFormLoginAuthenticationConverter {
+public class AuthenticationConverterKimImpl extends ServerFormLoginAuthenticationConverter {
     private ObjectMapper objectMapper;
-    private static final Logger log = LoggerFactory.getLogger(AuthenticationConverterImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(AuthenticationConverterKimImpl.class);
 
     @Autowired
     public void setObjectMapper(ObjectMapper objectMapper) {
@@ -38,7 +38,7 @@ public class AuthenticationConverterImpl extends ServerFormLoginAuthenticationCo
                 String loginType = Optional.ofNullable(map.get("loginType")).orElse("UNKNOWN_LOGIN_TYPE");
                 String username = map.get("username");
                 String password = map.get("password");
-                UserDetailsImpl userDetails = new UserDetailsImpl(username, password);
+                UserDetailsKimImpl userDetails = new UserDetailsKimImpl(username, password);
                 userDetails.setAccessChannel(accessChannel);
                 userDetails.setLoginType(loginType);
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(username, password);

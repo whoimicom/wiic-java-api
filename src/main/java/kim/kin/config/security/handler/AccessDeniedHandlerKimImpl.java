@@ -1,4 +1,4 @@
-package kim.kin.config.security;
+package kim.kin.config.security.handler;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -20,8 +20,8 @@ import reactor.core.publisher.Mono;
 import java.nio.charset.Charset;
 
 @Component
-public class AccessDeniedHandlerImpl implements ServerAccessDeniedHandler {
-    private static final Logger log = LoggerFactory.getLogger(AccessDeniedHandlerImpl.class);
+public class AccessDeniedHandlerKimImpl implements ServerAccessDeniedHandler {
+    private static final Logger log = LoggerFactory.getLogger(AccessDeniedHandlerKimImpl.class);
     @Resource
     private ObjectMapper objectMapper;
 
@@ -46,6 +46,5 @@ public class AccessDeniedHandlerImpl implements ServerAccessDeniedHandler {
                             Charset.defaultCharset()));
                     return response.writeWith(Mono.just(buffer));
                 });
-
     }
 }

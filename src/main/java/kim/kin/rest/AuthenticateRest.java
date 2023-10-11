@@ -1,7 +1,6 @@
 package kim.kin.rest;
 
-import kim.kin.config.security.JwtTokenUtil;
-import kim.kin.config.security.handler.AnonymousKimAccess;
+import kim.kin.config.security.AnonymousKimAccess;
 import kim.kin.kklog.LogKimAnnotation;
 import kim.kin.model.*;
 import kim.kin.repository.UserInfoJdbcTemplate;
@@ -24,14 +23,13 @@ import java.util.*;
 @RestController
 @CrossOrigin
 public class AuthenticateRest {
-    private final JwtTokenUtil jwtTokenUtil;
+//    private final JwtTokenUtil jwtTokenUtil;
     private final UserInfoService userInfoService;
 //    private final UserInfoRepositoryDSL userInfoRepositoryDSL;
     private final JdbcTemplate jdbcTemplate;
     private final UserInfoJdbcTemplate userInfoJdbcTemplate;
 
-    public AuthenticateRest( JwtTokenUtil jwtTokenUtil,  UserInfoService userInfoService, JdbcTemplate jdbcTemplate, UserInfoJdbcTemplate userInfoJdbcTemplate) {
-        this.jwtTokenUtil = jwtTokenUtil;
+    public AuthenticateRest(   UserInfoService userInfoService, JdbcTemplate jdbcTemplate, UserInfoJdbcTemplate userInfoJdbcTemplate) {
         this.userInfoService = userInfoService;
         this.jdbcTemplate = jdbcTemplate;
         this.userInfoJdbcTemplate = userInfoJdbcTemplate;

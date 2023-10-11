@@ -1,6 +1,6 @@
 package kim.kin.rest;
 
-import kim.kin.config.security.handler.AnonymousKimAccess;
+import kim.kin.config.security.AnonymousKimAccess;
 import kim.kin.utils.PdfUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

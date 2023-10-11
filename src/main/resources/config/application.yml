@@ -71,5 +71,5 @@ fonts:
   font-Family: Alibaba-PuHuiTi-Light
   suffix: ttf
 jwt:
-  base64EncodedSecretKey: kinkimkinkimkinkimkinkimkinkimkinkimkinkimkinkim
+  base64EncodedSecretKey: base64EncodedSecretKeybase64EncodedSecretKeybase64EncodedSecretKeybase64EncodedSecretKeybase64EncodedSecretKey
   expiration: 36000

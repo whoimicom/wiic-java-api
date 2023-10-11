@@ -1,4 +1,4 @@
-package kim.kin.config.security;
+package kim.kin.config.security.handler;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -21,8 +21,8 @@ import reactor.core.publisher.Mono;
 
 
 @Component
-public class AuthenticationFailureHandlerImpl implements ServerAuthenticationFailureHandler {
-    private static final Logger log = LoggerFactory.getLogger(AuthenticationFailureHandlerImpl.class);
+public class AuthenticationFailureHandlerKimImpl implements ServerAuthenticationFailureHandler {
+    private static final Logger log = LoggerFactory.getLogger(AuthenticationFailureHandlerKimImpl.class);
     @Resource
     private ObjectMapper objectMapper;
 

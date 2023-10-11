@@ -46,7 +46,7 @@ Content-Encoding: utf-8
 > {% client.global.set("auth_token", response.body.token); %}
 
 ###login
-POST {{url}}/login?username=kinkim&password=123456
+POST {{url}}/auth/login?username=kinkim&password=123456
 Accept: */*
 Cache-Control: no-cache
 Content-Type: application/json

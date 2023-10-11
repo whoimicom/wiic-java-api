@@ -7,6 +7,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authorization.AuthorizationDecision;
 import org.springframework.security.authorization.ReactiveAuthorizationManager;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.server.authorization.AuthorizationContext;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
@@ -16,8 +17,8 @@ import reactor.core.publisher.Mono;
  * 授权逻辑处理中心
  */
 @Component
-public class AuthorizationManagerImpl implements ReactiveAuthorizationManager<AuthorizationContext> {
-    private static final Logger log = LoggerFactory.getLogger(AuthorizationManagerImpl.class);
+public class AuthorizationManagerKimImpl implements ReactiveAuthorizationManager<AuthorizationContext> {
+    private static final Logger log = LoggerFactory.getLogger(AuthorizationManagerKimImpl.class);
 
 
     /**
@@ -49,22 +50,15 @@ public class AuthorizationManagerImpl implements ReactiveAuthorizationManager<Au
                 .defaultIfEmpty(new AuthorizationDecision(false));*/
 
         // 通过路径判断
+        //                    System.out.println("authority"+authority);
         Mono<AuthorizationDecision> authorizationDecisionMono = authentication
                 .filter(Authentication::isAuthenticated)
                 .flatMapIterable(auth -> {
                     log.info(auth.getAuthorities().toString());
                     return auth.getAuthorities();
                 })
-                .map(grantedAuthority -> {
-                    String authority = grantedAuthority.getAuthority();
-//                    System.out.println("authority"+authority);
-                    return authority;
-                })
-                .any(s -> {
-                    boolean equals = path.equals(s);
-//                    System.out.println("equals"+equals);
-                    return equals;
-                })
+                .map(GrantedAuthority::getAuthority)
+                .any(path::equals)
                 .map(AuthorizationDecision::new)
                 .defaultIfEmpty(new AuthorizationDecision(false));
         System.out.println(authorizationDecisionMono);
