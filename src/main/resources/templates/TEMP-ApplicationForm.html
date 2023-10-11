@@ -82,7 +82,8 @@
         <td colspan="1">姓 名<span style="color: red; ">*</span></td>
         <td colspan="1">[[${customer.name}]]</td>
         <td colspan="1">性 别<span style="color: red; ">*</span></td>
-        <td colspan="2">[[${customer.gender}]]</td>
+<!--        <td colspan="2">[[${customer.gender}]]</td>-->
+        <td colspan="2"><th:block th:text="${customer.gender eq 'M'?'男':'女'}"></th:block></td>
         <td colspan="2">出生年月日(yyyyMMdd)<span style="color: red; ">*</span></td>
         <td colspan="1">[[${customer.birthday}]]</td>
         <td colspan="1">民族</td>
