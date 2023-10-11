@@ -3,11 +3,13 @@ package kim.kin.common;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 
 public class ResultInfo<T> implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = -8949153510458566367L;
 
     /**
