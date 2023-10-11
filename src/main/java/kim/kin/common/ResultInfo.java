@@ -28,7 +28,7 @@ public class ResultInfo<T> implements Serializable {
      * 业务内容返回体[失败不设置值]
      */
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private T resultBody;
+    private T data;
 
     public ResultInfo() {
         super();
@@ -39,15 +39,15 @@ public class ResultInfo<T> implements Serializable {
         this.success = success;
     }
 
-    public ResultInfo(T resultBody) {
+    public ResultInfo(T data) {
         super();
-        this.resultBody = resultBody;
+        this.data = data;
     }
 
-    public ResultInfo(Boolean success, T resultBody) {
+    public ResultInfo(Boolean success, T data) {
         super();
         this.success = success;
-        this.resultBody = resultBody;
+        this.data = data;
     }
 
     public ResultInfo(Integer resultCode) {
@@ -70,30 +70,30 @@ public class ResultInfo<T> implements Serializable {
         this.resultMsg = resultMsg;
     }
 
-    public ResultInfo(Integer resultCode, String resultMsg, T resultBody) {
+    public ResultInfo(Integer resultCode, String resultMsg, T data) {
         this(resultCode, resultMsg);
-        this.resultBody = resultBody;
+        this.data = data;
     }
 
-    public ResultInfo(Boolean success, Integer resultCode, String resultMsg, T resultBody) {
+    public ResultInfo(Boolean success, Integer resultCode, String resultMsg, T data) {
         this(success, resultCode, resultMsg);
-        this.resultBody = resultBody;
+        this.data = data;
     }
 
 
     /**
-     * @return 成功信息, 不包含BODY
+     * @return 成功信息, 不包含DATA
      */
     public static <T> ResultInfo<T> ok() {
         return new ResultInfo<>(true);
     }
 
     /**
-     * @param resultBody resultBody
-     * @return 成功包含BODY
+     * @param data data
+     * @return 成功包含data
      */
-    public static <T> ResultInfo<T> ok(T resultBody) {
-        return new ResultInfo<>(true, resultBody);
+    public static <T> ResultInfo<T> ok(T data) {
+        return new ResultInfo<>(true, data);
     }
 
     /**
@@ -101,12 +101,12 @@ public class ResultInfo<T> implements Serializable {
      *
      * @param resultCode    resultCode
      * @param resultMessage resultMessage
-     * @param resultBody    body
+     * @param data    data
      * @return 成功包含所有信息
      */
     @Deprecated
-    public static <T> ResultInfo<T> ok(Integer resultCode, String resultMessage, T resultBody) {
-        return new ResultInfo<>(true, resultCode, resultMessage, resultBody);
+    public static <T> ResultInfo<T> ok(Integer resultCode, String resultMessage, T data) {
+        return new ResultInfo<>(true, resultCode, resultMessage, data);
     }
 
     /**
@@ -151,7 +151,7 @@ public class ResultInfo<T> implements Serializable {
         resultInfo.setSuccess(false);
         resultInfo.setResultCode(resultCode);
         resultInfo.setResultMsg(resultMsg);
-        resultInfo.setResultBody(resultBody);
+        resultInfo.setData(resultBody);
         return resultInfo;
     }
 
@@ -179,11 +179,11 @@ public class ResultInfo<T> implements Serializable {
         this.resultMsg = resultMsg;
     }
 
-    public T getResultBody() {
-        return resultBody;
+    public T getData() {
+        return data;
     }
 
-    public void setResultBody(T resultBody) {
-        this.resultBody = resultBody;
+    public void setData(T data) {
+        this.data = data;
     }
 }

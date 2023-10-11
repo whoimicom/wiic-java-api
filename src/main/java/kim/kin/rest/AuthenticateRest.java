@@ -1,5 +1,6 @@
 package kim.kin.rest;
 
+import kim.kin.common.ResultInfo;
 import kim.kin.config.security.AnonymousKimAccess;
 import kim.kin.kklog.LogKimAnnotation;
 import kim.kin.model.*;
@@ -41,7 +42,7 @@ public class AuthenticateRest {
     @GetMapping("/getUserInfo")
     public ResponseEntity<?> getUserInfo() {
         UserKimDetails currentUser = SecurityKimUtils.getCurrentUser();
-        return ResponseEntity.ok(ResultVO.success(currentUser));
+        return ResponseEntity.ok(ResultInfo.ok(currentUser));
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)

@@ -55,7 +55,6 @@ public class AuthenticationFailureHandlerKimImpl implements ServerAuthentication
             } else if (exception instanceof AuthenticationServiceException) {
                 resultInfo.setResultMsg("AuthenticationServiceException");
             }
-
             byte[] bytes;
             try {
                 bytes = objectMapper.writeValueAsBytes(resultInfo);
@@ -64,7 +63,6 @@ public class AuthenticationFailureHandlerKimImpl implements ServerAuthentication
                 return Mono.error(new RuntimeException(e));
             }
             DataBuffer dataBuffer = dataBufferFactory.wrap(bytes);
-
             response.setStatusCode(statusCode);
             response.getHeaders().set(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
             return response.writeWith(Mono.just(dataBuffer));
