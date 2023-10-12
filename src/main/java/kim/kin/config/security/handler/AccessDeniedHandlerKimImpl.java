@@ -1,6 +1,5 @@
 package kim.kin.config.security.handler;
 
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.Resource;
@@ -19,6 +18,10 @@ import reactor.core.publisher.Mono;
 
 import java.nio.charset.Charset;
 
+/**
+ * @author kin.kim
+ * @since 2023-10-12
+ **/
 @Component
 public class AccessDeniedHandlerKimImpl implements ServerAccessDeniedHandler {
     private static final Logger log = LoggerFactory.getLogger(AccessDeniedHandlerKimImpl.class);
@@ -39,7 +42,7 @@ public class AccessDeniedHandlerKimImpl implements ServerAccessDeniedHandler {
                     try {
                         result = objectMapper.writeValueAsString(ResultInfo.fail(statusCode.value(), "AccessDeniedException"));
                     } catch (JsonProcessingException e) {
-                        log.error(e.getMessage());
+                        log.error(e.getMessage(), e);
                         return Mono.error(new RuntimeException(e));
                     }
                     DataBuffer buffer = dataBufferFactory.wrap(result.getBytes(

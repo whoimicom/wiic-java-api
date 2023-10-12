@@ -19,8 +19,9 @@ import java.util.*;
 /**
  * 合同生成
  *
- * @author kinkim
- */
+ * @author kin.kim
+ * @since 2023-10-12
+ **/
 @Controller
 @RequestMapping("/contract")
 public class ContractRest {

@@ -19,7 +19,10 @@ import org.springframework.security.web.server.authentication.ServerAuthenticati
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
-
+/**
+ * @author kin.kim
+ * @since 2023-10-12
+ **/
 @Component
 public class AuthenticationFailureHandlerKimImpl implements ServerAuthenticationFailureHandler {
     private static final Logger log = LoggerFactory.getLogger(AuthenticationFailureHandlerKimImpl.class);
@@ -59,7 +62,7 @@ public class AuthenticationFailureHandlerKimImpl implements ServerAuthentication
             try {
                 bytes = objectMapper.writeValueAsBytes(resultInfo);
             } catch (JsonProcessingException e) {
-                log.error(e.getMessage());
+                log.error(e.getMessage(),e);
                 return Mono.error(new RuntimeException(e));
             }
             DataBuffer dataBuffer = dataBufferFactory.wrap(bytes);

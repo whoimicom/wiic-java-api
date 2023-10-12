@@ -7,8 +7,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author choky
- */
+ * @author kin.kim
+ * @since 2023-10-12
+ **/
 public interface UserInfoService {
     UserInfo save(UserInfoDTO dto);
 

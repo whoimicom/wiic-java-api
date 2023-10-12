@@ -6,7 +6,12 @@ import org.springframework.security.core.userdetails.User;
 
 import java.util.Collection;
 
-
+/**
+ * 自定义USER
+ *
+ * @author kin.kim
+ * @since 2023-10-12
+ **/
 public class UserDetailsKimImpl extends User {
     private String bearer;
     /**

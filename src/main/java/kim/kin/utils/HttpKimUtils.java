@@ -21,8 +21,9 @@ import java.util.Set;
 
 
 /**
- * @author choky
- */
+ * @author kin.kim
+ * @since 2023-10-12
+ **/
 @Component
 public class HttpKimUtils {
     private static final String CONTENT_TYPE_FORM = "application/x-www-form-urlencoded;charset=utf-8";

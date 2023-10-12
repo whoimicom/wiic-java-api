@@ -14,6 +14,11 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ *
+ * @author kin.kim
+ * @since 2023-10-12
+ **/
 @Service
 public class UserDetailsServiceKimImpl implements UserDetailsService {
     private static final Logger log = LoggerFactory.getLogger(UserDetailsServiceKimImpl.class);

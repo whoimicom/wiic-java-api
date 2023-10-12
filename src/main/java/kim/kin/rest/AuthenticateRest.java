@@ -2,7 +2,6 @@ package kim.kin.rest;
 
 import kim.kin.common.ResultInfo;
 import kim.kin.config.security.AnonymousKimAccess;
-import kim.kin.kklog.LogKimAnnotation;
 import kim.kin.model.*;
 import kim.kin.repository.UserInfoJdbcTemplate;
 import kim.kin.service.UserInfoService;
@@ -19,8 +18,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.*;
 
 /**
- * @author choky
- */
+ * AuthenticateRest
+ *
+ * @author kin.kim
+ * @since 2023-10-12
+ **/
+
 @RestController
 @CrossOrigin
 public class AuthenticateRest {
@@ -46,13 +49,11 @@ public class AuthenticateRest {
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    @LogKimAnnotation
     public ResponseEntity<?> saveUser(@RequestBody UserInfoDTO user) {
         return ResponseEntity.ok(userInfoService.save(user));
     }
 
     @RequestMapping(value = "/currentUser", method = RequestMethod.POST)
-    @LogKimAnnotation
     public ResponseEntity<?> currentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
@@ -110,13 +111,11 @@ public class AuthenticateRest {
 //    }
 
     @PostMapping(value = "/user/logout")
-    @LogKimAnnotation
     public ResponseEntity<?> logout() {
         return ResponseEntity.ok("SUCCESS");
     }
 
     @PostMapping(value = "/getInfo")
-    @LogKimAnnotation
     public ResponseEntity<?> getInfo() {
         UserInfoDTO us = new UserInfoDTO();
         us.setAvatar("https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif");

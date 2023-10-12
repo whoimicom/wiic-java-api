@@ -1,5 +1,7 @@
 package kim.kin.utils;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Service;
@@ -10,11 +12,12 @@ import java.sql.SQLException;
 import java.util.Objects;
 
 /**
- * @author choky
- */
-@SuppressWarnings("ClassCanBeRecord")
+ * @author kin.kim
+ * @since 2023-10-12
+ **/
 @Service
 public class DataSourcePropertiesUtil {
+    private static final Logger log = LoggerFactory.getLogger(DataSourcePropertiesUtil.class);
     private final DataSourceProperties dataSourceProperties;
     private final DataSourceTransactionManager dataSourceTransactionManager;
 
@@ -42,7 +45,7 @@ public class DataSourcePropertiesUtil {
             try {
                 System.out.println(String.format("%1$-" + 27 + "s", field.getName() + ":") + field.get(obj));
             } catch (IllegalAccessException e) {
-                e.printStackTrace();
+                log.error(e.getMessage(),e);
             }
         }
     }

@@ -1,8 +1,6 @@
 package kim.kin.utils;
 
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
@@ -10,7 +8,10 @@ import java.net.URL;
 import java.nio.channels.FileChannel;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
@@ -18,7 +19,8 @@ import java.util.zip.ZipOutputStream;
 
 /**
  * @author kin.kim
- */
+ * @since 2023-10-12
+ **/
 @SuppressWarnings({"unused", "ResultOfMethodCallIgnored"})
 @Component
 public class FileKimUtils {

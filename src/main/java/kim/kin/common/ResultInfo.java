@@ -6,7 +6,12 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import java.io.Serial;
 import java.io.Serializable;
 
-
+/**
+ * 统一返回信息
+ *
+ * @author kin.kim
+ * @since 2023-10-12
+ **/
 public class ResultInfo<T> implements Serializable {
 
     @Serial
@@ -103,7 +108,7 @@ public class ResultInfo<T> implements Serializable {
      *
      * @param resultCode    resultCode
      * @param resultMessage resultMessage
-     * @param data    data
+     * @param data          data
      * @return 成功包含所有信息
      */
     @Deprecated

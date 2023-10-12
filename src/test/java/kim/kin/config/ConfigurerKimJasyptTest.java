@@ -20,7 +20,7 @@ public class ConfigurerKimJasyptTest {
 
     @Test
     public void testEnvironmentProperties() throws SQLException {
-        assertEquals("kinkim", environment.getProperty("spring.datasource.username"));
+        assertEquals("kin.kim", environment.getProperty("spring.datasource.username"));
         dataSourcePropertiesUtil.showDatabaseMetaData();
     }
 }

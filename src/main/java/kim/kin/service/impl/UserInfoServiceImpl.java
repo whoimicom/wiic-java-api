@@ -5,15 +5,15 @@ import kim.kin.model.UserInfoDTO;
 import kim.kin.repository.UserInfoRepository;
 import kim.kin.service.UserInfoService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
 
 /**
- * @author choky
- */
+ * @author kin.kim
+ * @since 2023-10-12
+ **/
 @Service
 public class UserInfoServiceImpl implements UserInfoService {
     private final UserInfoRepository userInfoRepository;

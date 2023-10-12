@@ -1,5 +1,8 @@
 package kim.kin.utils;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -21,6 +24,7 @@ import java.util.stream.Stream;
  */
 @SuppressWarnings("unused")
 public class ShortcutUtils {
+    private static final Logger log = LoggerFactory.getLogger(ShortcutUtils.class);
     public static final String SOURCE_PATH = "D:\\home\\notes\\lang\\javascript\\react.md";
     public static final String TARGET_PATH = "D:\\shortcut\\shortcut_.txt";
     public static final String LINE_SEPARATOR = System.lineSeparator();
@@ -114,13 +118,13 @@ public class ShortcutUtils {
                             System.out.print(str);
                             bufferedWriter.write(str);
                         } catch (IOException e) {
-                            e.printStackTrace();
+                            log.error(e.getMessage(),e);
                         }
                     } else {
                         try {
                             bufferedWriter.write(lin + LINE_SEPARATOR);
                         } catch (IOException e) {
-                            e.printStackTrace();
+                            log.error(e.getMessage(),e);
                         }
                     }
 
@@ -152,7 +156,7 @@ public class ShortcutUtils {
                             System.out.print(str);
                             bufferedWriter.write(str);
                         } catch (IOException e) {
-                            e.printStackTrace();
+                            log.error(e.getMessage(),e);
                         }
                     }
                 });

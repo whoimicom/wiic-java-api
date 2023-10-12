@@ -12,6 +12,7 @@ import java.util.List;
 
 import kim.kin.model.UserInfo;
 
+
 @Repository
 public class UserInfoJdbcTemplate {
     private final JdbcTemplate jdbcTemplate;

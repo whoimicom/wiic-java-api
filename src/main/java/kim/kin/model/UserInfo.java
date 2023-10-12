@@ -7,8 +7,9 @@ import org.springframework.data.relational.core.mapping.Table;
 
 
 /**
- * @author choky
- */
+ * @author kin.kim
+ * @since 2023-10-12
+ **/
 @Table("kim_user_info")
 public class UserInfo {
 

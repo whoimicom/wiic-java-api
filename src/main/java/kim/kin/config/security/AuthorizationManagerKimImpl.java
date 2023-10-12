@@ -13,9 +13,13 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
+
 /**
  * 授权逻辑处理中心
- */
+ *
+ * @author kin.kim
+ * @since 2023-10-12
+ **/
 @Component
 public class AuthorizationManagerKimImpl implements ReactiveAuthorizationManager<AuthorizationContext> {
     private static final Logger log = LoggerFactory.getLogger(AuthorizationManagerKimImpl.class);

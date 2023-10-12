@@ -16,9 +16,13 @@ import reactor.core.publisher.Mono;
 
 import java.util.List;
 
+
 /**
  * 从 token 中提取用户凭证
- */
+ *
+ * @author kin.kim
+ * @since 2023-10-12
+ **/
 @Component
 public class SecurityContextRepositoryKimImpl implements ServerSecurityContextRepository {
     private static final Logger log = LoggerFactory.getLogger(SecurityContextRepositoryKimImpl.class);

@@ -12,8 +12,9 @@ import java.util.Optional;
 
 
 /**
- * @author choky
- */
+ * @author kin.kim
+ * @since 2023-10-12
+ **/
 @Repository
 public interface UserInfoRepository extends CrudRepository<UserInfo, Long> {
 

@@ -12,7 +12,10 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Optional;
-
+/**
+ * @author kin.kim
+ * @since 2023-10-12
+ **/
 
 @SuppressWarnings("ALL")
 public class ImageBase64Utils {

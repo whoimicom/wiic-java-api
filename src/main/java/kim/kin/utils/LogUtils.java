@@ -6,7 +6,10 @@ import java.nio.file.*;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.stream.Stream;
-
+/**
+ * @author kin.kim
+ * @since 2023-10-12
+ **/
 public class LogUtils {
     /*
 

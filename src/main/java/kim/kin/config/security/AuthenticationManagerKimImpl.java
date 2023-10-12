@@ -13,7 +13,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
-
+/**
+ * @author kin.kim
+ * @since 2023-10-12
+ **/
 @Component
 @Primary
 public class AuthenticationManagerKimImpl implements ReactiveAuthenticationManager {

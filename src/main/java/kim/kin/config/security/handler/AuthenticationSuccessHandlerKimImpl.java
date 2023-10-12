@@ -7,6 +7,8 @@ import jakarta.annotation.Resource;
 import kim.kin.common.ResultInfo;
 import kim.kin.config.security.JwtTokenUtil;
 import kim.kin.config.security.UserDetailsKimImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.core.io.buffer.DataBufferFactory;
 import org.springframework.http.HttpHeaders;
@@ -20,9 +22,13 @@ import reactor.core.publisher.Mono;
 
 import java.nio.charset.StandardCharsets;
 
+/**
+ * @author kin.kim
+ * @since 2023-10-12
+ **/
 @Component
 public class AuthenticationSuccessHandlerKimImpl implements ServerAuthenticationSuccessHandler {
-
+    private static final Logger log = LoggerFactory.getLogger(AuthenticationSuccessHandlerKimImpl.class);
     @Resource
     private JwtTokenUtil jwtTokenUtil;
     @Resource
@@ -45,6 +51,7 @@ public class AuthenticationSuccessHandlerKimImpl implements ServerAuthentication
                     try {
                         dataBuffer = dataBufferFactory.wrap(objectMapper.writeValueAsBytes(ResultInfo.ok(userDetails)));
                     } catch (JsonProcessingException e) {
+                        log.error(e.getMessage(), e);
                         return Mono.error(new RuntimeException(e));
                     }
                     response.getHeaders().set(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);

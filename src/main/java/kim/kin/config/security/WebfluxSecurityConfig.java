@@ -32,6 +32,13 @@ import java.util.stream.Collectors;
 import static org.springframework.security.config.Customizer.withDefaults;
 import static org.springframework.security.web.server.util.matcher.ServerWebExchangeMatchers.pathMatchers;
 
+
+/**
+ * WebfluxSecurityConfig
+ *
+ * @author kin.kim
+ * @since 2023-10-12
+ **/
 @Configuration
 @EnableWebFluxSecurity
 @EnableReactiveMethodSecurity

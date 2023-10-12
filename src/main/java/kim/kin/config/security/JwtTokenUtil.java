@@ -23,7 +23,7 @@ import java.util.*;
 import java.util.function.Function;
 
 /**
- * @author choky
+ *
  */
 @Component
 public class JwtTokenUtil implements Serializable, InitializingBean {
@@ -57,7 +57,7 @@ public class JwtTokenUtil implements Serializable, InitializingBean {
      * while creating the token -
      * 1. Define  claims of the token, like Issuer, Expiration, Subject, and the ID
      * 2. Sign the JWT using the HS512 algorithm and secret key.
-     * 3. According to JWS Compact Serialization(https://tools.ietf.org/html/draft-ietf-jose-json-web-signature-41#section-3.1)
+     * 3. According to JWS Compact Serialization(<a href="https://tools.ietf.org/html/draft-ietf-jose-json-web-signature-41#section-3.1">...</a>)
      * compaction of the JWT to a URL-safe string
      *
      * @param username    username
