@@ -50,7 +50,7 @@ public class SecurityContextRepositoryKimImpl implements ServerSecurityContextRe
         }
 
         String token = authorization.substring(JwtTokenUtil.AUTH_BEARER.length());
-
+        log.info("token: {}", token);
         if (token.isEmpty()) {
             return Mono.empty();
         }

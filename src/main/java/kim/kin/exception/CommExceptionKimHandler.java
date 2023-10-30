@@ -41,7 +41,7 @@ public class CommExceptionKimHandler {
      */
     @ExceptionHandler(value = BusinessKimException.class)
     public ResponseEntity<Object> smsException(BusinessKimException ex) {
-        ex.printStackTrace();
+        log.error(ex.getMessage(), ex);
         String errorCode = Optional.ofNullable(ex.getErrorCode()).orElse("500");
         String errorMessage = Optional.ofNullable(ex.getErrorMessage()).orElse("No ErrorMessage");
         log.error("businessException getErrorCode:{}, getErrorMessage:{},getMessage:{}", errorCode, errorMessage, ex.getMessage());
@@ -56,8 +56,7 @@ public class CommExceptionKimHandler {
      */
     @ExceptionHandler(value = Exception.class)
     public ResponseEntity<Object> globalException(Throwable throwable) {
-        throwable.printStackTrace();
-        log.error("globalException {}", throwable.getMessage());
+        log.error("globalException {}", throwable.getMessage(), throwable);
         return ResponseEntity.badRequest()
                 .contentType(new MediaType(MediaType.APPLICATION_JSON, StandardCharsets.UTF_8))
                 .body(new ErrorInfo(throwable));
