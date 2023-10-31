@@ -3,18 +3,12 @@ package kim.kin.common;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-import java.io.Serial;
 import java.io.Serializable;
+import java.util.Objects;
 
-/**
- * 统一返回信息
- *
- * @author kin.kim
- * @since 2023-10-12
- **/
+
 public class ResultInfo<T> implements Serializable {
 
-    @Serial
     private static final long serialVersionUID = -8949153510458566367L;
 
     /**
@@ -35,7 +29,7 @@ public class ResultInfo<T> implements Serializable {
      * 业务内容返回体[失败不设置值]
      */
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private T data;
+    private T resultBody;
 
     public ResultInfo() {
         super();
@@ -46,15 +40,21 @@ public class ResultInfo<T> implements Serializable {
         this.success = success;
     }
 
-    public ResultInfo(T data) {
+    public ResultInfo(T resultBody) {
         super();
-        this.data = data;
+        this.resultBody = resultBody;
     }
 
-    public ResultInfo(Boolean success, T data) {
+    public ResultInfo(ResultEnum resultEnum) {
+        super();
+        this.success = Objects.equals(resultEnum.getResultCode(), ResultConstant.CODE_OK);
+        this.resultMsg = resultEnum.getResultMsg();
+    }
+
+    public ResultInfo(Boolean success, T resultBody) {
         super();
         this.success = success;
-        this.data = data;
+        this.resultBody = resultBody;
     }
 
     public ResultInfo(Integer resultCode) {
@@ -77,30 +77,30 @@ public class ResultInfo<T> implements Serializable {
         this.resultMsg = resultMsg;
     }
 
-    public ResultInfo(Integer resultCode, String resultMsg, T data) {
+    public ResultInfo(Integer resultCode, String resultMsg, T resultBody) {
         this(resultCode, resultMsg);
-        this.data = data;
+        this.resultBody = resultBody;
     }
 
-    public ResultInfo(Boolean success, Integer resultCode, String resultMsg, T data) {
+    public ResultInfo(Boolean success, Integer resultCode, String resultMsg, T resultBody) {
         this(success, resultCode, resultMsg);
-        this.data = data;
+        this.resultBody = resultBody;
     }
 
 
     /**
-     * @return 成功信息, 不包含DATA
+     * @return 成功信息, 不包含BODY
      */
     public static <T> ResultInfo<T> ok() {
         return new ResultInfo<>(true);
     }
 
     /**
-     * @param data data
-     * @return 成功包含data
+     * @param resultBody resultBody
+     * @return 成功包含BODY
      */
-    public static <T> ResultInfo<T> ok(T data) {
-        return new ResultInfo<>(true, data);
+    public static <T> ResultInfo<T> ok(T resultBody) {
+        return new ResultInfo<>(true, resultBody);
     }
 
     /**
@@ -108,12 +108,12 @@ public class ResultInfo<T> implements Serializable {
      *
      * @param resultCode    resultCode
      * @param resultMessage resultMessage
-     * @param data          data
+     * @param resultBody    body
      * @return 成功包含所有信息
      */
     @Deprecated
-    public static <T> ResultInfo<T> ok(Integer resultCode, String resultMessage, T data) {
-        return new ResultInfo<>(true, resultCode, resultMessage, data);
+    public static <T> ResultInfo<T> ok(Integer resultCode, String resultMessage, T resultBody) {
+        return new ResultInfo<>(true, resultCode, resultMessage, resultBody);
     }
 
     /**
@@ -122,15 +122,15 @@ public class ResultInfo<T> implements Serializable {
     public static <T> ResultInfo<T> fail() {
         ResultInfo<T> resultInfo = new ResultInfo<>();
         resultInfo.setSuccess(false);
-        resultInfo.setResultCode(ResultConstant.FAIL_CODE);
-        resultInfo.setResultMsg(ResultConstant.FAIL_MSG);
+        resultInfo.setResultCode(ResultConstant.CODE_FAIL);
+        resultInfo.setResultMsg(ResultConstant.MSG_FAIL);
         return resultInfo;
     }
 
     public static <T> ResultInfo<T> fail(String resultMsg) {
         ResultInfo<T> resultInfo = new ResultInfo<>();
         resultInfo.setSuccess(false);
-        resultInfo.setResultCode(ResultConstant.FAIL_CODE);
+        resultInfo.setResultCode(ResultConstant.CODE_FAIL);
         resultInfo.setResultMsg(resultMsg);
         return resultInfo;
     }
@@ -158,7 +158,7 @@ public class ResultInfo<T> implements Serializable {
         resultInfo.setSuccess(false);
         resultInfo.setResultCode(resultCode);
         resultInfo.setResultMsg(resultMsg);
-        resultInfo.setData(resultBody);
+        resultInfo.setResultBody(resultBody);
         return resultInfo;
     }
 
@@ -186,11 +186,16 @@ public class ResultInfo<T> implements Serializable {
         this.resultMsg = resultMsg;
     }
 
-    public T getData() {
-        return data;
+    public T getResultBody() {
+        return resultBody;
     }
 
-    public void setData(T data) {
-        this.data = data;
+    public void setResultBody(T resultBody) {
+        this.resultBody = resultBody;
+    }
+
+    public ResultInfo<T> msg(String msg) {
+        this.resultMsg = msg;
+        return this;
     }
 }

@@ -1,12 +1,12 @@
 package kim.kin.exception;
 
-public class BusinessKimException extends RuntimeException {
+public class BusiKimException extends Throwable {
 
     private String errorCode;
     private String errorMessage;
 
 
-    public BusinessKimException(String errorCode, String errorMessage) {
+    public BusiKimException(String errorCode, String errorMessage) {
         super(errorMessage);
         this.errorCode = errorCode;
         this.errorMessage = errorMessage;

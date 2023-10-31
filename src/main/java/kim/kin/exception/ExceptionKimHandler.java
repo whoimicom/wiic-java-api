@@ -1,5 +1,7 @@
 package kim.kin.exception;
 
+import jakarta.annotation.PostConstruct;
+import kim.kin.common.ResultInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -12,6 +14,8 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.beans.PropertyEditorSupport;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -22,12 +26,26 @@ import java.util.Date;
 import java.util.Optional;
 
 /**
- * @author choky
+ * @author kinkim
+ * @Since 20231031
  */
 @RestControllerAdvice
-public class CommExceptionKimHandler {
-    private final Logger log = LoggerFactory.getLogger(CommExceptionKimHandler.class);
+public class ExceptionKimHandler {
+    private final Logger log = LoggerFactory.getLogger(ExceptionKimHandler.class);
+    private String hostName = "localhost";
+    private String hostAddress = "127.0.0.1";
 
+    @PostConstruct
+    public void postConstruct() {
+        try {
+            InetAddress localHost = InetAddress.getLocalHost();
+            hostName = localHost.getHostName();
+            hostAddress = localHost.getHostAddress();
+        } catch (UnknownHostException e) {
+            log.error("InetAddress.getLocalHost() error", e);
+        }
+
+    }
 
     @ExceptionHandler(AuthenticationException.class)
 //    @ResponseBody
@@ -39,8 +57,8 @@ public class CommExceptionKimHandler {
     /**
      * 自定义异常捕捉处理
      */
-    @ExceptionHandler(value = BusinessKimException.class)
-    public ResponseEntity<Object> smsException(BusinessKimException ex) {
+    @ExceptionHandler(value = BusiKimException.class)
+    public ResponseEntity<Object> busiKimException(BusiKimException ex) {
         log.error(ex.getMessage(), ex);
         String errorCode = Optional.ofNullable(ex.getErrorCode()).orElse("500");
         String errorMessage = Optional.ofNullable(ex.getErrorMessage()).orElse("No ErrorMessage");
@@ -54,12 +72,13 @@ public class CommExceptionKimHandler {
     /**
      * 全局异常捕捉处理
      */
-    @ExceptionHandler(value = Exception.class)
-    public ResponseEntity<Object> globalException(Throwable throwable) {
-        log.error("globalException {}", throwable.getMessage(), throwable);
+    @ExceptionHandler(value = Throwable.class)
+    public ResponseEntity<Object> globalException(Throwable e) {
+        String message = e.getMessage();
+        log.error("globalException ,hostName:{},hostAddress:{},getMessage:{}", hostName, hostAddress, message, e);
         return ResponseEntity.badRequest()
                 .contentType(new MediaType(MediaType.APPLICATION_JSON, StandardCharsets.UTF_8))
-                .body(new ErrorInfo(throwable));
+                .body(ResultInfo.fail(HttpStatus.INTERNAL_SERVER_ERROR.value(), hostName + ":" + message));
     }
 
     @InitBinder
