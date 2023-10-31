@@ -23,15 +23,14 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
-import java.util.Optional;
 
 /**
  * @author kinkim
  * @Since 20231031
  */
 @RestControllerAdvice
-public class ExceptionKimHandler {
-    private final Logger log = LoggerFactory.getLogger(ExceptionKimHandler.class);
+public class GlobalExceptionAdvice {
+    private final Logger log = LoggerFactory.getLogger(GlobalExceptionAdvice.class);
     private String hostName = "localhost";
     private String hostAddress = "127.0.0.1";
 
@@ -57,16 +56,15 @@ public class ExceptionKimHandler {
     /**
      * 自定义异常捕捉处理
      */
-    @ExceptionHandler(value = BusiKimException.class)
-    public ResponseEntity<Object> busiKimException(BusiKimException ex) {
-        log.error(ex.getMessage(), ex);
-        String errorCode = Optional.ofNullable(ex.getErrorCode()).orElse("500");
-        String errorMessage = Optional.ofNullable(ex.getErrorMessage()).orElse("No ErrorMessage");
-        log.error("businessException getErrorCode:{}, getErrorMessage:{},getMessage:{}", errorCode, errorMessage, ex.getMessage());
-        return ResponseEntity.badRequest()
+    @ExceptionHandler(value = BusiException.class)
+    public ResponseEntity<Object> busiException(BusiException e) {
+        Integer errorCode = e.getErrorCode();
+        String errorMessage = e.getErrorMessage();
+        log.error("BusiException getErrorCode:{}, getErrorMessage:{},getMessage:{}", errorCode, errorMessage, e.getMessage(), e);
+        return ResponseEntity.ok()
                 .contentType(new MediaType(MediaType.APPLICATION_JSON, StandardCharsets.UTF_8))
 //                .header("errorCode", errorCode).header("errorMessage", errorMessage)
-                .body(new ErrorInfo(ex));
+                .body(ResultInfo.fail(errorCode, errorMessage));
     }
 
     /**

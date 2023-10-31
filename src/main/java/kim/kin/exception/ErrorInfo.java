@@ -37,9 +37,9 @@ public class ErrorInfo {
         this.errorMethod = errorMethod;
     }
 
-    public ErrorInfo(BusiKimException busiKimException) {
-        this(busiKimException.getErrorCode(), busiKimException.getErrorMessage());
-        StackTraceElement[] stackTrace = busiKimException.getStackTrace();
+    public ErrorInfo(BusiException busiException) {
+        this(String.valueOf(busiException.getErrorCode()), busiException.getErrorMessage());
+        StackTraceElement[] stackTrace = busiException.getStackTrace();
         Optional.ofNullable(stackTrace).ifPresent(stackTraceElements -> {
             if (stackTraceElements.length > 1) {
                 StackTraceElement stackTraceElement = stackTraceElements[0];

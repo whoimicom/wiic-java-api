@@ -1,23 +1,37 @@
 package kim.kin.exception;
 
-public class BusiKimException extends Throwable {
+import kim.kin.common.ResultConstant;
+import kim.kin.common.ResultEnum;
 
-    private String errorCode;
+public class BusiException extends RuntimeException {
+
+    private Integer errorCode = ResultConstant.CODE_FAIL;
     private String errorMessage;
 
 
-    public BusiKimException(String errorCode, String errorMessage) {
+    public BusiException(Integer errorCode, String errorMessage) {
         super(errorMessage);
         this.errorCode = errorCode;
         this.errorMessage = errorMessage;
 
     }
 
-    public String getErrorCode() {
+    public BusiException(String errorMessage) {
+        super(errorMessage);
+        this.errorMessage = errorMessage;
+
+    }
+
+    public BusiException(ResultEnum resultEnum) {
+        this(resultEnum.getResultCode(), resultEnum.getResultMsg());
+
+    }
+
+    public Integer getErrorCode() {
         return errorCode;
     }
 
-    public void setErrorCode(String errorCode) {
+    public void setErrorCode(Integer errorCode) {
         this.errorCode = errorCode;
     }
 
