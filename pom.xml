@@ -16,7 +16,7 @@
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <spring-boot.version>3.1.4</spring-boot.version>
+        <spring-boot.version>3.2.3</spring-boot.version>
         <openhtml.version>1.0.10</openhtml.version>
         <jjwt.version>0.11.5</jjwt.version>
     </properties>
@@ -158,7 +158,7 @@
         <dependency>
             <groupId>org.thymeleaf.extras</groupId>
             <artifactId>thymeleaf-extras-springsecurity6</artifactId>
-            <version>3.1.1.RELEASE</version>
+            <version>3.1.2.RELEASE</version>
         </dependency>
 
 
@@ -250,5 +250,11 @@
 
         </plugins>
     </build>
+    <repositories>
+        <repository>
+            <id>maven</id>
+            <url>https://repo.maven.apache.org/maven2/</url>
+        </repository>
+    </repositories>
 
 </project>
