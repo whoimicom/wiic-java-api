@@ -1,6 +1,8 @@
 package com.whoimi.utils;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
@@ -24,7 +26,7 @@ import java.util.zip.ZipOutputStream;
 @SuppressWarnings({"unused", "ResultOfMethodCallIgnored"})
 @Component
 public class FileKimUtils {
-
+    private static final Logger log = LoggerFactory.getLogger(FileKimUtils.class);
     //    @Value("${fs.apiurl}")
     //private String fsApiurl = "http://172.16.2.172:10011/huij-fs";
     private final String fsApiurl = "http://172.16.2.160:10016/oa-api/api/pictures";
@@ -239,10 +241,11 @@ public class FileKimUtils {
      */
     public static void copyFileUsingFileChannels(File source, File dest)
             throws IOException {
-        try (FileChannel inputChannel = new FileInputStream(source).getChannel()) {
-            try (FileChannel outputChannel = new FileOutputStream(dest).getChannel()) {
-                outputChannel.transferFrom(inputChannel, 0, inputChannel.size());
-            }
+        try (FileInputStream fileInputStream = new FileInputStream(source);
+             FileChannel inputChannel = fileInputStream.getChannel();
+             FileOutputStream fileOutputStream = new FileOutputStream(dest);
+             FileChannel outputChannel = fileOutputStream.getChannel()) {
+            outputChannel.transferFrom(inputChannel, 0, inputChannel.size());
         }
     }
 
@@ -255,12 +258,12 @@ public class FileKimUtils {
      */
     public static Map<String, String> downLoadFile(String httpUrl, String saveFileUrl) {
         Map<String, String> result = new HashMap<>(5);
-        if (null == httpUrl || "".equals(httpUrl.trim())) {
+        if (null == httpUrl || httpUrl.trim().isEmpty()) {
             result.put("status", "0");
             result.put("msg", "下载地址httpUrl参数为空");
             return result;
         }
-        if (null == saveFileUrl || "".equals(saveFileUrl.trim())) {
+        if (null == saveFileUrl || saveFileUrl.trim().isEmpty()) {
             result.put("status", "0");
             result.put("msg", "保存文件地址saveFileUrl参数为空");
             return result;
@@ -278,7 +281,7 @@ public class FileKimUtils {
                 } catch (IOException ex) {
                     System.out.println(ex.getMessage());
                     if (!"Premature EOF".equals(ex.getMessage())) {//Premature EOF这个异常可以不用管
-                        ex.printStackTrace();
+                        log.error(ex.getMessage(), ex);
                         result.put("status", "0");
                         result.put("msg", "下载出错" + ex.getMessage());
                         return result;
@@ -394,7 +397,7 @@ public class FileKimUtils {
         for (File file : certFiles) {
             String name = file.getName();
             int i = name.indexOf("_");
-            Files.move(file.toPath(), Paths.get(certsPath, name.substring(i + 1)),StandardCopyOption.REPLACE_EXISTING);
+            Files.move(file.toPath(), Paths.get(certsPath, name.substring(i + 1)), StandardCopyOption.REPLACE_EXISTING);
         }
     }
 
