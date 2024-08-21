@@ -6,6 +6,8 @@ import com.ulisesbocchio.jasyptspringboot.encryptor.SimpleAsymmetricStringEncryp
 import org.jasypt.encryption.StringEncryptor;
 import org.jasypt.util.text.AES256TextEncryptor;
 import org.jasypt.util.text.BasicTextEncryptor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Configuration;
 
 import java.io.IOException;
@@ -13,6 +15,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.ulisesbocchio.jasyptspringboot.util.AsymmetricCryptography.KeyFormat.PEM;
 
@@ -20,6 +23,7 @@ import static com.ulisesbocchio.jasyptspringboot.util.AsymmetricCryptography.Key
 @Configuration
 @EnableEncryptableProperties
 public class ConfigurerJasypt {
+    private static final Logger log = LoggerFactory.getLogger(ConfigurerJasypt.class);
 
     /**
      * @param args args
@@ -56,27 +60,32 @@ public class ConfigurerJasypt {
         System.out.println();
 
         System.out.println("------------------------SimpleAsymmetricConfig ------------------------------------");
-        String privateKey = Files.lines(Paths.get(System.getProperty("user.home") + "/.ssh/id_rsa_pkcs8"), StandardCharsets.UTF_8)
-                .collect(Collectors.joining());
-        String publicKey = Files.lines(Paths.get(System.getProperty("user.home") + "/.ssh/id_rsa_pkcs8.pem"), StandardCharsets.UTF_8)
-                .collect(Collectors.joining());
-        System.out.println(privateKey);
-        System.out.println(publicKey);
+        try (Stream<String> lines = Files.lines(Paths.get(System.getProperty("user.home") + "/.ssh/id_rsa_pkcs8"), StandardCharsets.UTF_8);
+             Stream<String> linesPem = Files.lines(Paths.get(System.getProperty("user.home") + "/.ssh/id_rsa_pkcs8.pem"), StandardCharsets.UTF_8)) {
+            String privateKey = lines.collect(Collectors.joining());
+            System.out.println(privateKey);
+            String publicKey = linesPem.collect(Collectors.joining());
+            System.out.println(publicKey);
 
-        SimpleAsymmetricConfig config = new SimpleAsymmetricConfig();
-        config.setKeyFormat(PEM);
-        config.setPrivateKey(privateKey);
-        config.setPublicKey(publicKey);
-        StringEncryptor stringEncryptor = new SimpleAsymmetricStringEncryptor(config);
-        String encryptUsername = stringEncryptor.encrypt(username);
-        String encryptPassword = stringEncryptor.encrypt(password);
-        String decryptUsername = stringEncryptor.decrypt(encryptUsername);
-        String decryptPassword = stringEncryptor.decrypt(encryptPassword);
-        System.out.println("SimpleAsymmetricStringEncryptor entryUsername:" + encryptUsername);
-        System.out.println("SimpleAsymmetricStringEncryptor entryPassword:" + encryptPassword);
-        System.out.println("SimpleAsymmetricStringEncryptor decryptUsername:" + decryptUsername);
-        System.out.println("SimpleAsymmetricStringEncryptor decryptPassword:" + decryptPassword);
+            SimpleAsymmetricConfig config = new SimpleAsymmetricConfig();
+            config.setKeyFormat(PEM);
+            config.setPrivateKey(privateKey);
+            config.setPublicKey(publicKey);
+            StringEncryptor stringEncryptor = new SimpleAsymmetricStringEncryptor(config);
+            String encryptUsername = stringEncryptor.encrypt(username);
+            String encryptPassword = stringEncryptor.encrypt(password);
+            String decryptUsername = stringEncryptor.decrypt(encryptUsername);
+            String decryptPassword = stringEncryptor.decrypt(encryptPassword);
+            System.out.println("SimpleAsymmetricStringEncryptor entryUsername:" + encryptUsername);
+            System.out.println("SimpleAsymmetricStringEncryptor entryPassword:" + encryptPassword);
+            System.out.println("SimpleAsymmetricStringEncryptor decryptUsername:" + decryptUsername);
+            System.out.println("SimpleAsymmetricStringEncryptor decryptPassword:" + decryptPassword);
+
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
         System.out.println("------------------------SimpleAsymmetricConfig ------------------------------------");
+
 
     }
 
