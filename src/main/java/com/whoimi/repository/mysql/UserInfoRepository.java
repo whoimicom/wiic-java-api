@@ -1,4 +1,4 @@
-package com.whoimi.repository;
+package com.whoimi.repository.mysql;
 
 import com.whoimi.model.ResultKimListMap;
 import com.whoimi.model.UserInfo;

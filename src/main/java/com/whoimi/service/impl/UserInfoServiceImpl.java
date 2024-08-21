@@ -2,7 +2,7 @@ package com.whoimi.service.impl;
 
 import com.whoimi.model.UserInfo;
 import com.whoimi.model.UserInfoDTO;
-import com.whoimi.repository.UserInfoRepository;
+import com.whoimi.repository.mysql.UserInfoRepository;
 import com.whoimi.service.UserInfoService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;

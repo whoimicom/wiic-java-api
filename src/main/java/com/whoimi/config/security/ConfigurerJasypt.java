@@ -29,8 +29,8 @@ public class ConfigurerJasypt {
         String salt = "a2lua2lt";
 //        String prefix="mail@whoimi.com[";
 //        String suffix="]";
-//        List<String> source = Arrays.asList("kinkim", "123456");
-        String username = "kinkim";
+//        List<String> source = Arrays.asList("whoimi", "123456");
+        String username = "whoimi";
         String password = "123456";
         System.out.println("------------------------BasicTextEncryptor ------------------------------------");
         BasicTextEncryptor textEncryptor = new BasicTextEncryptor();

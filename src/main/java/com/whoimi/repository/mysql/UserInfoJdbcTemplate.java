@@ -1,4 +1,4 @@
-package com.whoimi.repository;
+package com.whoimi.repository.mysql;
 
 import org.springframework.data.domain.PageImpl;
 import org.springframework.jdbc.core.JdbcTemplate;

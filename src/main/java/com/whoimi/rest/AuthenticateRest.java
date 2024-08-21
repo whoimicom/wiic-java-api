@@ -3,9 +3,11 @@ package com.whoimi.rest;
 import com.whoimi.common.ResultInfo;
 import com.whoimi.config.security.AnonymousKimAccess;
 import com.whoimi.model.*;
-import com.whoimi.repository.UserInfoJdbcTemplate;
+import com.whoimi.repository.mysql.UserInfoJdbcTemplate;
+import com.whoimi.repository.oracle.SysLibraryRepository;
 import com.whoimi.service.UserInfoService;
 import com.whoimi.utils.SecurityKimUtils;
+import jakarta.annotation.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -27,18 +29,16 @@ import java.util.*;
 @RestController
 @CrossOrigin
 public class AuthenticateRest {
-//    private final JwtTokenUtil jwtTokenUtil;
-    private final UserInfoService userInfoService;
-//    private final UserInfoRepositoryDSL userInfoRepositoryDSL;
-    private final JdbcTemplate jdbcTemplate;
-    private final UserInfoJdbcTemplate userInfoJdbcTemplate;
-
-    public AuthenticateRest(   UserInfoService userInfoService, JdbcTemplate jdbcTemplate, UserInfoJdbcTemplate userInfoJdbcTemplate) {
-        this.userInfoService = userInfoService;
-        this.jdbcTemplate = jdbcTemplate;
-        this.userInfoJdbcTemplate = userInfoJdbcTemplate;
-    }
-
+    //    private final JwtTokenUtil jwtTokenUtil;
+    @Resource
+    private UserInfoService userInfoService;
+    //    private final UserInfoRepositoryDSL userInfoRepositoryDSL;
+    @Resource
+    private JdbcTemplate jdbcTemplate;
+    @Resource
+    private UserInfoJdbcTemplate userInfoJdbcTemplate;
+    @Resource
+    private SysLibraryRepository sysLibraryRepository;
 
 
     //    @RequestMapping(value = "/getUserInfo", method = RequestMethod.POST)
@@ -74,7 +74,7 @@ public class AuthenticateRest {
 //        return ResponseEntity.ok(maps);
 //    }
 
-//    @GetMapping("/page")
+    //    @GetMapping("/page")
 //    @AnonymousKimAccess
 //    public ResponseEntity<?> page(@QuerydslPredicate(root = UserInfo.class) Predicate predicate, final Pageable pageable) {
 //        if (predicate == null) predicate = new BooleanBuilder();
@@ -88,11 +88,19 @@ public class AuthenticateRest {
         mapList.forEach(System.out::println);
         return ResponseEntity.ok(mapList);
     }
+
     @PostMapping("/tempPage")
     @AnonymousKimAccess
     public ResponseEntity<?> tempPage(Pageable page) {
         Page<UserInfo> all = userInfoJdbcTemplate.findAll(page);
         return ResponseEntity.ok(all);
+    }
+
+    @PostMapping("/sysLibrary")
+    @AnonymousKimAccess
+    public ResponseEntity<?> sysLibrary() {
+        List<SysLibrary> top100 = sysLibraryRepository.findTop100OrderByLibIdDesc();
+        return ResponseEntity.ok(top100);
     }
 
 //    @GetMapping("/dsl")

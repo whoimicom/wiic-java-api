@@ -2,7 +2,7 @@ package com.whoimi.config.security;
 
 import jakarta.annotation.Resource;
 import com.whoimi.model.UserInfo;
-import com.whoimi.repository.UserInfoRepository;
+import com.whoimi.repository.mysql.UserInfoRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
