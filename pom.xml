@@ -16,7 +16,7 @@
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <spring-boot.version>3.2.3</spring-boot.version>
+        <spring-boot.version>3.3.2</spring-boot.version>
         <openhtml.version>1.0.10</openhtml.version>
         <jjwt.version>0.11.5</jjwt.version>
     </properties>
@@ -28,11 +28,6 @@
                 <version>${spring-boot.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.yaml</groupId>
-                <artifactId>snakeyaml</artifactId>
-                <version>2.0</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -169,14 +164,11 @@
             <plugin>
                 <groupId>org.asciidoctor</groupId>
                 <artifactId>asciidoctor-maven-plugin</artifactId>
-                <version>2.2.2</version>
+                <version>3.0.0</version>
                 <executions>
                     <execution>
                         <id>generate-docs</id>
                         <phase>prepare-package</phase>
-                        <goals>
-                            <goal>process-asciidoc</goal>
-                        </goals>
                         <configuration>
                             <backend>html</backend>
                             <doctype>book</doctype>
@@ -187,22 +179,19 @@
                     <dependency>
                         <groupId>org.springframework.restdocs</groupId>
                         <artifactId>spring-restdocs-asciidoctor</artifactId>
-                        <version>3.0.0</version>
+                        <version>3.0.1</version>
                     </dependency>
                 </dependencies>
             </plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>3.1.2</version>
+                <version>3.3.1</version>
                 <configuration>
-                    <mainClass>kim.kin.Application</mainClass>
+                    <mainClass>Application</mainClass>
                 </configuration>
                 <executions>
                     <execution>
-                        <goals>
-                            <goal>repackage</goal>
-                        </goals>
                     </execution>
                 </executions>
             </plugin>
@@ -240,7 +229,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <mainClass>wii-java-api.KimApplication</mainClass>
+                    <mainClass>wii-java-api.Application</mainClass>
                     <imageName>wii-java-api</imageName>
                     <buildArgs>
                         <buildArg>&#45;&#45;verbose</buildArg>
