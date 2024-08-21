@@ -18,7 +18,7 @@ jasypt:
     algorithm: PBEWITHHMACSHA512ANDAES_256
     password: a2lua2lt
     property:
-      prefix: "im@kin.kim["
+      prefix: "mail@whoimi.com["
       suffix: "]"
     privateKeyFormat: pem
     publicKeyFormat: pem

@@ -12,7 +12,7 @@ import java.util.Base64;
 
 /**
  *
- * @author kin.kim
+ * @author whoimi
  * @since  2021-09-28
  */
 @SuppressWarnings("unused")

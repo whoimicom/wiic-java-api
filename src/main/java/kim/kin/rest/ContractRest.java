@@ -19,7 +19,7 @@ import java.util.*;
 /**
  * 合同生成
  *
- * @author kin.kim
+ * @author whoimi
  * @since 2023-10-12
  **/
 @Controller
@@ -38,7 +38,7 @@ public class ContractRest {
 
     /**
      * 查看模板
-     * localhost:1987/kim-api/contract/preview/ApplicationForm
+     * localhost:1987/wii-java-api/contract/preview/ApplicationForm
      *
      * @param tempName 模板名称
      * @param model    model
@@ -88,7 +88,7 @@ public class ContractRest {
         record Capital(String name, String shortName, String logoAddr, String bankName, String bankAccount,
                        String legalRepresentative, String registrationAddr, String tel, String contactAddr) {
         }
-        Capital capital = new Capital("XX融资担保有限公司", "担保公司", "http://localhost:1987/kim-api/loan.png",
+        Capital capital = new Capital("XX融资担保有限公司", "担保公司", "http://localhost:1987/wii-java-api/loan.png",
                 "XX银行", "33333333****333333", "XX法人", "XX省XX市", "0826-*****", "XX省XX市");
         record Repayment(String stages, String date, String principal, String serviceFee, String monthlyPayment) {
         }
@@ -128,7 +128,7 @@ public class ContractRest {
 
     /**
      * 生成根据模板生成PDF
-     * localhost:1987/kim-api/contract/generate/ApplicationForm
+     * localhost:1987/wii-java-api/contract/generate/ApplicationForm
      *
      * @param tempName 模板名称
      * @return 路径
@@ -137,7 +137,7 @@ public class ContractRest {
     @AnonymousKimAccess
     @ResponseBody
     public String generate(@PathVariable String tempName) throws IOException {
-        String uri = "http://localhost:1987/kim-api/contract/preview/" + tempName;
+        String uri = "http://localhost:1987/wii-java-api/contract/preview/" + tempName;
         int nextInt = new Random().nextInt();
         String outputPath = "d:\\contract\\" + tempName + "-" + fontFamily + "-" + nextInt + ".pdf";
         pdfUtils.generatePdf(uri, outputPath);
@@ -145,7 +145,7 @@ public class ContractRest {
     }
 
     /**
-     * localhost:1987/kim-api/contract/generateAll
+     * localhost:1987/wii-java-api/contract/generateAll
      */
     @GetMapping("/generateAll")
     @AnonymousKimAccess
@@ -159,7 +159,7 @@ public class ContractRest {
 //        int size = Math.abs(nextInt % list.size());
 //        String tempName = list.get(size);
         list.forEach(tempName -> {
-            String uri = "http://localhost:1987/kim-api/contract/preview/" + tempName;
+            String uri = "http://localhost:1987/wii-java-api/contract/preview/" + tempName;
             String outputPath = "d:\\contract\\" + tempName + "-" + fontFamily + "-" + nextInt + ".pdf";
             try (OutputStream ignored = new FileOutputStream(outputPath)) {
                 pdfUtils.generatePdf(uri, outputPath);

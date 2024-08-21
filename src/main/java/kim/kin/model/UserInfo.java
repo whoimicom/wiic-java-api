@@ -7,7 +7,7 @@ import org.springframework.data.relational.core.mapping.Table;
 
 
 /**
- * @author kin.kim
+ * @author whoimi
  * @since 2023-10-12
  **/
 @Table("kim_user_info")

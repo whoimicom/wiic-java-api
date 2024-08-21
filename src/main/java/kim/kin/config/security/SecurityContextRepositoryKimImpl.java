@@ -20,7 +20,7 @@ import java.util.List;
 /**
  * 从 token 中提取用户凭证
  *
- * @author kin.kim
+ * @author whoimi
  * @since 2023-10-12
  **/
 @Component

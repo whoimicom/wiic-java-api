@@ -12,7 +12,7 @@ import java.util.Optional;
 
 
 /**
- * @author kin.kim
+ * @author whoimi
  * @since 2023-10-12
  **/
 @Repository

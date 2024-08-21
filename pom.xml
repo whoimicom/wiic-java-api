@@ -2,11 +2,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>kim.kin</groupId>
-    <artifactId>kim-api</artifactId>
+    <groupId>com.whoimi</groupId>
+    <artifactId>wii-java-api</artifactId>
     <version>0.0.2-SNAPSHOT</version>
-    <name>kim-api</name>
-    <description>kim-api</description>
+    <name>wii-java-api</name>
+    <description>wii-java-api</description>
     <packaging>jar</packaging>
 
     <properties>
@@ -196,7 +196,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>3.1.2</version>
                 <configuration>
-                    <mainClass>kim.kin.KimApplication</mainClass>
+                    <mainClass>kim.kin.Application</mainClass>
                 </configuration>
                 <executions>
                     <execution>
@@ -240,8 +240,8 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <mainClass>kim.kin.KimApplication</mainClass>
-                    <imageName>kim-api</imageName>
+                    <mainClass>wii-java-api.KimApplication</mainClass>
+                    <imageName>wii-java-api</imageName>
                     <buildArgs>
                         <buildArg>&#45;&#45;verbose</buildArg>
                     </buildArgs>

@@ -5,7 +5,7 @@ server:
     context-path: /${spring.application.name}
 spring:
   application:
-    name: kim-api
+    name: wii-java-api
   webflux:
     base-path: /${spring.application.name}
   profiles:
@@ -64,7 +64,7 @@ kim:
   kin:
     channel-no: '000'
     file-path: /data/file
-    web-path: /kim-admin
+    web-path: /wii-java-admin
 fonts:
 #  font-Family: SourceSans3-Regular
 # font-Family: SimSun

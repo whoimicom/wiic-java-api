@@ -21,7 +21,7 @@ import java.util.Set;
 
 
 /**
- * @author kin.kim
+ * @author whoimi
  * @since 2023-10-12
  **/
 @Component

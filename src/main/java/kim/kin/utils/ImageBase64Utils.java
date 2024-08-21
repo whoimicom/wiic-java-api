@@ -13,7 +13,7 @@ import java.util.Base64;
 import java.util.HashMap;
 import java.util.Optional;
 /**
- * @author kin.kim
+ * @author whoimi
  * @since 2023-10-12
  **/
 

@@ -23,7 +23,7 @@ import reactor.core.publisher.Mono;
 import java.nio.charset.StandardCharsets;
 
 /**
- * @author kin.kim
+ * @author whoimi
  * @since 2023-10-12
  **/
 @Component

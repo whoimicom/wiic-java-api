@@ -17,7 +17,7 @@ import reactor.core.publisher.Mono;
 /**
  * 授权逻辑处理中心
  *
- * @author kin.kim
+ * @author whoimi
  * @since 2023-10-12
  **/
 @Component

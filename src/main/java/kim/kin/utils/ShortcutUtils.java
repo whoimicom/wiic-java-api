@@ -19,7 +19,7 @@ import java.util.concurrent.atomic.AtomicReferenceArray;
 import java.util.stream.Stream;
 
 /**
- * @author kin.kim
+ * @author whoimi
  * @since 2021-10-28
  */
 @SuppressWarnings("unused")

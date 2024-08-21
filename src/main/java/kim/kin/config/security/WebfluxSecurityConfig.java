@@ -36,7 +36,7 @@ import static org.springframework.security.web.server.util.matcher.ServerWebExch
 /**
  * WebfluxSecurityConfig
  *
- * @author kin.kim
+ * @author whoimi
  * @since 2023-10-12
  **/
 @Configuration

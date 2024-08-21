@@ -12,7 +12,7 @@ import java.sql.SQLException;
 import java.util.Objects;
 
 /**
- * @author kin.kim
+ * @author whoimi
  * @since 2023-10-12
  **/
 @Service

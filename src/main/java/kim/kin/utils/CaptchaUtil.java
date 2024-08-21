@@ -18,7 +18,7 @@ import java.util.Optional;
 import java.util.Random;
 
 /**
- * @author kin.kim
+ * @author whoimi
  * @since 2023-10-30
  **/
 @Component

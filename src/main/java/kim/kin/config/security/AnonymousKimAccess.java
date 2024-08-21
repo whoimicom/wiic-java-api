@@ -5,7 +5,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 /**
- * @author kin.kim
+ * @author whoimi
  * @since 2023-10-12
  **/
 @Target(ElementType.METHOD)

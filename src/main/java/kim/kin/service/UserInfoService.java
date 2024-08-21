@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author kin.kim
+ * @author whoimi
  * @since 2023-10-12
  **/
 public interface UserInfoService {

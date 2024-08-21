@@ -15,7 +15,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 /**
- * @author kin.kim
+ * @author whoimi
  * @since 2024-06-07
  **/
 @Component

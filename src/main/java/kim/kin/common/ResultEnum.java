@@ -4,7 +4,7 @@ package kim.kin.common;
 import java.util.Objects;
 
 /**
- * @author kin.kim
+ * @author whoimi
  * @since 2023-10-27
  **/
 public enum ResultEnum {

@@ -20,7 +20,7 @@ import java.util.*;
 /**
  * AuthenticateRest
  *
- * @author kin.kim
+ * @author whoimi
  * @since 2023-10-12
  **/
 

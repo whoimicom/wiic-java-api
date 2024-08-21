@@ -9,7 +9,7 @@ import java.util.Collection;
 /**
  * 自定义USER
  *
- * @author kin.kim
+ * @author whoimi
  * @since 2023-10-12
  **/
 public class UserDetailsKimImpl extends User {

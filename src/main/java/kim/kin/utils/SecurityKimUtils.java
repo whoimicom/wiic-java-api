@@ -5,7 +5,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 /**
- * @author kin.kim
+ * @author whoimi
  * @since 2023-10-12
  **/
 public class SecurityKimUtils {
