@@ -1,23 +1,43 @@
 spring:
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://172.16.2.222:3306/kinkim?serverTimezone=Asia/Shanghai&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true
-    username: root
-    password: root123456
+    mysql:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      jdbc-url: jdbc:mysql://mysql.kin.kim:3306/kinkim?serverTimezone=Asia/Shanghai&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true
+      username: mail@whoimi.com[yT0o/tBDsLDMKDJkWsmSMLT1D1F6VdjJQ2piv1kJVmsT66+q3xZlaIrfe8PaU1OFhgdfywgTilVb2q2J/mWH2yPIezWRJR5WhUNp+thJJyH1UwT7GL+aGy8peUU5dv6ORWxyLC/xJK4kFuS3Exum5B2Yf1owj1oRHeVyzknK47FynIY75g6UCpMnInIxlJwZIGFmOwn1B7FKwqewhtC1+Xx4QELFFr5ACKD4k2q3cfjl8xkdXBkfsaiWwhikLJjWGX5Hfy0ry0NagAAFis9BA9LQobSemfyl6iiyBuPpHQ2MXQDaE7NzVF9O77tf/0GVJhKg8dT3VaDNYOy9S9AcaQ==]
+      password: mail@whoimi.com[Z+kb5ctzpOaIjjijiwNzelvDIsNhdU0jgoFlUKugDwWE4jqNdPZrWGBgomkWfJ46zxtfpEb+Sb4JZo9O560lKlCcXYAjOudVJj5UD9WS8uXkex+WruwZvavr3SNHpMuNA5rqGeytYrEHGplck+SKQWTxeRX30wg+b4nbZyo3y8Wpnb3wUB0TEEWm6uVa/voh2q3hqZiFpGAbrxne73dfQ0c3RP0YSNQ8vXlZmOr536sSMY2Etgy9K0zsoxRirrbYzGsguxITlMZpfrGZWJ/7c1ulzzeu6Fzapr+WSveWpoulGsQh0gRXoC0G6k3AywOySTu3YXVBPXduEsimAYeMUA==]
+    oracle:
+      driver-class-name: oracle.jdbc.OracleDriver
+      jdbc-url: jdbc:oracle:thin:@172.16.2.19:1521/orcl
+      username: mail@whoimi.com[hZtDyYocK1ybnBal82TYjerwcqhT2rzpZrEeMc2BO6L9kW3SiyHX2qppDCX98NDhMCUIHlm7sNnc+BxgPSyyJeFu1cHzXHXXG4xVAp4pJeByHK9654Vkk25neaHhYEDYPoqWmBvGeSwIX82E74Lm87tTgDlYnmTF9fHANS5D2kY+AZbxXTMqd/iopgyhyKPo3UGxTgRE7lgaNNdgaWh7E/ITohFkjgfD37Ucxq3KPDQkcRpoXc1h9772DGEzK8chuDdx4SGz8m80rwRezrDasObY7QamPJev5IcevaU1kSrR8Hefnyyf0XvdL+hq3SbEGyNrZFhp4/Wg+NN84+otOw==]
+      password: mail@whoimi.com[sz3LTmIAFxM8OR21YfqCOFJkXrEvXAOzn+tooFM5mDZFSonDd4G+H5e+/Vd0Y9AwiIhhvol34pMMKazNKM5B9xp2cFsILA3sVeJ/zJK3ovEIkbTr28zwdbEffh7HvjVEiErfvaXMr6lNhCqmqL/1uICc2wVC4l4VBU7IPOucrx4nMtso/Hi/sfnwafCYe3s6Nb9nxKlny6t0CCHXFJZXL04rl6MAHJKeoSle7vM56wFfsVJLROcSVXQZAnnEsR2Cv6AJ+7YVHKeerD+tdbH/JdJUVpcxWmsysg9sw7jOhxKgjQ7KPadjSRe0rb8eIWv8RDl0XNQRCA2Drl14mFV/rg==]
+    hikari:
+      minimum-idle: 10
+      maximum-pool-size: 100
+      auto-commit: true
+      idle-timeout: 30000
+      pool-name: DatebookHikariCP
+      max-lifetime: 1800000
+      connection-timeout: 30000
+      connection-test-query: SELECT 1
   data:
     redis:
-      host: localhost
-      password:
+      host: whoimi.com
+      password: mail@whoimi.com[ofdVcHK+MRzXdlxj2GkZV48lSteJQ6TdqANjyLBxzrsC1NcgjPFSXcEhzBwxkZaCWzuVgUyrboHmOqw9Cjmr/2YqvXS3omKJokfwpNgtd0FXKcA2TpUn1dFcF+iXf47bfsaxrWx4Sizk0dqCe6iOkkAxhV5XsDHy2YWPxdWXlFIR0p5qGvrgR6AHUx+fxVfw7YptfI7Hk8g9dbTDLpQva0GAcWe5HizCnx88VXoiC+cBa1lVcX+77Qj7i33oaZczvkDh06ehmsm3pQAZjtIbQeV+6m1YVIMqrHyR4NgkZb6cMicUSxYmVvxs/NEvDgOPlG3kz99xKAChx29n8ys3Jw==]
       port: 6379
       database: 0
+  sql:
+    init:
+      platform:
 jasypt:
   encryptor:
-    algorithm: PBEWITHHMACSHA512ANDAES_256
-    password: a2lua2lt
+    #    algorithm: PBEWITHHMACSHA512ANDAES_256
+    #    password: a2lua2lt
     property:
       prefix: "mail@whoimi.com["
       suffix: "]"
-    privateKeyFormat: pem
-    publicKeyFormat: pem
-    private-key-location: file:C:\\Users\\choky\\.ssh\\id_rsa_pkcs8
-    public-key-location: file:C:\\Users\\choky\\.ssh\\id_rsa_pkcs8.pem
+    private-key-format: pem
+    public-key-format: pem
+    #    private-key-location: classpath:id_rsa_pkcs8
+    #    public-key-location: classpath:id_rsa_pkcs8.pem
+    private-key-location: file:C:\\Users\\kinkim\\.ssh\\id_rsa_pkcs8
+    public-key-location: file:C:\\Users\\kinkim\\.ssh\\id_rsa_pkcs8.pem
