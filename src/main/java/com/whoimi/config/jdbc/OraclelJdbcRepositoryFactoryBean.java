@@ -16,9 +16,6 @@ public class OraclelJdbcRepositoryFactoryBean<T extends Repository<S, ID>, S, ID
 
     @Override
     public void setDialect(Dialect dialect) {
-        System.out.println(dialect);
         super.setDialect(OracleDialect.INSTANCE);
     }
-
-
 }

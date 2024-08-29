@@ -16,7 +16,6 @@ public class MysqlJdbcRepositoryFactoryBean<T extends Repository<S, ID>, S, ID e
 
     @Override
     public void setDialect(Dialect dialect) {
-        System.out.println(dialect);
         super.setDialect(MySqlDialect.INSTANCE);
     }
 

@@ -20,23 +20,16 @@ import javax.sql.DataSource;
 public class OracleJdbcConfiguration {
 
     @Bean
-//    @Primary
     @ConfigurationProperties(prefix = "spring.datasource.oracle")
     public DataSource oracleDataSource() {
         return DataSourceBuilder.create().type(HikariDataSource.class).build();
     }
 
     @Bean
-//    @Primary
     NamedParameterJdbcOperations oracleOperations(@Qualifier("oracleDataSource") DataSource dataSource) {
         return new NamedParameterJdbcTemplate(dataSource);
     }
 
-    //    @Override
-//    public Dialect jdbcDialect(@Qualifier("oracleOperations") NamedParameterJdbcOperations operations) {
-//        return super.jdbcDialect(operations);
-////        return DialectResolver.getDialect(operations.getJdbcOperations());
-//    }
     @Bean(name = "oracleJdbcTemplate")
     public JdbcTemplate oracleJdbcTemplate(@Qualifier("oracleDataSource") DataSource mainDataSource) {
         return new JdbcTemplate(mainDataSource);
