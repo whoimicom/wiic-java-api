@@ -10,24 +10,12 @@ spring:
       jdbc-url: jdbc:oracle:thin:@172.16.2.19:1521/orcl
       username: mail@whoimi.com[hZtDyYocK1ybnBal82TYjerwcqhT2rzpZrEeMc2BO6L9kW3SiyHX2qppDCX98NDhMCUIHlm7sNnc+BxgPSyyJeFu1cHzXHXXG4xVAp4pJeByHK9654Vkk25neaHhYEDYPoqWmBvGeSwIX82E74Lm87tTgDlYnmTF9fHANS5D2kY+AZbxXTMqd/iopgyhyKPo3UGxTgRE7lgaNNdgaWh7E/ITohFkjgfD37Ucxq3KPDQkcRpoXc1h9772DGEzK8chuDdx4SGz8m80rwRezrDasObY7QamPJev5IcevaU1kSrR8Hefnyyf0XvdL+hq3SbEGyNrZFhp4/Wg+NN84+otOw==]
       password: mail@whoimi.com[sz3LTmIAFxM8OR21YfqCOFJkXrEvXAOzn+tooFM5mDZFSonDd4G+H5e+/Vd0Y9AwiIhhvol34pMMKazNKM5B9xp2cFsILA3sVeJ/zJK3ovEIkbTr28zwdbEffh7HvjVEiErfvaXMr6lNhCqmqL/1uICc2wVC4l4VBU7IPOucrx4nMtso/Hi/sfnwafCYe3s6Nb9nxKlny6t0CCHXFJZXL04rl6MAHJKeoSle7vM56wFfsVJLROcSVXQZAnnEsR2Cv6AJ+7YVHKeerD+tdbH/JdJUVpcxWmsysg9sw7jOhxKgjQ7KPadjSRe0rb8eIWv8RDl0XNQRCA2Drl14mFV/rg==]
-    hikari:
-      minimum-idle: 10
-      maximum-pool-size: 100
-      auto-commit: true
-      idle-timeout: 30000
-      pool-name: DatebookHikariCP
-      max-lifetime: 1800000
-      connection-timeout: 30000
-      connection-test-query: SELECT 1
   data:
     redis:
       host: whoimi.com
       password: mail@whoimi.com[ofdVcHK+MRzXdlxj2GkZV48lSteJQ6TdqANjyLBxzrsC1NcgjPFSXcEhzBwxkZaCWzuVgUyrboHmOqw9Cjmr/2YqvXS3omKJokfwpNgtd0FXKcA2TpUn1dFcF+iXf47bfsaxrWx4Sizk0dqCe6iOkkAxhV5XsDHy2YWPxdWXlFIR0p5qGvrgR6AHUx+fxVfw7YptfI7Hk8g9dbTDLpQva0GAcWe5HizCnx88VXoiC+cBa1lVcX+77Qj7i33oaZczvkDh06ehmsm3pQAZjtIbQeV+6m1YVIMqrHyR4NgkZb6cMicUSxYmVvxs/NEvDgOPlG3kz99xKAChx29n8ys3Jw==]
       port: 6379
       database: 0
-  sql:
-    init:
-      platform:
 jasypt:
   encryptor:
     #    algorithm: PBEWITHHMACSHA512ANDAES_256

@@ -81,27 +81,7 @@ public class AuthenticateRest {
 //        Page<UserInfo> dsl = userInfoRepositoryDSL.findAll(predicate, pageable);
 //        return ResponseEntity.ok(dsl);
 //    }
-    @GetMapping("/temp")
-    @AnonymousKimAccess
-    public ResponseEntity<?> temp() {
-        List<Map<String, Object>> mapList = jdbcTemplate.queryForList("select * from kk_user_info");
-        mapList.forEach(System.out::println);
-        return ResponseEntity.ok(mapList);
-    }
 
-    @PostMapping("/tempPage")
-    @AnonymousKimAccess
-    public ResponseEntity<?> tempPage(Pageable page) {
-        Page<UserInfo> all = userInfoJdbcTemplate.findAll(page);
-        return ResponseEntity.ok(all);
-    }
-
-    @PostMapping("/sysLibrary")
-    @AnonymousKimAccess
-    public ResponseEntity<?> sysLibrary() {
-        List<SysLibrary> top100 = sysLibraryRepository.findTop100OrderByLibIdDesc();
-        return ResponseEntity.ok(top100);
-    }
 
 //    @GetMapping("/dsl")
 //    @AnonymousKimAccess

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+
+    <!--  mysql数据源配置文件路径  -->
+    <properties resource="mysql.properties"/>
+
+    <context id="MysqlTables" targetRuntime="MyBatis3">
+        <!--添加这个标签，就证明不会添加注释到代码里面-->
+        <!--<commentGenerator>
+            <property name="suppressAllComments" value="true" />
+        </commentGenerator>-->
+
+        <!--配置数据库连接-->
+        <jdbcConnection driverClass="${jdbc.driver}"
+                        connectionURL="${db.url}"
+                        userId="${db.username}"
+                        password="${db.password}">
+        </jdbcConnection>
+
+        <javaTypeResolver>
+            <property name="forceBigDecimals" value="false"/>
+        </javaTypeResolver>
+
+        <!--指定生成javabean的位置-->
+        <javaModelGenerator targetPackage="com.whoimi.pojo" targetProject=".\src\main\java">
+            <property name="enableSubPackages" value="true"/>
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+
+        <!--指定sql的映射文件-->
+        <sqlMapGenerator targetPackage="mapper" targetProject=".\src\main\resources">
+            <property name="enableSubPackages" value="true"/>
+        </sqlMapGenerator>
+
+        <!--指定dao接口生成的位置，mapper接口-->
+        <javaClientGenerator type="XMLMAPPER" targetPackage="com.whoimi.mapper" targetProject=".\src\main\java">
+            <property name="enableSubPackages" value="true"/>
+        </javaClientGenerator>
+
+        <!--table的生成策略-->
+        <!-- <table tableName="ALLTYPES" domainObjectName="Customer" >
+             <property name="useActualColumnNames" value="true"/>
+             <generatedKey column="ID" sqlStatement="DB2" identity="true" />
+             <columnOverride column="DATE_FIELD" property="startDate" />
+             <ignoreColumn column="FRED" />
+             <columnOverride column="LONG_VARCHAR_FIELD" jdbcType="VARCHAR" />
+         </table> -->
+        <!--可多写  要生成的表名-->
+        <table tableName="brand" domainObjectName="Brand"/>
+
+
+    </context>
+</generatorConfiguration>
