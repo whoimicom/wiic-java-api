@@ -1,18 +1,3 @@
-/*
- Navicat Premium Data Transfer
-
- Source Server         : KINKIM
- Source Server Type    : MySQL
- Source Server Version : 80032
- Source Host           : kin.kim:3306
- Source Schema         : promgt
-
- Target Server Type    : MySQL
- Target Server Version : 80032
- File Encoding         : 65001
-
- Date: 21/04/2023 09:33:44
-*/
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
@@ -63,7 +48,7 @@ CREATE TABLE `groups`  (
 -- Table structure for kk_authorities
 -- ----------------------------
 DROP TABLE IF EXISTS `kk_authorities`;
-CREATE TABLE `kk_authorities`  (
+CREATE TABLE `authorities`  (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `username` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `authority` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
@@ -74,13 +59,13 @@ CREATE TABLE `kk_authorities`  (
 -- ----------------------------
 -- Records of kk_authorities
 -- ----------------------------
-INSERT INTO `kk_authorities` VALUES (1, 'admin', '/hello');
+INSERT INTO `authorities` VALUES (1, 'admin', '/hello');
 
 -- ----------------------------
 -- Table structure for kk_user_info
 -- ----------------------------
 DROP TABLE IF EXISTS `kk_user_info`;
-CREATE TABLE `kk_user_info`  (
+CREATE TABLE `user_info`  (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `username` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `password` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
@@ -100,9 +85,9 @@ CREATE TABLE `kk_user_info`  (
 -- ----------------------------
 -- Records of kk_user_info
 -- ----------------------------
-INSERT INTO `kk_user_info` VALUES (1, 'kinkim', '$2a$10$fm3xLyxsOXYcCobbb5FKp.3mdY3PWgIWYKy8jZWTL.z2SpU6RtDMK', 1, NULL, NULL, 'im@kin.kim', NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `kk_user_info` VALUES (2, 'admin', '$2a$10$RBu1rjIPbuVh8VeAMcOuvO8FmxW6KympyTsz2U0zCz95M773nLVbi', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `kk_user_info` VALUES (4, 'other', '$2a$10$7ceHcotcvmLiclNCD993gOF1J8mP.C0ziTTTDhqw9qfwdFiWjw3S6', 1, 'https://q1.qlogo.cn/g?b=qq&nk=190848757&s=640', NULL, NULL, NULL, NULL, 'vben', 'vb', 'dashboard/analysis');
-INSERT INTO `kk_user_info` VALUES (5, '1ben', '$2a$10$sQNZmLNvwJwaN6X4/jqQgORzvpomTEzj7PfPcyOmH9z.MD0AVae8i', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `user_info` VALUES (1, 'kinkim', '$2a$10$fm3xLyxsOXYcCobbb5FKp.3mdY3PWgIWYKy8jZWTL.z2SpU6RtDMK', 1, NULL, NULL, 'im@kin.kim', NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `user_info` VALUES (2, 'admin', '$2a$10$RBu1rjIPbuVh8VeAMcOuvO8FmxW6KympyTsz2U0zCz95M773nLVbi', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `user_info` VALUES (4, 'other', '$2a$10$7ceHcotcvmLiclNCD993gOF1J8mP.C0ziTTTDhqw9qfwdFiWjw3S6', 1, 'https://q1.qlogo.cn/g?b=qq&nk=190848757&s=640', NULL, NULL, NULL, NULL, 'vben', 'vb', 'dashboard/analysis');
+INSERT INTO `user_info` VALUES (5, '1ben', '$2a$10$sQNZmLNvwJwaN6X4/jqQgORzvpomTEzj7PfPcyOmH9z.MD0AVae8i', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 SET FOREIGN_KEY_CHECKS = 1;

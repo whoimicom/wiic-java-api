@@ -9,7 +9,7 @@ import java.util.Collection;
 import java.util.HashMap;
 
 /**
- * @author choky
+ * @author whoimi
  */
 public class UserKimDetails extends User {
 

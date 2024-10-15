@@ -4,7 +4,7 @@ package com.whoimi.model;
 import java.util.List;
 
 /**
- * @author choky
+ * @author whoimi
  */
 public class UserInfoDTO {
 	private String username;
