@@ -45,9 +45,9 @@ CREATE TABLE `groups`  (
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for kk_authorities
+-- Table structure for authorities
 -- ----------------------------
-DROP TABLE IF EXISTS `kk_authorities`;
+DROP TABLE IF EXISTS `authorities`;
 CREATE TABLE `authorities`  (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `username` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
@@ -57,14 +57,14 @@ CREATE TABLE `authorities`  (
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Records of kk_authorities
+-- Records of authorities
 -- ----------------------------
 INSERT INTO `authorities` VALUES (1, 'admin', '/hello');
 
 -- ----------------------------
--- Table structure for kk_user_info
+-- Table structure for user_info
 -- ----------------------------
-DROP TABLE IF EXISTS `kk_user_info`;
+DROP TABLE IF EXISTS `user_info`;
 CREATE TABLE `user_info`  (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `username` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
@@ -83,7 +83,7 @@ CREATE TABLE `user_info`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Records of kk_user_info
+-- Records of user_info
 -- ----------------------------
 INSERT INTO `user_info` VALUES (1, 'kinkim', '$2a$10$fm3xLyxsOXYcCobbb5FKp.3mdY3PWgIWYKy8jZWTL.z2SpU6RtDMK', 1, NULL, NULL, 'im@kin.kim', NULL, NULL, NULL, NULL, NULL);
 INSERT INTO `user_info` VALUES (2, 'admin', '$2a$10$RBu1rjIPbuVh8VeAMcOuvO8FmxW6KympyTsz2U0zCz95M773nLVbi', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
