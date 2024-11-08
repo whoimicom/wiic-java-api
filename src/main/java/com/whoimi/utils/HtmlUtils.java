@@ -23,7 +23,7 @@ public class HtmlUtils {
     private static final Logger log = LoggerFactory.getLogger(HtmlUtils.class);
     @Value("${fonts.font-family}")
     private String fontFamily;
-    @Value("${kim.kin.file-path}")
+    @Value("${com.whoimi.file-path}")
     private String tempPath;
     @Value("${spring.thymeleaf.suffix}")
     private String suffix;

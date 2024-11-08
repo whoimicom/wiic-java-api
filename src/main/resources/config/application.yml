@@ -26,6 +26,7 @@ spring:
       FAIL_ON_UNKNOWN_PROPERTIES: false
     serialization:
       write-dates-as-timestamps: false
+      fail-on-empty-beans: false
   servlet:
     multipart:
       location: ${user.home}/multipartUpload
@@ -60,8 +61,8 @@ management:
 #      base-path: /actuator
 #      exposure:
 #        include: '/actuator/*'
-kim:
-  kin:
+com:
+  whoimi:
     channel-no: '000'
     file-path: /data/file
     web-path: /wii-java-admin
