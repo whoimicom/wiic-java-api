@@ -1,6 +1,6 @@
 package com.whoimi.repository.mysql;
 
-import com.whoimi.model.ResultKimListMap;
+import com.whoimi.model.ResultListMap;
 import com.whoimi.model.UserInfo;
 import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -34,7 +34,7 @@ public interface UserInfoRepository extends CrudRepository<UserInfo, Long> {
     /**
      * @return show replica status
      */
-    @Query(value = "show replica status",resultSetExtractorClass = ResultKimListMap.class )
+    @Query(value = "show replica status",resultSetExtractorClass = ResultListMap.class )
     List<Map<String, Object>> showReplicaStatus();
 
 
