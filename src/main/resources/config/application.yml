@@ -5,7 +5,7 @@ server:
     context-path: /${spring.application.name}
 spring:
   application:
-    name: wii-java-api
+    name: wiic-java-api
   webflux:
     base-path: /${spring.application.name}
   profiles:
@@ -65,7 +65,7 @@ com:
   whoimi:
     channel-no: '000'
     file-path: /data/file
-    web-path: /wii-java-admin
+    web-path: /wiic-java-admin
 fonts:
 #  font-Family: SourceSans3-Regular
 # font-Family: SimSun

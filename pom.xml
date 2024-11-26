@@ -3,10 +3,10 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.whoimi</groupId>
-    <artifactId>wii-java-api</artifactId>
+    <artifactId>wiic-java-api</artifactId>
     <version>0.0.2-SNAPSHOT</version>
-    <name>wii-java-api</name>
-    <description>wii-java-api</description>
+    <name>wiic-java-api</name>
+    <description>wiic-java-api</description>
     <packaging>jar</packaging>
 
     <properties>
@@ -16,7 +16,7 @@
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <spring-boot.version>3.3.3</spring-boot.version>
+        <spring-boot.version>3.4.0</spring-boot.version>
         <openhtml.version>1.0.10</openhtml.version>
         <jjwt.version>0.11.5</jjwt.version>
         <dao.target.dir>src/main/java</dao.target.dir>
@@ -216,8 +216,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
                 <configuration>
-                    <source>17</source>
-                    <target>17</target>
+                    <source>21</source>
+                    <target>21</target>
                     <generatedSourcesDirectory>${project.build.directory}/generated-sources/annotations/
                     </generatedSourcesDirectory>
                 </configuration>
@@ -264,8 +264,8 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <mainClass>wii-java-api.Application</mainClass>
-                    <imageName>wii-java-api</imageName>
+                    <mainClass>wiic-java-api.Application</mainClass>
+                    <imageName>wiic-java-api</imageName>
                     <buildArgs>
                         <buildArg>&#45;&#45;verbose</buildArg>
                     </buildArgs>

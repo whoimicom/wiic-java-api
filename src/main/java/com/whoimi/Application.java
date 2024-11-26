@@ -21,8 +21,8 @@ public class Application {
         String port = environment.getProperty("server.port");
         String springApplicationName = environment.getProperty("spring.application.name");
         String webPath = environment.getProperty("com.whoimi.web-path");
-        System.out.println("wii-java-api>  http://localhost:" + port + "/" + springApplicationName);
-        System.out.println("wii-java-admin>  http://localhost" + webPath);
+        System.out.println("wiic-java-api>  http://localhost:" + port + "/" + springApplicationName);
+        System.out.println("wiic-java-admin>  http://localhost" + webPath);
     }
 
 }
