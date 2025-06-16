@@ -11,12 +11,10 @@
 
     <properties>
         <skipTests>true</skipTests>
-        <java.version>21</java.version>
-        <maven.compiler.source>21</maven.compiler.source>
-        <maven.compiler.target>21</maven.compiler.target>
+        <java.version>17</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <spring-boot.version>3.4.0</spring-boot.version>
+        <spring-boot.version>3.4.6</spring-boot.version>
         <openhtml.version>1.0.10</openhtml.version>
         <jjwt.version>0.11.5</jjwt.version>
         <dao.target.dir>src/main/java</dao.target.dir>
@@ -216,8 +214,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
                 <configuration>
-                    <source>21</source>
-                    <target>21</target>
+                    <source>17</source>
+                    <target>17</target>
                     <generatedSourcesDirectory>${project.build.directory}/generated-sources/annotations/
                     </generatedSourcesDirectory>
                 </configuration>
