@@ -1,8 +1,5 @@
 package com.whoimi.utils;
 
-import java.util.HashSet;
-import java.util.Set;
-
 
 public class NumberEncryptor {
 
@@ -53,6 +50,16 @@ public class NumberEncryptor {
             encryptedString = String.format("%" + maxLen + "s", encryptedString).replace(' ', '0');
         }
         return encryptedString;
+    }
+
+    public static String encryptPhone(String phone) {
+        if (phone.length() != 11) {
+            return phone;
+        }
+        String phoneStart = phone.substring(0, 7);
+        String phoneEnd = phone.substring(7);
+        String encrypt = encrypt(phoneEnd);
+        return phoneStart + encrypt;
     }
 
     // 解密方法
@@ -114,9 +121,12 @@ public class NumberEncryptor {
     }
 
     public static void main(String[] args) {
-        Set<String> StringSet = new HashSet<>();
 
-        for (int i = 1201; i <= 1201; i++) {
+        String s = encryptPhone("18581427060");
+        System.out.println(s);
+
+ /*       Set<String> StringSet = new HashSet<>();
+        for (int i = 6622; i <= 6622; i++) {
             String originalString = String.valueOf(i);
             String encrypt = encrypt(originalString);
             String decrypt = decrypt(encrypt);
@@ -130,7 +140,7 @@ public class NumberEncryptor {
                 StringSet.add(encrypt);
             }
         }
-        System.out.println("size:" + StringSet.size());
+        System.out.println("size:" + StringSet.size());*/
 
 /*        Set<Long> longSet = new HashSet<>();
         int maxLen = 1;
