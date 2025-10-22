@@ -27,5 +27,5 @@ jasypt:
     public-key-format: pem
     #    private-key-location: classpath:id_rsa_pkcs8
     #    public-key-location: classpath:id_rsa_pkcs8.pem
-    private-key-location: file:C:\\Users\\kinkim\\.ssh\\id_rsa_pkcs8
-    public-key-location: file:C:\\Users\\kinkim\\.ssh\\id_rsa_pkcs8.pem
+    private-key-location: file:C:\\Users\\whoimi\\.ssh\\id_rsa_pkcs8
+    public-key-location: file:C:\\Users\\whoimi\\.ssh\\id_rsa_pkcs8.pem

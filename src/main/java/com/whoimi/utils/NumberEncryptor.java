@@ -122,7 +122,7 @@ public class NumberEncryptor {
 
     public static void main(String[] args) {
 
-        String s = encryptPhone("18581427060");
+        String s = encryptPhone("18696725090");
         System.out.println(s);
 
  /*       Set<String> StringSet = new HashSet<>();
